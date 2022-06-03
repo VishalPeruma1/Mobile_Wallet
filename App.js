@@ -1,86 +1,53 @@
-
-import React from 'react';
-import type {Node} from 'react';
+import Access from './access';
+import New_wallet from './new_wallet'
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text, 
-  Button,TouchableOpacity,
+  Button,
+  TouchableOpacity,
   Alert,
   useColorScheme,
   View,
 } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import {
-  Colors,
-  Header,
-  
-} from 'react-native/Libraries/NewAppScreen';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+const Stack = createNativeStackNavigator();
 
+const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView>
-      <StatusBar />
-      <ScrollView>        
-            <Text style={styles.headline}>Welcome to Knuct Webwallet. </Text>
-            <Text style={styles.content}>
-            This is web based wallet that give you access to your knuct coin anywhere in the world.
-            </Text>
-            {/* <View style = {styles.container}>
-         <TouchableOpacity>
-            <Text style = {styles.text}>
-               Button
-            </Text>
-         </TouchableOpacity>
-      </View> */}
-            <View style={styles.Button_style}>
-            <Button
+    <StatusBar />
+    <ScrollView>   
+     
+          <Text style={styles.headline}>Welcome to Knuct Webwallet. </Text>
+          <Text style={styles.content}>
+          This is web based wallet that give you access to your knuct coin anywhere in the world.
+          </Text>
+        
+          <View style={styles.Button_style}>
+          <Button
             color="#841584"
             accessibilityLabel="Learn more about this purple button"
         title="Access your Wallet"
-        onPress={() => Alert.alert('Simple Button pressed')}
+        onPress={() => navigation.navigate('Access')}
       /></View>
       <View style={styles.Button_style}>
+
             <Button
             color="#841584"
             accessibilityLabel="Learn more about this purple button"
         title="+ Create a new Wallet"
-        onPress={() => Alert.alert('Simple Button pressed')}
+        onPress={() => navigation.navigate('New Wallet')}
       />
+      
               </View>
               <Text style={styles.content}>
               For better security download our desktop wallet.
@@ -88,8 +55,28 @@ const App: () => Node = () => {
               
       </ScrollView>
     </SafeAreaView>
+
+
   );
 };
+const App = () => {
+  
+
+  return (
+  
+ <NavigationContainer>
+  <Stack.Navigator>
+    <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Screen name="Access" component={Access} />
+    <Stack.Screen name="New Wallet" component={New_wallet} />
+  </Stack.Navigator>
+  </NavigationContainer>
+
+            
+  );
+};
+
+
 
 const styles = StyleSheet.create({
   sectionContainer: {
