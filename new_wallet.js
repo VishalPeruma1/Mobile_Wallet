@@ -1,20 +1,25 @@
 import React from 'react';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text, 
-  Button,TouchableOpacity,
-  Alert,
-  useColorScheme,
+  Button,
   TextInput,
   View,
 } from 'react-native';
+import { ButtonGroup } from "react-native-elements";
 
 const New_wallet = ({ navigation}) => {
 
     const [text, onChangeText] = React.useState("Passphrase ");
+    const [selectedIndex,setSelectedIndex  ] = React.useState();
+    const [selectedIndexes,setSelectedIndexes] = React.useState();
+    const [selectedIndex1,setSelectedIndex1  ] = React.useState();
+    const [selectedIndexes1,setSelectedIndexes1] = React.useState();
+    const [selectedIndex2,setSelectedIndex2  ] = React.useState();
+    const [selectedIndexes2,setSelectedIndexes2] = React.useState();
+    const [selectedIndex3,setSelectedIndex3  ] = React.useState();
+    const [selectedIndexes3,setSelectedIndexes3] = React.useState();
     
     return(
 
@@ -31,16 +36,112 @@ const New_wallet = ({ navigation}) => {
         onChangeText={onChangeText}
         value={text}
       />
+       <View style={styles.Button_style}>
+  <Button color="#841584"
+  title="Continue ->"
+  onPress={()=>navigation.navigate('Continue')}/>
+  <ButtonGroup
+      buttonStyle={{ width: 100 }}
+      buttonContainerStyle={{}}
+      buttons={[
+        "Hill",
+        "Bull",
+        "Bag",
+        "Window"
+      ]}
+      containerStyle={{ marginTop: 50 }}
+      disabled={[]}
+      disabledStyle={{}}
+      disabledTextStyle={{}}
+      disabledSelectedStyle={{}}
+      disabledSelectedTextStyle={{}}
+      innerBorderStyle={{}}
+      onPress={selectedIdx => setSelectedIndex(selectedIdx)}
+      selectedButtonStyle={{}}
+      selectedIndex={selectedIndex}
+      selectedIndexes={selectedIndexes}
+      selectedTextStyle={{}}
+      textStyle={{}} />
+      
+      <ButtonGroup
+        buttonStyle={{ width: 100 }}
+        buttonContainerStyle={{}}
+        buttons={[
+        "Parrot",
+        "Cloud",
+        "Design",
+        "Zebra"
+        ]}
+        containerStyle={{ marginTop: 10 }}
+        disabled={[ ]}
+        disabledStyle={{}}
+        disabledTextStyle={{}}
+        disabledSelectedStyle={{}}
+        disabledSelectedTextStyle={{}}
+        innerBorderStyle={{}}
+        onPress={selectedIdx => setSelectedIndex1(selectedIdx)}
+        selectedButtonStyle={{}}
+        selectedIndex={selectedIndex1}
+        selectedIndexes={selectedIndexes1}
+        selectedTextStyle={{}}
+        textStyle={{}} /><ButtonGroup
+        buttonStyle={{ width: 100 }}
+        buttonContainerStyle={{}}
+        buttons={[
+          "Book",
+        "Cat",
+        "Mobile",
+        "Dog"
+        ]}
+        containerStyle={{ }}
+        disabled={[ ]}
+        disabledStyle={{}}
+        disabledTextStyle={{}}
+        disabledSelectedStyle={{}}
+        disabledSelectedTextStyle={{}}
+        innerBorderStyle={{}}
+        onPress={selectedIdx => setSelectedIndex2(selectedIdx)}
+        selectedButtonStyle={{}}
+        selectedIndex={selectedIndex2}
+        selectedIndexes={selectedIndexes2}
+        selectedTextStyle={{}}
+        textStyle={{}} />
+        
+        <ButtonGroup
+        buttonStyle={{ width: 100 }}
+        buttonContainerStyle={{}}
+        buttons={[
+          "Tree",
+        "Computer",
+        "Bottle",
+        "Water"
+        ]}
+        containerStyle={{  }}
+        disabled={[ ]}
+        disabledStyle={{}}
+        disabledTextStyle={{}}
+        disabledSelectedStyle={{}}
+        disabledSelectedTextStyle={{}}
+        innerBorderStyle={{}}
+        onPress={selectedIdx => setSelectedIndex3(selectedIdx)}
+        selectedButtonStyle={{}}
+        selectedIndex={selectedIndex3}
+        selectedIndexes={selectedIndexes3}
+        selectedTextStyle={{}}
+        textStyle={{}} />
+
+  </View>
+
+        
 
         <View style={styles.Button_style}>
+  <Button color="#841584"
+  title="Back"
+  onPress={()=>navigation.navigate('Home')}/>
 
-          {/* <Button
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-      title="Choose private share"
-      onPress={() => navigation.navigate('Access')}
-    /> */}
+  
 </View>
+
       </ScrollView>
 
     );

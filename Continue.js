@@ -1,5 +1,4 @@
 import React from 'react';
-import Dashboard from './Dashboard';
 import {
   SafeAreaView,
   ScrollView,
@@ -12,31 +11,11 @@ import {
   View,
 } from 'react-native';
 
-const Access = ({ navigation}) => {
+const Continue = ({ navigation}) => {
     return(
 
         <ScrollView style={styles.content}>
-          <Text style={styles.headline}>Access Wallet. </Text>
-          <Text style={styles.content}>
-          To access your wallet upload the private share saved in your device.
-          </Text>
-
-          <View style={styles.Button_style}>
-
-            <Button
-            color="#841584"
-            
-        title="Choose private share"
-        onPress={() => navigation.navigate('Dashboard')}
-      />
-</View>
-<View style={styles.Button_style}>
-  <Button color="#841584"
-  title="Back"
-  onPress={()=>navigation.navigate('Home')}/>
-
-  
-</View>
+          <Text style={styles.headline}>New Wallet. </Text>
         </ScrollView>
     );
 };
@@ -98,4 +77,4 @@ const styles = StyleSheet.create({
     },
   });
 
-  export default Access;
+  export default Continue;

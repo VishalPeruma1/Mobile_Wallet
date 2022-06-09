@@ -3,3 +3,10 @@ Add the dependencies here
 npm install @react-navigation/native @react-navigation/native-stack
 npm install react-native-screens react-native-safe-area-context
 
+yarn add react-native-elements
+# or with npm
+npm install react-native-elements
+
+yarn add react-native-vector-icons
+# or with npm
+npm i --save react-native-vector-icons
