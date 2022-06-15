@@ -11,32 +11,62 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {launchImageLibrary} from 'react-native-image-picker';
+
 
 const Access = ({ navigation}) => {
+
+  choosePrivateShare = () => {
+    var options = {
+      title: 'Choose Private Share',
+      mediaType: 'photo',
+      customButtons: [
+        { 
+          name: 'customOptionKey', 
+          title: 'Choose file from Gallery' 
+        },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    launchImageLibrary(options, res => {
+      console.log('Response = ', res);
+      if (res.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (res.error) {
+        console.log('ImagePicker Error: ', res.error);
+      } else if (res.customButton) {
+        console.log('User tapped custom button: ', res.customButton);
+        alert(res.customButton);
+      } else {
+      }
+    });
+  };
+
+
     return(
 
         <ScrollView style={styles.content}>
-          <Text style={styles.headline}>Access Wallet. </Text>
+          <Text style={styles.headline}>Access Wallet</Text>
           <Text style={styles.content}>
           To access your wallet upload the private share saved in your device.
           </Text>
-
-          <View style={styles.Button_style}>
-
-            <Button
-            color="#841584"
-            
-        title="Choose private share"
-        onPress={() => navigation.navigate('Dashboard')}
-      />
-</View>
-<View style={styles.Button_style}>
-  <Button color="#841584"
-  title="Back"
-  onPress={()=>navigation.navigate('Home')}/>
-
-  
-</View>
+        <TouchableOpacity onPress={choosePrivateShare}>
+            <View style={styles.Button_style}>
+                  <MaterialIcons name='bubble-chart' style={{color:'#ffffff',fontSize:18}}/>
+                <Text style={{color: '#ffffff',fontSize:14}}>  CHOOSE PRIVATE SHARE</Text>
+            </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
+            <View style={styles.backBtn}>
+                  <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:18}}/>
+                <Text style={{color: '#1976D2',fontSize:18}}>  Back</Text>
+            </View>
+        </TouchableOpacity>
         </ScrollView>
     );
 };
@@ -56,17 +86,31 @@ const styles = StyleSheet.create({
       textAlign:'center',
       fontSize: 15,
       marginTop: 25,
+      paddingEnd:20,
+      paddingStart:20
       // justifyContent: 'center',
       // marginLeft: 37
     },
     Button_style:{
-      flex:2 ,
+      borderColor:'#1976D2',
+      flexDirection:'row',
+      borderWidth:1,
+      padding:12, 
+      justifyContent:'center',
+      flex:1,
+      borderRadius:5,
+      backgroundColor:'#1976D2',
+      marginTop:20,
+      alignSelf: 'center'
+    },
+    backBtn:{
+      alignItems:'center',
       textAlign:'center',
-      fontSize: 20,
-      marginTop: 25,
-      // justifyContent: 'center',
-      // marginLeft: 37,
-      alignItems: 'center'
+      flex:2,
+      marginTop:25,
+      flex:1,
+      justifyContent:'center',
+      flexDirection:'row'
     },
     container: {
       alignItems: 'center',
