@@ -3,10 +3,11 @@ import New_wallet from './new_wallet';
 import Continue from './Continue'
 import ActionBarImage from './ActionBarImage';
 import React from 'react';
-import { SafeAreaView ,ScrollView, StyleSheet, Text, Button, View} from 'react-native';
+import { SafeAreaView ,ScrollView, StyleSheet, Text, Button, View, TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Dashboard from './Dashboard';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,28 +22,27 @@ const HomeScreen = ({ navigation }) => {
     <>
     
       <SafeAreaView>
-        <ScrollView>  
+        <ScrollView styles={styles.pagecontent}>  
 
           <Text style={styles.headline}>Welcome to Knuct Wallet.</Text>
           <Text style={styles.content}>
             This is a wallet that gives you access to your knuct coin anywhere in the world.
           </Text>
 
-          <View style={styles.Button_style}>
-            <Button
-              color="#841584"
-              accessibilityLabel="Learn more about this purple button"
-              title="Access your Wallet"
-              onPress={() => navigation.navigate('Access')} /></View>
-          <View style={styles.Button_style}>
-
-            <Button
-              color="#841584"
-              accessibilityLabel="Learn more about this purple button"
-              title="+ Create a new Wallet"
-              onPress={() => navigation.navigate('New Wallet')} />
-
+          <TouchableOpacity onPress={()=>navigation.navigate('Access')}>
+          <View style={styles.accesswallet}>
+              <MaterialIcons name='auto-awesome' style={{color:'#1976D2',fontSize:18}}/>
+            <Text style={{color: '#1976D2', fontWeight:'bold', fontSize:14}}>  ACCESS YOUR WALLET</Text>
           </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('New Wallet')}>
+          <View style={styles.newwallet}>
+              <MaterialIcons name='add-circle-outline' style={{color:'#ffffff',fontSize:18}}/>
+            <Text style={{fontWeight:'bold', color:'#ffffff', fontSize:14}}>  CREATE A NEW WALLET</Text>
+          </View>
+          </TouchableOpacity>
+
           {/* <Text style={styles.content}>
             For better security download our desktop wallet.
           </Text> */}
@@ -79,6 +79,15 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 24,
   },
+  pagecontent:{
+    color:'black',
+    flex:2 ,
+    textAlign:'center',
+    fontSize: 15,
+    marginTop: 25,
+    // justifyContent: 'center',
+    // marginLeft: 37
+  },
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
@@ -89,18 +98,34 @@ const styles = StyleSheet.create({
     textAlign:'center',
     fontSize: 15,
     marginTop: 25,
+    paddingEnd:20,
+    paddingStart:20,
     // justifyContent: 'center',
     // marginLeft: 37,
     alignItems: 'center'
   },
-  Button_style:{
-    flex:2 ,
-    textAlign:'center',
-    fontSize: 20,
-    marginTop: 25,
-    // justifyContent: 'center',
-    // marginLeft: 37,
-    alignItems: 'center'
+  accesswallet:{
+    borderColor:'#1976D2',
+    flexDirection:'row',
+    borderWidth:1,
+    padding:12, 
+    justifyContent:'center',
+    flex:1,
+    borderRadius:5,
+    marginTop:20,
+    alignSelf: 'center',
+  },
+  newwallet:{
+    borderColor:'#1976D2',
+    flexDirection:'row',
+    borderWidth:1,
+    padding:12, 
+    justifyContent:'center',
+    flex:1,
+    borderRadius:5,
+    marginTop:20,
+    alignSelf: 'center',
+    backgroundColor:'#1976D2'
   },
   container: {
     alignItems: 'center',
