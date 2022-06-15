@@ -139,19 +139,22 @@ const New_wallet = ({ navigation}) => {
 
         </View>
 
+        <View style={styles.btnStyle}>
         <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
-            <View style={styles.btnStyle}>
+            <View style={{flexDirection:'row'}}>
                 <Text style={{color: '#ffffff',fontSize:14}}>CONTINUE  </Text>
                 <Ionicons name='arrow-forward-outline' style={{color:'#ffffff',fontSize:18}}/>
             </View>
         </TouchableOpacity>
-
+        </View>
+      <View style={styles.backBtn}>
       <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
-            <View style={styles.backBtn}>
+            <View style={{flexDirection:'row'}}>
                   <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:18}}/>
                 <Text style={{color: '#1976D2',fontSize:18}}>  Back</Text>
             </View>
-        </TouchableOpacity>
+      </TouchableOpacity>
+      </View>
 
       </ScrollView>
 

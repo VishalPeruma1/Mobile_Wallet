@@ -55,18 +55,22 @@ const Access = ({ navigation}) => {
           <Text style={styles.content}>
           To access your wallet upload the private share saved in your device.
           </Text>
+        <View style={styles.Button_style}>
         <TouchableOpacity onPress={choosePrivateShare}>
-            <View style={styles.Button_style}>
+            <View style={{flexDirection:'row'}}>
                   <MaterialIcons name='bubble-chart' style={{color:'#ffffff',fontSize:18}}/>
                 <Text style={{color: '#ffffff',fontSize:14}}>  CHOOSE PRIVATE SHARE</Text>
             </View>
         </TouchableOpacity>
+        </View>
+        <View style={styles.backBtn}>
         <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
-            <View style={styles.backBtn}>
+            <View style={{flexDirection:'row'}}>
                   <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:18}}/>
                 <Text style={{color: '#1976D2',fontSize:18}}>  Back</Text>
             </View>
         </TouchableOpacity>
+        </View>
         </ScrollView>
     );
 };

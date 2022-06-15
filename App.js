@@ -28,20 +28,22 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.content}>
             This is a wallet that gives you access to your knuct coin anywhere in the world.
           </Text>
-
-          <TouchableOpacity onPress={()=>navigation.navigate('Access')}>
           <View style={styles.accesswallet}>
+          <TouchableOpacity onPress={()=>navigation.navigate('Access')}>
+          <View style={{flexDirection:'row'}}>
               <MaterialIcons name='auto-awesome' style={{color:'#1976D2',fontSize:18}}/>
             <Text style={{color: '#1976D2', fontWeight:'bold', fontSize:14}}>  ACCESS YOUR WALLET</Text>
           </View>
           </TouchableOpacity>
-
-          <TouchableOpacity onPress={()=>navigation.navigate('New Wallet')}>
+          </View>
           <View style={styles.newwallet}>
+          <TouchableOpacity onPress={()=>navigation.navigate('New Wallet')}>
+          <View style={{flexDirection:'row'}}>
               <MaterialIcons name='add-circle-outline' style={{color:'#ffffff',fontSize:18}}/>
             <Text style={{fontWeight:'bold', color:'#ffffff', fontSize:14}}>  CREATE A NEW WALLET</Text>
           </View>
           </TouchableOpacity>
+          </View>
 
           {/* <Text style={styles.content}>
             For better security download our desktop wallet.
