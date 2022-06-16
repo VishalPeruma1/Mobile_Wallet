@@ -23,6 +23,62 @@ const New_wallet = ({ navigation}) => {
     const [selectedIndexes2,setSelectedIndexes2] = React.useState();
     const [selectedIndex3,setSelectedIndex3  ] = React.useState();
     const [selectedIndexes3,setSelectedIndexes3] = React.useState();
+
+    const data = [
+      [{val:"Hill",id:1}, {val:"Bull",id:2}, {val:"Bag",id:3}, {val:"Window",id:4}],
+      [{val:"Parrot",id:5}, {val:"Cloud",id:6}, {val:"Design",id:7}, {val:"Zebra",id:8}],
+      [{val:"Book",id:9}, {val:"Cat",id:10}, {val:"Mobile",id:11}, {val:"Dog",id:12}],
+      [{val:"Tree",id:13}, {val:"Computer",id:14}, {val:"Bottle",id:15}, {val:"Water",id:16}],
+    ]
+
+    var state = Array(16).fill(false)
+    var selected = []
+
+    function seedwords({data}){
+      state[data.id-1] = !state[data.id-1]
+      console.log(data.id)
+      if(selected.length==0){
+        selected.push(data)
+      }
+      else if(selected.includes(data)){
+        idx = selected.indexOf(data)
+        selected.splice(idx,1)
+      }
+      else{
+        if (selected.length<4){
+          selected.push(data)
+        }
+        else{
+          dt = selected.shift();
+          state[dt.id-1] = !state[dt.id-1]
+          selected.push(data)
+        }
+      }
+      console.log(state)
+      console.log(selected)
+    }
+
+    function Row({ column }) {  
+      return (
+        <View style={styles.rowStyle}>
+          {column.map((data) => (
+            <Cell data={data} key={data.id} />
+          ))}
+        </View>
+     );
+    }
+
+    function Cell({ data }) {
+      return (
+        <View style={styles.cellStyle}>
+          <TouchableOpacity onPress={()=>seedwords({data})}>
+            <View>
+              <Text styles={{color : state[data.id] ? "white" : "gray" }}>{data.val}</Text>              
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }    
     
     return(
 
@@ -34,18 +90,14 @@ const New_wallet = ({ navigation}) => {
         <Text style={styles.sectionDescription}>
             Enter a passphrase
         </Text>
-        <TextInput
-        placeholder='Passphrase'
-        style={styles.input}
-        onChangeText={onChangeText}
-        value={text}
-      />
+        
+        <TextInput placeholder='Passphrase' style={styles.textinput} onChangeText={onChangeText} value={text} />
 
         <Text style={{marginTop: 25, fontSize: 15, fontWeight: '400', paddingStart:10, color:'black',}}>
             Choose any 4 words from below.
         </Text>
 
-       <View style={styles.Button_style}>
+       {/* <View style={styles.Button_style}>
 
         <ButtonGroup
             buttonStyle={{ width: 100 }}
@@ -137,6 +189,12 @@ const New_wallet = ({ navigation}) => {
               selectedTextStyle={{}}
               textStyle={{}} />
 
+        </View> */}
+
+        <View style={styles.gridContainer}>
+          {data.map((column) => (
+            <Row column={column} />
+          ))}
         </View>
 
         <View style={styles.btnStyle}>
@@ -150,7 +208,7 @@ const New_wallet = ({ navigation}) => {
       <View style={styles.backBtn}>
       <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
             <View style={{flexDirection:'row'}}>
-                  <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:18}}/>
+                <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:18,marginTop:3}}/>
                 <Text style={{color: '#1976D2',fontSize:18}}>  Back</Text>
             </View>
       </TouchableOpacity>
@@ -161,6 +219,31 @@ const New_wallet = ({ navigation}) => {
     );
 };
 const styles = StyleSheet.create({
+    gridContainer: {
+        marginTop: 15,
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    rowStyle: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: 'center',
+    },
+    cellStyle: {
+      flex: 1,
+      marginStart:5,
+      marginBottom:10,
+      marginTop:10,
+      marginEnd:5,
+      paddingStart:6,
+      paddingBottom:10,
+      paddingTop:10,
+      paddingEnd:6,
+      alignItems:'center',
+      justifyContent:'center',
+      borderWidth:1,
+      borderRadius:5,
+    },
     sectionContainer: {
       marginTop: 32,
       paddingHorizontal: 24,
@@ -173,13 +256,13 @@ const styles = StyleSheet.create({
       alignItems:'center',
       textAlign:'center',
       flex:2,
-      marginTop:15,
+      marginTop:25,
       flex:1,
       justifyContent:'center',
       flexDirection:'row'
     },
     content:{
-      color:'black',
+      color: "gray",
       flex:2 ,
       textAlign:'center',
       fontSize: 15,
@@ -204,13 +287,15 @@ const styles = StyleSheet.create({
       marginTop:20,
       alignSelf: 'center'
     },
-    input: {
+    textinput: {
         height: 40,
         marginTop: 12,
         marginStart:12,
         marginEnd:12,
-        borderWidth: 1,
         padding: 10,
+        borderColor: 'gray', 
+        borderWidth: 1, 
+        borderRadius: 5,
       },
     Button_style:{
       flex:2 ,

@@ -10,3 +10,7 @@ npm install react-native-elements
 yarn add react-native-vector-icons
 # or with npm
 npm i --save react-native-vector-icons
+
+yarn add react-native-image-picker
+# or with npm
+npm install react-native-image-picker --save
