@@ -8,9 +8,10 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { ButtonGroup } from "react-native-elements";
+import { ButtonGroup, Input } from "react-native-elements";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Toast from 'react-native-simple-toast';
 
 const New_wallet = ({ navigation}) => {
 
@@ -73,12 +74,32 @@ const New_wallet = ({ navigation}) => {
         <View style={styles.cellStyle}>
           <TouchableOpacity onPress={()=>seedwords({data})}>
             <View>
-              <Text styles={{color : state[data.id] ? "white" : "gray" }}>{data.val}</Text>              
+              <Text style={{color : (state[data.id] ? 'grey' : 'black')}}>{data.val}</Text>              
             </View>
           </TouchableOpacity>
         </View>
       );
     }    
+
+    function Create_Wallet() {
+      if(text===""){
+        Toast.show("You cannot leave passphrase empty")
+      }
+      else {
+        if(selected.length<4){
+          Toast.show("Select exactly 4 words from the list")
+        }
+        else{
+          var param1 = text
+          var param2 = []
+          for(i of selected){
+            param2.push(i.val)
+          }
+          console.log(param1,param2)
+          navigation.navigate('Wallet Creation',{"param1":param1,"param2":param2})
+        }
+      }
+    }
     
     return(
 
@@ -91,7 +112,7 @@ const New_wallet = ({ navigation}) => {
             Enter a passphrase
         </Text>
         
-        <TextInput placeholder='Passphrase' style={styles.textinput} onChangeText={onChangeText} value={text} />
+        <TextInput placeholder='Passphrase' placeholderTextColor="grey" style={styles.textinput} onChangeText={onChangeText} value={text} />
 
         <Text style={{marginTop: 25, fontSize: 15, fontWeight: '400', paddingStart:10, color:'black',}}>
             Choose any 4 words from below.
@@ -198,7 +219,7 @@ const New_wallet = ({ navigation}) => {
         </View>
 
         <View style={styles.btnStyle}>
-        <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
+        <TouchableOpacity onPress={()=>Create_Wallet()}>
             <View style={{flexDirection:'row'}}>
                 <Text style={{color: '#ffffff',fontSize:14}}>CONTINUE  </Text>
                 <Ionicons name='arrow-forward-outline' style={{color:'#ffffff',fontSize:18}}/>
@@ -213,7 +234,6 @@ const New_wallet = ({ navigation}) => {
             </View>
       </TouchableOpacity>
       </View>
-
       </ScrollView>
 
     );
@@ -287,13 +307,13 @@ const styles = StyleSheet.create({
       marginTop:20,
       alignSelf: 'center'
     },
-    textinput: {
+    textinput:{
+        color: "black",
         height: 40,
         marginTop: 12,
         marginStart:12,
         marginEnd:12,
         padding: 10,
-        borderColor: 'gray', 
         borderWidth: 1, 
         borderRadius: 5,
       },

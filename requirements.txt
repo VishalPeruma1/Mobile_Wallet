@@ -14,3 +14,7 @@ npm i --save react-native-vector-icons
 yarn add react-native-image-picker
 # or with npm
 npm install react-native-image-picker --save
+
+yarn add react-native-simple-toast
+#or with npm
+npm install react-native-simple-toast
