@@ -16,7 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 
-const Access = ({ navigation}) => {
+const UploadPrivateShare = ({ navigation}) => {
 
   choosePrivateShare = () => {
     var options = {
@@ -58,16 +58,16 @@ const Access = ({ navigation}) => {
         <View style={styles.Button_style}>
         <TouchableOpacity onPress={choosePrivateShare}>
             <View style={{flexDirection:'row'}}>
-                <MaterialIcons name='bubble-chart' style={{color:'#ffffff',fontSize:18}}/>
-                <Text style={{color: '#ffffff',fontSize:14}}>  CHOOSE PRIVATE SHARE</Text>
+                <MaterialIcons name='bubble-chart' style={{color:'#ffffff',fontSize:20}}/>
+                <Text style={{color: '#ffffff',fontSize:14, marginLeft:5}}>CHOOSE PRIVATE SHARE</Text>
             </View>
         </TouchableOpacity>
         </View>
         <View style={styles.backBtn}>
         <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
             <View style={{flexDirection:'row'}}>
-                <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:18,marginTop:3}}/>
-                <Text style={{color: '#1976D2',fontSize:18}}>  Back</Text>
+                <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:20,marginTop:3}}/>
+                <Text style={{color: '#1976D2',fontSize:18, marginLeft:5}}>Back</Text>
             </View>
         </TouchableOpacity>
         </View>
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
       alignItems:'center',
       textAlign:'center',
       flex:2,
-      marginTop:25,
+      marginTop:45,
       flex:1,
       justifyContent:'center',
       flexDirection:'row'
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
     },
   });
 
-  export default Access;
+  export default UploadPrivateShare;

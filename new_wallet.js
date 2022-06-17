@@ -16,14 +16,8 @@ import Toast from 'react-native-simple-toast';
 const New_wallet = ({ navigation}) => {
 
     const [text, onChangeText] = React.useState("");
-    const [selectedIndex,setSelectedIndex  ] = React.useState();
-    const [selectedIndexes,setSelectedIndexes] = React.useState();
-    const [selectedIndex1,setSelectedIndex1  ] = React.useState();
-    const [selectedIndexes1,setSelectedIndexes1] = React.useState();
-    const [selectedIndex2,setSelectedIndex2  ] = React.useState();
-    const [selectedIndexes2,setSelectedIndexes2] = React.useState();
-    const [selectedIndex3,setSelectedIndex3  ] = React.useState();
-    const [selectedIndexes3,setSelectedIndexes3] = React.useState();
+    const [state,setState] = React.useState(Array(16).fill(false));
+
 
     const data = [
       [{val:"Hill",id:1}, {val:"Bull",id:2}, {val:"Bag",id:3}, {val:"Window",id:4}],
@@ -32,28 +26,33 @@ const New_wallet = ({ navigation}) => {
       [{val:"Tree",id:13}, {val:"Computer",id:14}, {val:"Bottle",id:15}, {val:"Water",id:16}],
     ]
 
-    var state = Array(16).fill(false)
+    /* var state = Array(16).fill(false) */
     var selected = []
 
     function seedwords({data}){
       state[data.id-1] = !state[data.id-1]
       console.log(data.id)
-      if(selected.length==0){
-        selected.push(data)
-      }
-      else if(selected.includes(data)){
-        idx = selected.indexOf(data)
-        selected.splice(idx,1)
-      }
-      else{
-        if (selected.length<4){
+      try{
+        if(selected.length==0){
           selected.push(data)
+        }
+        else if(selected.includes(data)){
+          idx = selected.indexOf(data)
+          selected.splice(idx,1)
         }
         else{
-          dt = selected.shift();
-          state[dt.id-1] = !state[dt.id-1]
-          selected.push(data)
+          if (selected.length<4){
+            selected.push(data)
+          }
+          else{
+            dt = selected.shift();
+            state[dt.id-1] = !state[dt.id-1]
+            selected.push(data)
+          }
         }
+      }
+      catch(err){
+        console.log(err)
       }
       console.log(state)
       console.log(selected)
@@ -62,8 +61,8 @@ const New_wallet = ({ navigation}) => {
     function Row({ column }) {  
       return (
         <View style={styles.rowStyle}>
-          {column.map((data) => (
-            <Cell data={data} key={data.id} />
+          {column.map((data,id) => (
+            <Cell data={data} key={id} />
           ))}
         </View>
      );
@@ -74,7 +73,7 @@ const New_wallet = ({ navigation}) => {
         <View style={styles.cellStyle}>
           <TouchableOpacity onPress={()=>seedwords({data})}>
             <View>
-              <Text style={{color : (state[data.id] ? 'grey' : 'black')}}>{data.val}</Text>              
+              <Text style={{color : (state[data.id] ? 'red' : 'black')}}>{data.val}</Text>              
             </View>
           </TouchableOpacity>
         </View>
@@ -83,11 +82,14 @@ const New_wallet = ({ navigation}) => {
 
     function Create_Wallet() {
       if(text===""){
-        Toast.show("You cannot leave passphrase empty")
+        Toast.show("You cannot leave passphrase empty",Toast.LONG);
+      }
+      else if(text.length<3){
+        Toast.show("Passphrase should atleast be 3 characters long",Toast.LONG);
       }
       else {
         if(selected.length<4){
-          Toast.show("Select exactly 4 words from the list")
+          Toast.show("Select exactly 4 words from the list",Toast.LONG);
         }
         else{
           var param1 = text
@@ -118,119 +120,25 @@ const New_wallet = ({ navigation}) => {
             Choose any 4 words from below.
         </Text>
 
-       {/* <View style={styles.Button_style}>
-
-        <ButtonGroup
-            buttonStyle={{ width: 100 }}
-            buttonContainerStyle={{}}
-            buttons={[
-              "Hill",
-              "Bull",
-              "Bag",
-              "Window"
-            ]}
-            containerStyle={{ marginTop: 50 }}
-            disabled={[]}
-            disabledStyle={{}}
-            disabledTextStyle={{}}
-            disabledSelectedStyle={{}}
-            disabledSelectedTextStyle={{}}
-            innerBorderStyle={{}}
-            onPress={selectedIdx => setSelectedIndex(selectedIdx)}
-            selectedButtonStyle={{}}
-            selectedIndex={selectedIndex}
-            selectedIndexes={selectedIndexes}
-            selectedTextStyle={{}}
-            textStyle={{}} />
-            
-            <ButtonGroup
-              buttonStyle={{ width: 100 }}
-              buttonContainerStyle={{}}
-              buttons={[
-              "Parrot",
-              "Cloud",
-              "Design",
-              "Zebra"
-              ]}
-              containerStyle={{ marginTop: 10 }}
-              disabled={[ ]}
-              disabledStyle={{}}
-              disabledTextStyle={{}}
-              disabledSelectedStyle={{}}
-              disabledSelectedTextStyle={{}}
-              innerBorderStyle={{}}
-              onPress={selectedIdx => setSelectedIndex1(selectedIdx)}
-              selectedButtonStyle={{}}
-              selectedIndex={selectedIndex1}
-              selectedIndexes={selectedIndexes1}
-              selectedTextStyle={{}}
-              textStyle={{}} /><ButtonGroup
-              buttonStyle={{ width: 100 }}
-              buttonContainerStyle={{}}
-              buttons={[
-                "Book",
-              "Cat",
-              "Mobile",
-              "Dog"
-              ]}
-              containerStyle={{ }}
-              disabled={[ ]}
-              disabledStyle={{}}
-              disabledTextStyle={{}}
-              disabledSelectedStyle={{}}
-              disabledSelectedTextStyle={{}}
-              innerBorderStyle={{}}
-              onPress={selectedIdx => setSelectedIndex2(selectedIdx)}
-              selectedButtonStyle={{}}
-              selectedIndex={selectedIndex2}
-              selectedIndexes={selectedIndexes2}
-              selectedTextStyle={{}}
-              textStyle={{}} />
-              
-              <ButtonGroup
-              buttonStyle={{ width: 100 }}
-              buttonContainerStyle={{}}
-              buttons={[
-                "Tree",
-              "Computer",
-              "Bottle",
-              "Water"
-              ]}
-              containerStyle={{  }}
-              disabled={[ ]}
-              disabledStyle={{}}
-              disabledTextStyle={{}}
-              disabledSelectedStyle={{}}
-              disabledSelectedTextStyle={{}}
-              innerBorderStyle={{}}
-              onPress={selectedIdx => setSelectedIndex3(selectedIdx)}
-              selectedButtonStyle={{}}
-              selectedIndex={selectedIndex3}
-              selectedIndexes={selectedIndexes3}
-              selectedTextStyle={{}}
-              textStyle={{}} />
-
-        </View> */}
-
         <View style={styles.gridContainer}>
-          {data.map((column) => (
-            <Row column={column} />
+          {data.map((column,id) => (
+            <Row key={id} column={column} />
           ))}
         </View>
 
         <View style={styles.btnStyle}>
         <TouchableOpacity onPress={()=>Create_Wallet()}>
             <View style={{flexDirection:'row'}}>
-                <Text style={{color: '#ffffff',fontSize:14}}>CONTINUE  </Text>
-                <Ionicons name='arrow-forward-outline' style={{color:'#ffffff',fontSize:18}}/>
+                <Text style={{color: '#ffffff',fontSize:14, marginRight:5}}>CONTINUE</Text>
+                <Ionicons name='arrow-forward-outline' style={{color:'#ffffff',fontSize:20}}/>
             </View>
         </TouchableOpacity>
         </View>
       <View style={styles.backBtn}>
       <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
             <View style={{flexDirection:'row'}}>
-                <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:18,marginTop:3}}/>
-                <Text style={{color: '#1976D2',fontSize:18}}>  Back</Text>
+                <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:20,marginTop:3}}/>
+                <Text style={{color: '#1976D2',fontSize:18, marginLeft:5}}>Back</Text>
             </View>
       </TouchableOpacity>
       </View>

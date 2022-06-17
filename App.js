@@ -1,4 +1,4 @@
-import Access from './access';
+import UploadPrivateShare from './uploadprivateshare';
 import New_wallet from './new_wallet';
 import Continue from './Continue'
 import ActionBarImage from './ActionBarImage';
@@ -10,6 +10,7 @@ import Dashboard from './Dashboard';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Wallet_Creation from './wallet_creation';
 import Get_Private_Share from './Get_Private_Share';
+import AccessWallet from './accessWallet';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,18 +32,18 @@ const HomeScreen = ({ navigation }) => {
             This is a wallet that gives you access to your knuct coin anywhere in the world.
           </Text>
           <View style={styles.accesswallet}>
-          <TouchableOpacity onPress={()=>navigation.navigate('Access')}>
+          <TouchableOpacity onPress={()=>navigation.navigate('Access Wallet')}>
           <View style={{flexDirection:'row'}}>
-              <MaterialIcons name='auto-awesome' style={{color:'#1976D2',fontSize:18}}/>
-            <Text style={{color: '#1976D2', fontWeight:'bold', fontSize:14}}>  ACCESS YOUR WALLET</Text>
+            <MaterialIcons name='auto-awesome' style={{color:'#1976D2',fontSize:20}}/>
+            <Text style={{color: '#1976D2', fontWeight:'bold', fontSize:14, marginLeft:5}}>ACCESS WALLET</Text>
           </View>
           </TouchableOpacity>
           </View>
           <View style={styles.newwallet}>
           <TouchableOpacity onPress={()=>navigation.navigate('New Wallet')}>
           <View style={{flexDirection:'row'}}>
-              <MaterialIcons name='add-circle-outline' style={{color:'#ffffff',fontSize:18}}/>
-            <Text style={{fontWeight:'bold', color:'#ffffff', fontSize:14}}>  CREATE A NEW WALLET</Text>
+              <MaterialIcons name='add-circle-outline' style={{color:'#ffffff',fontSize:20}}/>
+            <Text style={{fontWeight:'bold', color:'#ffffff', fontSize:14, marginLeft:5}}>CREATE A NEW WALLET</Text>
           </View>
           </TouchableOpacity>
           </View>
@@ -65,12 +66,13 @@ const App = () => {
  <NavigationContainer>
   <Stack.Navigator >
     <Stack.Screen name="Home" component={HomeScreen} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}}/>
-    <Stack.Screen name="Access" component={Access} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}}/>
+    <Stack.Screen name="Upload Private Share" component={UploadPrivateShare} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}}/>
     <Stack.Screen name="New Wallet" component={New_wallet} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Continue" component={Continue} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Dashboard" component={Dashboard} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Wallet Creation" component={Wallet_Creation} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Get Private Share" component={Get_Private_Share} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
+    <Stack.Screen name="Access Wallet" component={AccessWallet} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
   </Stack.Navigator>
   </NavigationContainer>
 
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     flex:1,
     borderRadius:5,
-    marginTop:20,
+    marginTop:30,
     alignSelf: 'center',
   },
   newwallet:{
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     flex:1,
     borderRadius:5,
-    marginTop:20,
+    marginTop:30,
     alignSelf: 'center',
     backgroundColor:'#1976D2'
   },
