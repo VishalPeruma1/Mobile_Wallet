@@ -16,17 +16,17 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
 
 
-const Wallet_Creation = ({ navigation, route}) => {
+const AccessWallet = ({ navigation, route}) => {
 
-    const [starttempnode,setStarttempnode] = React.useState(false);
-    const [createwallet,setCreatewallet] = React.useState(false);
-    const {param1,param2} = route.params;
+    const [checkwallet,setCheckwallet] = React.useState(false);
+    const [authenticate,setAuthenticate] = React.useState(false);
+    const [startwallet,setStartwallet] = React.useState(false);
+    const [fetchdata,setFetchdata] = React.useState(false);
 
-    fetch('http://webwallet.knuct.com/sapi/starttempnode')
+    fetch('http://webwallet.knuct.com/sapi/auth/challenge')
      .then(response=>{
         if(response.status===204) {
             console.log(response.status)
-            console.log(param1,param2)
             setStarttempnode(true);
             let options = {
                 method:"POST",
@@ -37,8 +37,6 @@ const Wallet_Creation = ({ navigation, route}) => {
                     "Accept": "application/json",
                 },
                 body:JSON.stringify({
-                    passphrase: param1,
-                    seedWords: param2
                 })
             }
             fetch('http://webwallet.knuct.com/sapi/createwallet',options)
@@ -56,27 +54,27 @@ const Wallet_Creation = ({ navigation, route}) => {
 
     return(
         <ScrollView style={styles.content}>
-            <Text style={styles.headline}>Creating Wallet</Text>
+            <Text style={styles.headline}>Accessing Wallet</Text>
             <Text style={styles.content}>
                 This will take some time. Please wait until the procedure completes. 
             </Text>
             <View style={{alignItems:"center", justifyContent:"center", marginTop:40, flexDirection:"row"}}>
-                <Text style={{color:starttempnode?'green':'grey', fontSize:15, marginRight:5}}>
-                    Starting Temporary Wallet
+                <Text style={{color:checkwallet?'green':'grey', fontSize:15, marginRight:5}}>
+                    Checking Wallet
                 </Text>
-                {starttempnode?<MaterialIcons name='check' style={{color:'green',fontSize:18}}/>:<ActivityIndicator  color={'grey'} />}
+                {checkwallet?<MaterialIcons name='check' style={{color:'green',fontSize:18}}/>:<ActivityIndicator  color={'grey'} />}
             </View> 
             <View style={{alignItems:"center", justifyContent:"center", marginTop:20, flexDirection:"row"}}>
-                <Text style={{color:createwallet?'green': starttempnode ? "grey" : "#A9A9A9", fontSize:15, marginRight:5}}>
-                    Creating Wallet
+                <Text style={{color:authenticate?'green': checkwallet ? "grey" : "#A9A9A9", fontSize:15, marginRight:5}}>
+                    Authenticating
                 </Text>
                 {
                   (() => {
-                    if(createwallet){
+                    if(authenticate){
                       return <MaterialIcons name='check' style={{color:'green',fontSize:18}}/>
                     }
                     else{
-                      if(starttempnode){
+                      if(checkwallet){
                         return <ActivityIndicator  color={'grey'} />
                       }
                       else{
@@ -86,7 +84,47 @@ const Wallet_Creation = ({ navigation, route}) => {
                   })()
                 }
             </View>
-            <TouchableOpacity onPress={()=>navigation.navigate('New Wallet')}>
+            <View style={{alignItems:"center", justifyContent:"center", marginTop:20, flexDirection:"row"}}>
+                <Text style={{color:startwallet?'green': authenticate ? "grey" : "#A9A9A9", fontSize:15, marginRight:5}}>
+                    Starting Wallet Node
+                </Text>
+                {
+                  (() => {
+                    if(startwallet){
+                      return <MaterialIcons name='check' style={{color:'green',fontSize:18}}/>
+                    }
+                    else{
+                      if(authenticate){
+                        return <ActivityIndicator  color={'grey'} />
+                      }
+                      else{
+                        return null
+                      }
+                    }
+                  })()
+                }
+            </View>
+            <View style={{alignItems:"center", justifyContent:"center", marginTop:20, flexDirection:"row"}}>
+                <Text style={{color:fetchdata?'green': startwallet ? "grey" : "#A9A9A9", fontSize:15, marginRight:5}}>
+                    Fetching Initital Data
+                </Text>
+                {
+                  (() => {
+                    if(fetchdata){
+                      return <MaterialIcons name='check' style={{color:'green',fontSize:18}}/>
+                    }
+                    else{
+                      if(startwallet){
+                        return <ActivityIndicator  color={'grey'} />
+                      }
+                      else{
+                        return null
+                      }
+                    }
+                  })()
+                }
+            </View>
+            <TouchableOpacity onPress={()=>navigation.navigate('Upload Private Share')}>
             <View style={{alignItems:"center", justifyContent:"center", marginTop:45, flexDirection:"row"}}>
                 <Text style={{color:'red',fontSize:15}}>
                     CANCEL
@@ -99,13 +137,8 @@ const Wallet_Creation = ({ navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-    sectionContainer: {
-      marginTop: 32,
-      paddingHorizontal: 24,
-    },
     sectionTitle: {
       fontSize: 24,
-      fontWeight: '600',
     },
     content:{
       color:'black',
@@ -169,4 +202,4 @@ const styles = StyleSheet.create({
     },
   });
 
-  export default Wallet_Creation; 
+  export default AccessWallet; 
