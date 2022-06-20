@@ -2,8 +2,8 @@ import UploadPrivateShare from './uploadprivateshare';
 import New_wallet from './new_wallet';
 import Continue from './Continue'
 import ActionBarImage from './ActionBarImage';
-import React from 'react';
-import { SafeAreaView ,ScrollView, StyleSheet, Text, Button, View, TouchableOpacity} from 'react-native';
+import React, {useEffect, useCallback} from 'react';
+import { SafeAreaView ,ScrollView, StyleSheet, Text, Button, View, TouchableOpacity, PermissionsAndroid, Alert} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Dashboard from './Dashboard';
@@ -11,10 +11,44 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Wallet_Creation from './wallet_creation';
 import Get_Private_Share from './Get_Private_Share';
 import AccessWallet from './accessWallet';
+import {request, PERMISSIONS} from 'react-native-permissions';
 
 const Stack = createNativeStackNavigator();
 
 const HomeScreen = ({ navigation }) => {
+
+  const [readWritePermission, setReadWritePermission] = React.useState("denied");
+
+  const fetchRequest = useCallback(() => {
+    // Api request here
+    console.log("Hello")
+    if(readWritePermission==="denied"){
+      request(Platform.OS === 'ios' ? PERMISSIONS.IOS.WRITE_EXTERNAL_STORAGE : PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result) => {
+        console.log(result)
+        if(result==="granted"){
+          setReadWritePermission(result)
+          console.log("Permission Granted")
+        }else{
+          console.log("Permission Denied")
+          Alert.alert(
+            "Permission Required",
+            "App requires Read & Write permission to work.",
+            [
+              {
+                text: "Allow",
+                onPress: () => fetchRequest()
+              }
+            ]
+          )
+        }
+      });
+    }   
+  }, []);
+
+  useEffect(()=>{
+    fetchRequest()
+  })
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <ActionBarImage />,
