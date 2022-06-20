@@ -20,8 +20,6 @@ const HomeScreen = ({ navigation }) => {
   const [readWritePermission, setReadWritePermission] = React.useState("denied");
 
   const fetchRequest = useCallback(() => {
-    // Api request here
-    console.log("Hello")
     if(readWritePermission==="denied"){
       request(Platform.OS === 'ios' ? PERMISSIONS.IOS.WRITE_EXTERNAL_STORAGE : PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result) => {
         console.log(result)
@@ -56,8 +54,6 @@ const HomeScreen = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <>
-    
       <SafeAreaView>
         <ScrollView styles={styles.pagecontent}>  
 
@@ -66,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
             This is a wallet that gives you access to your knuct coin anywhere in the world.
           </Text>
           <View style={styles.accesswallet}>
-          <TouchableOpacity onPress={()=>navigation.navigate('Access Wallet')}>
+          <TouchableOpacity onPress={()=>navigation.navigate('Upload Private Share')}>
           <View style={{flexDirection:'row'}}>
             <MaterialIcons name='auto-awesome' style={{color:'#1976D2',fontSize:20}}/>
             <Text style={{color: '#1976D2', fontWeight:'bold', fontSize:14, marginLeft:5}}>ACCESS WALLET</Text>
@@ -81,15 +77,8 @@ const HomeScreen = ({ navigation }) => {
           </View>
           </TouchableOpacity>
           </View>
-
-          {/* <Text style={styles.content}>
-            For better security download our desktop wallet.
-          </Text> */}
-
         </ScrollView>
-      </SafeAreaView></>
-
-
+      </SafeAreaView>
   );
 };
 const App = () => {

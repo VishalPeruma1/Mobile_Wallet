@@ -9,7 +9,8 @@ import {
   Alert,
   useColorScheme,
   View,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from 'react-native';
 import { color } from 'react-native-elements/dist/helpers';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -22,6 +23,11 @@ const AccessWallet = ({ navigation, route}) => {
     const [authenticate,setAuthenticate] = React.useState(false);
     const [startwallet,setStartwallet] = React.useState(false);
     const [fetchdata,setFetchdata] = React.useState(false);
+    const imguri = route.params.imageuri;
+
+    React.useEffect(()=>{
+      console.log(imguri)
+    })
 
     fetch('http://webwallet.knuct.com/sapi/auth/challenge')
      .then(response=>{
@@ -37,6 +43,7 @@ const AccessWallet = ({ navigation, route}) => {
                     "Accept": "application/json",
                 },
                 body:JSON.stringify({
+                  
                 })
             }
             fetch('http://webwallet.knuct.com/sapi/createwallet',options)

@@ -95,7 +95,7 @@ const New_wallet = ({ navigation}) => {
           var param1 = text
           var param2 = []
           for(i of selected){
-            param2.push(i.val)
+            param2.push(i.val.toLowerCase())
           }
           console.log(param1,param2)
           navigation.navigate('Wallet Creation',{"param1":param1,"param2":param2})

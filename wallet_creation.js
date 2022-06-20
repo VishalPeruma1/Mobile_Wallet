@@ -11,7 +11,6 @@ import {
   View,
   ActivityIndicator
 } from 'react-native';
-import { color } from 'react-native-elements/dist/helpers';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
 
@@ -21,38 +20,74 @@ const Wallet_Creation = ({ navigation, route}) => {
     const [starttempnode,setStarttempnode] = React.useState(false);
     const [createwallet,setCreatewallet] = React.useState(false);
     const {param1,param2} = route.params;
+    var key;
 
-    fetch('http://webwallet.knuct.com/sapi/starttempnode')
-     .then(response=>{
-        if(response.status===204) {
-            console.log(response.status)
-            console.log(param1,param2)
-            setStarttempnode(true);
-            let options = {
-                method:"POST",
-                credentials: 'same-origin',
-                mode: 'same-origin',
-                headers:{
-                    "Content-Type":"application/json",
-                    "Accept": "application/json",
-                },
-                body:JSON.stringify({
-                    passphrase: param1,
-                    seedWords: param2
-                })
+    const tempnodecreation = async() => {
+      console.log("Starting Temporary Node")
+      fetch('http://webwallet.knuct.com/sapi/starttempnode')
+      .then(response => {
+         if(response.status===204) {
+             console.log(response.status)
+             console.log(param1,param2)
+             setStarttempnode(true);
+           }
+      })
+      .catch(error=>{
+         Toast.show(error,Toast.LONG)
+      })
+    }
+
+    const newwalletcreation = async() => {
+      console.log("Creating Wallet")
+      let options = {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify ({
+            passphrase: param1,
+            seedWords: param2
+        })
+    }
+    fetch('http://webwallet.knuct.com/sapi/createwallet', options)
+        .then(response => {
+            console.log(response)
+            if(response.status===200) {
+              setCreatewallet(true);
+              //key
             }
-            fetch('http://webwallet.knuct.com/sapi/createwallet',options)
-             .then(response=>{
-                console.log(response)
-             })
-             .catch(error=>{
-                Toast.show(error,Toast.LONG)
-             })
-        }
-     })
-     .catch(error=>{
-        Toast.show(error,Toast.LONG)
-     })
+        })
+        .catch(error=>{
+            Toast.show(error,Toast.LONG)
+        })
+    }
+
+    const privshare = async() => {
+      console.log("Getting Private Share")
+      fetch('http://webwallet.knuct.com/sapi/privshare?k='+key)
+      .then(response => {
+         
+      })
+      .catch(error=>{
+         Toast.show(error,Toast.LONG)
+      })
+    }
+
+    const apicalls = async() => {
+      tempnodecreation()
+      if(starttempnode) {
+        newwalletcreation()
+        // if(createwallet){
+        //   privshare()
+        // }
+      }
+    }
+
+    React.useEffect(() => {
+      apicalls()
+      }
+    )
+
 
     return(
         <ScrollView style={styles.content}>
@@ -62,7 +97,7 @@ const Wallet_Creation = ({ navigation, route}) => {
             </Text>
             <View style={{alignItems:"center", justifyContent:"center", marginTop:40, flexDirection:"row"}}>
                 <Text style={{color:starttempnode?'green':'grey', fontSize:15, marginRight:5}}>
-                    Starting Temporary Wallet
+                    Starting Temporary Node
                 </Text>
                 {starttempnode?<MaterialIcons name='check' style={{color:'green',fontSize:18}}/>:<ActivityIndicator  color={'grey'} />}
             </View> 

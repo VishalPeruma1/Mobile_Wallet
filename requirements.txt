@@ -18,3 +18,7 @@ npm install react-native-image-picker --save
 yarn add react-native-simple-toast
 #or with npm
 npm install react-native-simple-toast
+
+yarn add react-native-permissions
+#or with npm 
+npm install react-native-permissions

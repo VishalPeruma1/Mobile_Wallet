@@ -16,7 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 
-const UploadPrivateShare = ({ navigation}) => {
+const UploadPrivateShare = ({ navigation, route}) => {
 
   choosePrivateShare = () => {
     var options = {
@@ -43,10 +43,11 @@ const UploadPrivateShare = ({ navigation}) => {
         console.log('User tapped custom button: ', res.customButton);
         alert(res.customButton);
       } else {
+        var uri = res.assets[0].uri
+        navigation.navigate('Access Wallet',{"imageuri":uri})
       }
     });
   };
-
 
     return(
 
