@@ -15,7 +15,7 @@ import {
 import { color } from 'react-native-elements/dist/helpers';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
-
+import * as privShareUtils from './utils/privShare';
 
 const AccessWallet = ({ navigation, route}) => {
 
@@ -23,10 +23,26 @@ const AccessWallet = ({ navigation, route}) => {
     const [authenticate,setAuthenticate] = React.useState(false);
     const [startwallet,setStartwallet] = React.useState(false);
     const [fetchdata,setFetchdata] = React.useState(false);
-    const imguri = route.params.imageuri;
+    const priv_share = route.params.priv_share;
+    const [file,setFile] = React.useState(null)
 
     React.useEffect(()=>{
-      console.log(imguri)
+      console.log(priv_share)
+      console.log(new File([""], "filename"))
+      if(file) {
+        privShareUtils.getImageData(file,(imgData) => {
+            privShare = privShareUtils.removeAlphaChannel(imgData)
+            let hashRaw = privShareUtils.mh_md5(privShare)
+            hash = privShareUtils.mb_base32(hashRaw) 
+            console.log("Hash : ",hash)
+        },
+        (err) => {
+            Toast.show('Choose a valid private share',Toast.LONG)
+        });
+      }
+      else {
+          Toast.show('No file selected',Toast.LONG)
+      }
     })
 
     fetch('http://webwallet.knuct.com/sapi/auth/challenge')

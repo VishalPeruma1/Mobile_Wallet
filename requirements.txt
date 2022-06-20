@@ -22,3 +22,7 @@ npm install react-native-simple-toast
 yarn add react-native-permissions
 #or with npm 
 npm install react-native-permissions
+
+npm install md5
+
+npm i react-native-canvas

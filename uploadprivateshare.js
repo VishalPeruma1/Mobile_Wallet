@@ -43,8 +43,8 @@ const UploadPrivateShare = ({ navigation, route}) => {
         console.log('User tapped custom button: ', res.customButton);
         alert(res.customButton);
       } else {
-        var uri = res.assets[0].uri
-        navigation.navigate('Access Wallet',{"imageuri":uri})
+        var priv_share = res.assets[0]
+        navigation.navigate('Access Wallet',{"priv_share":priv_share})
       }
     });
   };
