@@ -3,7 +3,7 @@
  */
 
  import md5 from 'md5';
- import Canvas from 'react-native-canvas';
+//  import Canvas from 'react-native-canvas';
 
 /**
  * gets the image data of a file using canvas API's context.getImageData()

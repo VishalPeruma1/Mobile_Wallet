@@ -15,9 +15,18 @@ import Toast from 'react-native-simple-toast';
 
 const New_wallet = ({ navigation}) => {
 
+    const [value, setValue] = React.useState(0);
+
+    React.useEffect(() => {
+      const interval = setInterval(() => {
+        setValue((v) => (v === 9 ? 0 : v + 1));
+      }, 1000);
+    }, []); 
+
     const [text, onChangeText] = React.useState("");
     const [state,setState] = React.useState(Array(16).fill(false));
-
+    const [selected,setSelected] = React.useState([]);
+    // const [var1,changevar] = React.useState(null);
 
     const data = [
       [{val:"Hill",id:1}, {val:"Bull",id:2}, {val:"Bag",id:3}, {val:"Window",id:4}],
@@ -26,25 +35,26 @@ const New_wallet = ({ navigation}) => {
       [{val:"Tree",id:13}, {val:"Computer",id:14}, {val:"Bottle",id:15}, {val:"Water",id:16}],
     ]
 
-    /* var state = Array(16).fill(false) */
-    var selected = []
+    // var state = Array(16).fill(false).
 
-    function seedwords({data}){
+    // var selected = []
+
+    function seedwords({data}) {
       state[data.id-1] = !state[data.id-1]
       console.log(data.id)
-      try{
-        if(selected.length==0){
+      try {
+        if(selected.length==0) {
           selected.push(data)
         }
-        else if(selected.includes(data)){
+        else if(selected.includes(data)) {
           idx = selected.indexOf(data)
           selected.splice(idx,1)
         }
-        else{
-          if (selected.length<4){
+        else {
+          if (selected.length<4) {
             selected.push(data)
           }
-          else{
+          else {
             dt = selected.shift();
             state[dt.id-1] = !state[dt.id-1]
             selected.push(data)
@@ -73,7 +83,7 @@ const New_wallet = ({ navigation}) => {
         <View style={styles.cellStyle}>
           <TouchableOpacity onPress={()=>seedwords({data})}>
             <View>
-              <Text style={{color : (state[data.id] ? 'red' : 'black')}}>{data.val}</Text>              
+              <Text style={{color : (state[data.id-1] ? '#1976D2' : 'black')}}>{data.val}</Text>              
             </View>
           </TouchableOpacity>
         </View>
@@ -81,20 +91,20 @@ const New_wallet = ({ navigation}) => {
     }    
 
     function Create_Wallet() {
-      if(text===""){
+      if(text==="") {
         Toast.show("You cannot leave passphrase empty",Toast.LONG);
       }
-      else if(text.length<3){
+      else if(text.length<3) {
         Toast.show("Passphrase should atleast be 3 characters long",Toast.LONG);
       }
       else {
-        if(selected.length<4){
+        if(selected.length!==4) {
           Toast.show("Select exactly 4 words from the list",Toast.LONG);
         }
-        else{
+        else {
           var param1 = text
           var param2 = []
-          for(i of selected){
+          for(i of selected) {
             param2.push(i.val.toLowerCase())
           }
           console.log(param1,param2)

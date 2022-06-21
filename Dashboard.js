@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 
 import { Card, fonts, ListItem, Avatar, renderNode } from "react-native-elements";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 
 const Dashboard = ({ navigation}) => {
   return (

@@ -11,6 +11,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Wallet_Creation from './wallet_creation';
 import Get_Private_Share from './Get_Private_Share';
 import AccessWallet from './accessWallet';
+import TabBar from './Tab_Bar';
 import {request, PERMISSIONS} from 'react-native-permissions';
 
 const Stack = createNativeStackNavigator();
@@ -96,10 +97,10 @@ const App = () => {
     <Stack.Screen name="Wallet Creation" component={Wallet_Creation} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Get Private Share" component={Get_Private_Share} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Access Wallet" component={AccessWallet} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
+    <Stack.Screen name="Tab Bar" component={TabBar} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
   </Stack.Navigator>
   </NavigationContainer>
-
-            
+    
   );
 };
 
