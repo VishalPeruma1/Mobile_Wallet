@@ -57,7 +57,6 @@ const HomeScreen = ({ navigation }) => {
   return (
       <SafeAreaView>
         <ScrollView styles={styles.pagecontent}>  
-
           <Text style={styles.headline}>Welcome to Knuct Wallet.</Text>
           <Text style={styles.content}>
             This is a wallet that gives you access to your knuct coin anywhere in the world.

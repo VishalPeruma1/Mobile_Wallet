@@ -58,7 +58,7 @@ const Get_Private_Share = ({ navigation, route}) => {
               <TouchableOpacity onPress={()=>setCheckbox(!checkbox)}>
                 {
                   checkbox?<MaterialCommunityIcons name="checkbox-marked" style={{fontSize:20, color:"#1976D2"}}/> :
-                  <MaterialCommunityIcons name="checkbox-blank-outline" style={{fontSize:20}}/>
+                  <MaterialCommunityIcons name="checkbox-blank-outline" style={{fontSize:20, color:"#808080"}}/>
                 }
               </TouchableOpacity>
               <Text style={{textAlign:'center', color:'gray', marginLeft:10}}>
