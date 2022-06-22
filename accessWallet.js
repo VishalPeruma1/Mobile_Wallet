@@ -1,18 +1,12 @@
 import React from 'react';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text, 
-  Button,TouchableOpacity,
-  Alert,
-  useColorScheme,
+  TouchableOpacity,
   View,
   ActivityIndicator,
-  Image
 } from 'react-native';
-import { color } from 'react-native-elements/dist/helpers';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
 import * as privShareUtils from './utils/privShare';

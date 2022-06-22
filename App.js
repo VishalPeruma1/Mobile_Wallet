@@ -45,7 +45,9 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   useEffect(()=>{
-    fetchRequest()
+    if(readWritePermission!=="granted"){
+      fetchRequest()
+    }
   })
 
   React.useLayoutEffect(() => {

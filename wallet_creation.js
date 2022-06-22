@@ -1,13 +1,9 @@
 import React from 'react';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text, 
-  Button,TouchableOpacity,
-  Alert,
-  useColorScheme,
+  TouchableOpacity,
   View,
   ActivityIndicator
 } from 'react-native';
@@ -19,6 +15,7 @@ const Wallet_Creation = ({ navigation, route}) => {
 
     const [starttempnode,setStarttempnode] = React.useState(false);
     const [createwallet,setCreatewallet] = React.useState(false);
+    const [privShareKey,setPrivShareKey] = React.useState(null)
     const {param1,param2} = route.params;
     var key;
 
@@ -28,7 +25,6 @@ const Wallet_Creation = ({ navigation, route}) => {
       .then(response => {
          if(response.status===204) {
              console.log(response.status)
-             console.log(param1,param2)
              setStarttempnode(true);
            }
       })
@@ -39,6 +35,7 @@ const Wallet_Creation = ({ navigation, route}) => {
 
     const newwalletcreation = async() => {
       console.log("Creating Wallet")
+      console.log(param1,param2)
       let options = {
         method:"POST",
         headers:{
@@ -48,38 +45,50 @@ const Wallet_Creation = ({ navigation, route}) => {
             passphrase: param1,
             seedWords: param2
         })
-    }
-    fetch('http://webwallet.knuct.com/sapi/createwallet', options)
-        .then(response => {
-            console.log(response)
-            if(response.status===200) {
-              setCreatewallet(true);
-              //key
-            }
-        })
-        .catch(error=>{
-            Toast.show(error,Toast.LONG)
-        })
+      }
+      try {
+        const response = await fetch('http://webwallet.knuct.com/sapi/createwallet',options);
+        const responseJson = await response.json();
+        console.log("Response JSON: ", responseJson)
+        if(response.status===200){
+          console.log("privshare: "+responseJson.data.privshare)
+          setPrivShareKey(String(responseJson.data.privshare)) 
+          setCreatewallet(true)
+        }
+      } catch(error){
+        Toast.show(error,Toast.LONG);
+      }
     }
 
-    const privshare = async() => {
+    const getprivshare = async() => {
       console.log("Getting Private Share")
-      fetch('http://webwallet.knuct.com/sapi/privshare?k='+key)
-      .then(response => {
-         
-      })
-      .catch(error=>{
+      console.log('http://webwallet.knuct.com/sapi'+privShareKey)
+      try {
+        const response = await fetch('http://webwallet.knuct.com/sapi'+privShareKey,{method:"GET",headers:{}})
+        console.log("Response: ", response)
+        //const responseJson = await response.json();
+        //console.log("Response JSON: ", responseJson)
+        const imageBlob = await response.blob();
+        console.log("Image Blob: "+imageBlob)
+        const imageObjectURL = URL.createObjectURL(imageBlob)
+        console.log("ImageObjectURL: "+imageObjectURL)
+        if(response.status===200){
+          navigation.navigate('Get Private Share')
+        }
+      } catch(error){
          Toast.show(error,Toast.LONG)
-      })
+      }
     }
 
     const apicalls = async() => {
-      tempnodecreation()
-      if(starttempnode) {
+      if(!starttempnode){
+        tempnodecreation()
+      }
+      if(starttempnode && !createwallet) {
         newwalletcreation()
-        // if(createwallet){
-        //   privshare()
-        // }
+      }
+      if(starttempnode && createwallet){
+        getprivshare()
       }
     }
 

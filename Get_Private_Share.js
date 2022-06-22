@@ -1,19 +1,13 @@
 import React from 'react';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text, 
-  Button,TouchableOpacity,
-  Alert,
-  useColorScheme,
+  TouchableOpacity,
   View,
 } from 'react-native';
-import { color } from 'react-native-elements/dist/helpers';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Toast from 'react-native-simple-toast';
 
 
 const Get_Private_Share = ({ navigation, route}) => {
