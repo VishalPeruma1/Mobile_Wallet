@@ -1,14 +1,10 @@
 import React from 'react';
 import Dashboard from './Dashboard';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text, 
-  Button,TouchableOpacity,
-  Alert,
-  useColorScheme,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';

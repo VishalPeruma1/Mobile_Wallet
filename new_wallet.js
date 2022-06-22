@@ -3,14 +3,11 @@ import {
   ScrollView,
   StyleSheet,
   Text, 
-  Button,
   TextInput,
   View,
   TouchableOpacity,
 } from 'react-native';
-import { ButtonGroup, Input } from "react-native-elements";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
 
 const New_wallet = ({ navigation}) => {
@@ -18,9 +15,14 @@ const New_wallet = ({ navigation}) => {
     const [value, setValue] = React.useState(0);
 
     React.useEffect(() => {
-      const interval = setInterval(() => {
-        setValue((v) => (v === 9 ? 0 : v + 1));
-      }, 1000);
+      try{
+        const interval = setInterval(() => {
+          setValue((v) => (v === 9 ? 0 : v + 1));
+        }, 1000);
+      }
+      catch(err){
+        console.log(err);
+      }
     }, []); 
 
     const [text, onChangeText] = React.useState("");
@@ -43,21 +45,19 @@ const New_wallet = ({ navigation}) => {
       state[data.id-1] = !state[data.id-1]
       console.log(data.id)
       try {
-        if(selected.length==0) {
-          selected.push(data)
-        }
-        else if(selected.includes(data)) {
-          idx = selected.indexOf(data)
-          selected.splice(idx,1)
+        if(selected.includes(JSON.stringify(data))) {
+          console.log("Removing")
+          selected.splice(selected.indexOf(JSON.stringify(data)),1)
         }
         else {
+          console.log("Pushing")
           if (selected.length<4) {
-            selected.push(data)
+            selected.push(JSON.stringify(data))
           }
           else {
-            dt = selected.shift();
+            dt = JSON.parse(selected.shift());
             state[dt.id-1] = !state[dt.id-1]
-            selected.push(data)
+            selected.push(JSON.stringify(data))
           }
         }
       }
@@ -80,13 +80,14 @@ const New_wallet = ({ navigation}) => {
 
     function Cell({ data }) {
       return (
-        <View style={styles.cellStyle}>
-          <TouchableOpacity onPress={()=>seedwords({data})}>
-            <View>
-              <Text style={{color : (state[data.id-1] ? '#1976D2' : 'black')}}>{data.val}</Text>              
+        
+          <TouchableOpacity onPress={()=>seedwords({data})} style={styles.cellStyle}>
+          <View style={{ paddingStart:6, paddingBottom:10, paddingTop:10, paddingEnd:6, alignItems:'center', justifyContent:'center', borderRadius:4,
+          backgroundColor: (state[data.id-1] ? 'rgb(207, 150, 217)' : '#ffffff')}}>
+              <Text style={{color : (state[data.id-1] ? 'white' : 'black')}}>{data.val}</Text>              
             </View>
           </TouchableOpacity>
-        </View>
+        
       );
     }    
 
@@ -102,13 +103,18 @@ const New_wallet = ({ navigation}) => {
           Toast.show("Select exactly 4 words from the list",Toast.LONG);
         }
         else {
-          var param1 = text
-          var param2 = []
-          for(i of selected) {
-            param2.push(i.val.toLowerCase())
+          try{
+            var param1 = text
+            var param2 = []
+            for(i of selected) {
+              param2.push(JSON.parse(i).val.toLowerCase())
+            }
+            console.log(param1,param2)
+            navigation.navigate('Wallet Creation',{"param1":param1,"param2":param2})
           }
-          console.log(param1,param2)
-          navigation.navigate('Wallet Creation',{"param1":param1,"param2":param2})
+          catch(err){
+            console.log(err)
+          }
         }
       }
     }
@@ -173,12 +179,6 @@ const styles = StyleSheet.create({
       marginBottom:10,
       marginTop:10,
       marginEnd:5,
-      paddingStart:6,
-      paddingBottom:10,
-      paddingTop:10,
-      paddingEnd:6,
-      alignItems:'center',
-      justifyContent:'center',
       borderWidth:1,
       borderRadius:5,
     },

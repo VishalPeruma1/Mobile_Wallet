@@ -1,14 +1,8 @@
 import React from 'react';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
-  Text, 
-  Button,TouchableOpacity,
-  Alert,
-  useColorScheme,
-  View,
+  Text,
 } from 'react-native';
 
 const Continue = ({ navigation}) => {

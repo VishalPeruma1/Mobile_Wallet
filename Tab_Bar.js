@@ -1,18 +1,6 @@
 import React from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text, 
-  Image,
-  View,
-  TouchableHighlight
-} from 'react-native';
-
-import { Card, fonts, ListItem, Avatar, renderNode } from "react-native-elements";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { NavigationContainer } from '@react-navigation/native';
-import Continue from './Continue.js';
 import Dashboard from './Dashboard.js';
 import UploadPrivateShare from './uploadprivateshare.js';
 

@@ -8,8 +8,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-import { Card, fonts, ListItem, Avatar, renderNode } from "react-native-elements";
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Card, ListItem } from "react-native-elements";
 
 
 const Dashboard = ({ navigation}) => {
