@@ -10,7 +10,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-simple-toast';
 
-const New_wallet = ({ navigation}) => {
+const ChooseWords = ({ navigation}) => {
 
     const [value, setValue] = React.useState(0);
 
@@ -106,7 +106,7 @@ const New_wallet = ({ navigation}) => {
           try{
             var param1 = text
             var param2 = []
-            for(i of selected) {
+            for(var i of selected) {
               param2.push(JSON.parse(i).val.toLowerCase())
             }
             console.log(param1,param2)
@@ -274,4 +274,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export default New_wallet;
+export default ChooseWords;

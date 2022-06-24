@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
-import * as privShareUtils from './utils/privShare';
+import * as privShareUtils from '../utils/privShare';
 
 const AccessWallet = ({ navigation, route}) => {
 
