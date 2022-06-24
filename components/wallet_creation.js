@@ -130,7 +130,7 @@ const Wallet_Creation = ({ navigation, route}) => {
                   })()
                 }
             </View>
-            <TouchableOpacity onPress={()=>navigation.navigate('New Wallet')}>
+            <TouchableOpacity onPress={()=>navigation.navigate('Choose Words')}>
             <View style={{alignItems:"center", justifyContent:"center", marginTop:45, flexDirection:"row"}}>
                 <Text style={{color:'red',fontSize:15}}>
                     CANCEL

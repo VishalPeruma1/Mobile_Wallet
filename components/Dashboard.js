@@ -28,7 +28,7 @@ const Dashboard = ({ navigation}) => {
       <View style={{position: "relative" }}>
           <Text style={{ color: "white", fontSize: 15 }}>Use this to transfer tokens to your wallet. </Text>
           <Text></Text>
-          <Image source={ require('./assets/qr.png')} style={{alignSelf:"center"}}/>
+          <Image source={ require('../assets/qr.png')} style={{alignSelf:"center"}}/>
           <Text></Text>
           <Text style={{ color: "white", fontSize: 15 }}>Qmegu3AULzboZrA54K2ak1CoR4i1JTJqtxxQwVXeGrcWvT </Text>
       </View>
