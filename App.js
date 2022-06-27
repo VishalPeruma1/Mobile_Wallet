@@ -57,7 +57,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
       <SafeAreaView>
-        <ScrollView styles={styles.pagecontent}>  
+        <ScrollView>  
           <Text style={styles.headline}>Welcome to Knuct Wallet.</Text>
           <Text style={styles.content}>
             This is a wallet that gives you access to your knuct coin anywhere in the world.
@@ -109,15 +109,6 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
-  },
-  pagecontent:{
-    color:'black',
-    flex:2 ,
-    textAlign:'center',
-    fontSize: 15,
-    marginTop: 25,
-    // justifyContent: 'center',
-    // marginLeft: 37
   },
   sectionTitle: {
     fontSize: 24,
