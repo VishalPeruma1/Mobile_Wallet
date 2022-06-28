@@ -4,16 +4,50 @@ import {
   StyleSheet,
   Text, 
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
+import RNFetchBlob from 'rn-fetch-blob';
+import Toast from 'react-native-simple-toast';
 
 const Get_Private_Share = ({ navigation, route}) => {
 
     const [privateShare, setPrivateshare] = React.useState(false);
     const  [checkbox,setCheckbox] = React.useState(false);
+    const privShareKey = route.params.Key;
+    var RNFetchBlob = require('rn-fetch-blob').default
+
+
+    function getprivshare () {
+      console.log("Getting Private Share")
+      console.log('http://webwallet.knuct.com/sapi'+privShareKey)
+      try {
+        RNFetchBlob
+      .config({
+        fileCache : true,
+        path : RNFetchBlob.fs.dirs.DownloadDir+'/'+'PrivateShare.png',
+        addAndroidDownloads: { 
+          title: RNFetchBlob.fs.dirs.DownloadDir+'/'+'PrivateShare.png', 
+          description: `Download ${RNFetchBlob.fs.dirs.DownloadDir+'/'+'PrivateShare.png'}`,
+          useDownloadManager: false, 
+          notification: true,
+        }, 
+        appendExt : 'png'
+      })
+      .fetch('GET', 'http://webwallet.knuct.com/sapi'+privShareKey, {
+      })
+      .then((res) => {
+        // Toast.show('The file saved to ', res.path())
+        setPrivateshare(true)
+      })
+      .catch((error) => {
+        console.log(error)
+      })} 
+       catch(error){
+        //  Toast.show(error,Toast.LONG)
+      }
+    }
 
     return(
         <ScrollView style={styles.content}>
@@ -35,7 +69,7 @@ const Get_Private_Share = ({ navigation, route}) => {
             <View style={styles.download}>
             <View style={{backgroundColor:privateShare?"white":'#1976D2', padding:12, borderWidth:1, borderRadius:5, borderColor: "#1976D2"}}>
             <TouchableOpacity onPress={()=>{
-                setPrivateshare(true)
+                getprivshare()
               }}>
             <View style={{flexDirection:'row'}}>
                 <MaterialIcons name='file-download' style={{color:privateShare?'#1976D2':"white",fontSize:20, marginTop:1}}/>
