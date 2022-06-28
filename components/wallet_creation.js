@@ -7,6 +7,7 @@ import {
   View,
   ActivityIndicator
 } from 'react-native';
+import RNFetchBlob from 'react-native-fetch-blob'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
 
@@ -18,6 +19,7 @@ const Wallet_Creation = ({ navigation, route}) => {
     const [privShareKey,setPrivShareKey] = React.useState(null)
     const {param1,param2} = route.params;
     var key;
+    var RNFetchBlob = require('react-native-fetch-blob').default
 
     const tempnodecreation = async() => {
       console.log("Starting Temporary Node")
@@ -63,19 +65,33 @@ const Wallet_Creation = ({ navigation, route}) => {
     const getprivshare = async() => {
       console.log("Getting Private Share")
       console.log('http://webwallet.knuct.com/sapi'+privShareKey)
+
       try {
-        const response = await fetch('http://webwallet.knuct.com/sapi'+privShareKey,{method:"GET",headers:{}})
-        console.log("Response: ", response)
-        //const responseJson = await response.json();
-        //console.log("Response JSON: ", responseJson)
-        const imageBlob = await response.blob();
-        console.log("Image Blob: "+imageBlob)
-        const imageObjectURL = URL.createObjectURL(imageBlob)
-        console.log("ImageObjectURL: "+imageObjectURL)
-        if(response.status===200){
-          navigation.navigate('Get Private Share')
-        }
-      } catch(error){
+        RNFetchBlob
+      .config({
+        fileCache : true,
+        // by adding this option, the temp files will have a file extension
+        path : RNFetchBlob.fs.dirs.DownloadDir+'/'+'PrivateShare.png',
+        addAndroidDownloads: { 
+          title: RNFetchBlob.fs.dirs.DownloadDir+'/'+'PrivateShare.png', 
+          description: `Download ${RNFetchBlob.fs.dirs.DownloadDir+'/'+'PrivateShare.png'}`,
+          useDownloadManager: false, 
+          notification: true,
+        }, 
+        appendExt : 'png'
+      })
+      .fetch('GET', 'http://webwallet.knuct.com/sapi'+privShareKey, {
+        //some headers ..
+      })
+      .then((res) => {
+        // the temp file path with file extension `png`
+        console.log('The file saved to ', res.path())
+        navigation.navigate('Display',{'path': res.path()})
+        // Beware that when using a file path as Image source on Android,
+        // you must prepend "file://"" before the file path
+        //imageView = <Image source={{ uri : Platform.OS === 'android' ? 'file://' + res.path()  : '' + res.path() }}/>
+      })} 
+       catch(error){
          Toast.show(error,Toast.LONG)
       }
     }
