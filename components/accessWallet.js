@@ -44,6 +44,12 @@ const AccessWallet = ({ navigation, route}) => {
         console.log(signature)
         responseApi(signature)
       }
+      if(authenticate && !startwallet) {
+        startNodeApi()
+      }
+      if(startwallet && !fetchdata) {
+        fetchDataApi()
+      }
     }
 
     React.useEffect(()=>{
@@ -90,6 +96,32 @@ const AccessWallet = ({ navigation, route}) => {
         console.log(response)
         if(response.status===204) {
           setAuthenticate(true)
+        }
+      } catch(error) {
+        Toast.show(error,Toast.LONG);
+      }
+    }
+
+    const startNodeApi = async()=>{
+      try {
+        const response = await fetch('http://webwallet.knuct.com/sapi/startnode');
+        console.log(response)
+        if(response.status===204) {
+          setStartwallet(true)
+        }
+      } catch(error) {
+        Toast.show(error,Toast.LONG);
+      }
+    }
+
+    const fetchDataApi = async()=>{
+      try {
+        const response = await fetch('http://webwallet.knuct.com/sapi/walletdata');
+        const responseJson = await response.json();
+        console.log("Response JSON: ", responseJson)
+        if(response.status===200 && responseJson) {
+          setFetchdata(true)
+          // navigation.navigate("Tab Bar",{"did":responseJson.data.did})
         }
       } catch(error) {
         Toast.show(error,Toast.LONG);
