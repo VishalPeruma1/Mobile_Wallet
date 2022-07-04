@@ -23,8 +23,8 @@ const Wallet_Creation = ({ navigation, route}) => {
       fetch('http://webwallet.knuct.com/sapi/starttempnode')
       .then(response => {
          if(response.status===204) {
-             console.log(response.status)
-             setStarttempnode(true);
+            setStarttempnode(true);
+            console.log(response.status)
            }
       })
       .catch(error=>{
@@ -50,9 +50,9 @@ const Wallet_Creation = ({ navigation, route}) => {
         const responseJson = await response.json();
         console.log("Response JSON: ", responseJson)
         if(response.status===200){
+          setCreatewallet(true)
           console.log("privshare: "+responseJson.data.privshare)
           setPrivShareKey(String(responseJson.data.privshare)) 
-          setCreatewallet(true)
           navigation.navigate("Get Private Share",{"Key":String(responseJson.data.privshare)})
         }
       } catch(error){

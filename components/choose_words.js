@@ -84,7 +84,7 @@ const ChooseWords = ({ navigation}) => {
           <TouchableOpacity onPress={()=>seedwords({data})} style={styles.cellStyle}>
           <View style={{ paddingStart:6, paddingBottom:10, paddingTop:10, paddingEnd:6, alignItems:'center', justifyContent:'center', borderRadius:4,
           backgroundColor: (state[data.id-1] ? 'rgb(207, 150, 217)' : '#ffffff')}}>
-              <Text style={{color : (state[data.id-1] ? 'white' : 'black')}}>{data.val}</Text>              
+              <Text style={{color : (state[data.id-1] ? 'white' : 'black'), fontSize:13}}>{data.val}</Text>              
             </View>
           </TouchableOpacity>
         

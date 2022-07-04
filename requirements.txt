@@ -28,3 +28,5 @@ npm install md5
 npm i react-native-canvas
 
 npm install @react-navigation/bottom-tabs
+
+npm install react-native-radial-gradient  --save

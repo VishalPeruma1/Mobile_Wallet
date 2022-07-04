@@ -1,5 +1,5 @@
 import React, {useEffect, useCallback} from 'react';
-import { SafeAreaView ,ScrollView, StyleSheet, Text, Button, View, TouchableOpacity, Alert} from 'react-native';
+import { SafeAreaView ,ScrollView, StyleSheet, Text, Button, View, TouchableOpacity, Alert, LogBox} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {request, PERMISSIONS} from 'react-native-permissions';
@@ -12,9 +12,12 @@ import Wallet_Creation from './components/wallet_creation';
 import Get_Private_Share from './components/Get_Private_Share';
 import TabBar from './components/Tab_Bar'; 
 import Dashboard from './components/Dashboard';
+import Logout from './components/Logout';
 // import Display from './components/display';
 
 const Stack = createNativeStackNavigator();
+
+LogBox.ignoreAllLogs()
 
 const HomeScreen = ({ navigation }) => {
 
@@ -96,7 +99,7 @@ const App = () => {
     <Stack.Screen name="Choose Words" component={ChooseWords} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Wallet Creation" component={Wallet_Creation} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Get Private Share" component={Get_Private_Share} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
-    <Stack.Screen name="Tab Bar" component={TabBar} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
+    <Stack.Screen name="Tab Bar" component={TabBar} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>, headerRight: ()=><Logout/>}} />
     <Stack.Screen name="Dashboard" component={Dashboard} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
    {/* // <Stack.Screen name="Display" component={Display} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} /> */}
   </Stack.Navigator>

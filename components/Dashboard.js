@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { Card, ListItem } from "react-native-elements";
+import RadialGradient from 'react-native-radial-gradient';
 
 
 const Dashboard = ({ navigation}) => {
@@ -16,12 +17,14 @@ const Dashboard = ({ navigation}) => {
     <>
     <ScrollView  style={styles.content}>
     <View style={{display:"flex", flexDirection:"column"}}>
-      <Card containerStyle={{borderRadius:10}} wrapperStyle={{}}>
-        <Card.Title style={{ fontSize: 25 }}>Your Balance</Card.Title>
+    <Card containerStyle={{borderRadius:10, padding:0, backgroundColor:'rgb(66, 165, 245)',}} wrapperStyle={{padding:10}}>
+        <RadialGradient colors={['rgba(0,0,0,0)','rgba(0,0,0,0.1)','rgba(0,0,0,0.05)','rgba(0,0,0,0.03)','rgba(255,255,255,0.05)']} stops={[0.03,0.2,0.2,0.6,0.6]} center={[0,0]}>
+        <Card.Title style={{ fontSize: 20, color:"white", align:"left"}}>Your Balance</Card.Title>
         <View style={{position: "relative" }}>
           <Text style={{ color: "black", fontSize: 17.5 }}>KNCT                                                      NFT</Text>
           <Text style={{ color: "black", fontSize: 15 }}>0                                                                           0</Text>
         </View>
+        </RadialGradient>
       </Card>
       <Card containerStyle={{borderRadius:10, height: 400, backgroundColor:"black", borderWidth:0}} wrapperStyle={{height: 250}}>
       <Card.Title style={{ fontSize: 25, color:"white" }}>Your DID</Card.Title>

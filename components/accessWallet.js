@@ -10,8 +10,10 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
 import * as privShareUtils from '../utils/privShare';
+import * as nlssUtils from '../utils/nlss';
 import { Buffer } from 'buffer';
 import { PNG } from 'pngjs/browser';
+import { sign } from 'crypto';
 
 const AccessWallet = ({ navigation, route}) => {
 
@@ -22,19 +24,25 @@ const AccessWallet = ({ navigation, route}) => {
     const priv_share = route.params.priv_share;
     const [challengeRes,setChallengeRes] = React.useState(null);
 
-    function apicalls(){
-      if(!checkwallet){
+    const apicalls = async() => {
+      if(!checkwallet) {
         const myBuffer = Buffer.from(priv_share.base64, 'base64');
         console.log(myBuffer.slice(0,50))
-        var png = PNG.sync.read(myBuffer);
+        const png = PNG.sync.read(myBuffer);
         var AlphaprivShare = privShareUtils.removeAlphaChannel(png.data)
         let hashRaw = privShareUtils.mh_md5(AlphaprivShare)
         var hashval = privShareUtils.mb_base32(hashRaw) 
         console.log("Hash : ",hashval)
         challengeApi(hashval)
       }
-      else if(checkwallet && !authenticate){
-        //responseApi()
+      if(checkwallet && !authenticate) {
+        const myBuffer = Buffer.from(priv_share.base64, 'base64');
+        const png = PNG.sync.read(myBuffer);
+        console.log(png.data.slice(0,50))
+        var AlphaprivShare = privShareUtils.removeAlphaChannel(png.data)
+        const signature = nlssUtils.createChallengeResponse(String(challengeRes),32,AlphaprivShare)
+        console.log(signature)
+        responseApi(signature)
       }
     }
 
@@ -54,40 +62,36 @@ const AccessWallet = ({ navigation, route}) => {
         })
       }
       try {
-        if(!checkwallet){
           const response = await fetch('http://webwallet.knuct.com/sapi/auth/challenge',options);
           const responseJson = await response.json();
           console.log("Response JSON: ", responseJson)
-          if(response.status===200 && responseJson){
+          if(response.status===200 && responseJson) {
+            setCheckwallet(true)
             console.log(responseJson.data.challenge)
             setChallengeRes(responseJson.data.challenge)
-            setCheckwallet(true)
           }
-        }
       } catch(error){
         Toast.show(error,Toast.LONG);
       }
     }
 
-    const responseApi = async()=>{
+    const responseApi = async(signature)=>{
       let options = {
         method:"POST",
         headers:{
           "Content-Type":"application/json",
         },
         body:JSON.stringify ({ 
-          hash: hashval
+          response: signature
         })
       }
       try {
         const response = await fetch('http://webwallet.knuct.com/sapi/auth/response',options);
-        const responseJson = await response.json();
-        console.log("Response JSON: ", responseJson)
-        if(response.status===200 && responseJson){
-          console.log(responseJson.data.challenge)
+        console.log(response)
+        if(response.status===204) {
           setAuthenticate(true)
         }
-      } catch(error){
+      } catch(error) {
         Toast.show(error,Toast.LONG);
       }
     }

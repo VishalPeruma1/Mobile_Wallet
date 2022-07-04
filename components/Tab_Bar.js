@@ -1,4 +1,5 @@
 import React from 'react';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Dashboard from './Dashboard.js';
 import UploadPrivateShare from './uploadprivateshare.js';
@@ -8,8 +9,9 @@ const TabBar= ({ navigation}) => {
 
     const [pagename,setPagename] = React.useState("Dashboard")
     const pages = [
-        {displayname:"Dashboard",navName:"Dashboard",icon:<MaterialIcons name="home" style={{color:(pagename==="Dashboard"?"#1976D2":"#808080"), fontSize:25}}/>},
-        {displayname:"Contacts",navName:"Contacts",icon:<MaterialIcons name="contacts" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:25}}/>}
+        {displayname:"Dashboard",navName:"Dashboard",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(pagename==="Dashboard"?"#1976D2":"#808080"), fontSize:25}}/>},
+        {displayname:"Transaction",navName:"Contacts",icon:<MaterialIcons name="compare-arrows" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:25}}/>},
+        {displayname:"Contacts",navName:"Contacts",icon:<MaterialIcons name="contact-page" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:25}}/>}
     ]
 
     function TabScreen({data}){
