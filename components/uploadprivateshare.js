@@ -4,13 +4,14 @@ import {
   ScrollView,
   StyleSheet,
   Text, 
+  ToastAndroid, 
   TouchableOpacity,
   View,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {launchImageLibrary} from 'react-native-image-picker';
-
+import Toast from 'react-native-simple-toast';
 
 const UploadPrivateShare = ({ navigation, route}) => {
 
@@ -18,6 +19,7 @@ const UploadPrivateShare = ({ navigation, route}) => {
     var options = {
       title: 'Choose Private Share',
       mediaType: 'photo',
+      includeBase64:true,
       customButtons: [
         { 
           name: 'customOptionKey', 
@@ -30,7 +32,7 @@ const UploadPrivateShare = ({ navigation, route}) => {
       },
     };
     launchImageLibrary(options, res => {
-      console.log('Response = ', res);
+      //console.log('Response = ', res);
       if (res.didCancel) {
         console.log('User cancelled image picker');
       } else if (res.error) {
@@ -40,7 +42,12 @@ const UploadPrivateShare = ({ navigation, route}) => {
         alert(res.customButton);
       } else {
         var priv_share = res.assets[0]
-        navigation.navigate('Access Wallet',{"priv_share":priv_share})
+        if(priv_share.type!=="image/png"){
+          Toast.show("Select appropriate private share",Toast.LONG)
+        }
+        else{
+          navigation.navigate('Access Wallet',{"priv_share":priv_share})
+        }
       }
     });
   };

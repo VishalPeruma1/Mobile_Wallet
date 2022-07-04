@@ -10,6 +10,8 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
 import * as privShareUtils from '../utils/privShare';
+import { Buffer } from 'buffer';
+import { PNG } from 'pngjs/browser';
 
 const AccessWallet = ({ navigation, route}) => {
 
@@ -18,56 +20,77 @@ const AccessWallet = ({ navigation, route}) => {
     const [startwallet,setStartwallet] = React.useState(false);
     const [fetchdata,setFetchdata] = React.useState(false);
     const priv_share = route.params.priv_share;
-    const [file,setFile] = React.useState(null)
+    const [challengeRes,setChallengeRes] = React.useState(null);
+
+    function apicalls(){
+      if(!checkwallet){
+        const myBuffer = Buffer.from(priv_share.base64, 'base64');
+        console.log(myBuffer.slice(0,50))
+        var png = PNG.sync.read(myBuffer);
+        var AlphaprivShare = privShareUtils.removeAlphaChannel(png.data)
+        let hashRaw = privShareUtils.mh_md5(AlphaprivShare)
+        var hashval = privShareUtils.mb_base32(hashRaw) 
+        console.log("Hash : ",hashval)
+        challengeApi(hashval)
+      }
+      else if(checkwallet && !authenticate){
+        //responseApi()
+      }
+    }
 
     React.useEffect(()=>{
-      console.log(priv_share)
-      console.log(new File([""], "filename"))
-      if(file) {
-        privShareUtils.getImageData(file,(imgData) => {
-            privShare = privShareUtils.removeAlphaChannel(imgData)
-            let hashRaw = privShareUtils.mh_md5(privShare)
-            hash = privShareUtils.mb_base32(hashRaw) 
-            console.log("Hash : ",hash)
-        },
-        (err) => {
-            Toast.show('Choose a valid private share',Toast.LONG)
-        });
-      }
-      else {
-          Toast.show('No file selected',Toast.LONG)
-      }
+      apicalls()
     })
 
-    fetch('http://webwallet.knuct.com/sapi/auth/challenge')
-     .then(response=>{
-        if(response.status===204) {
-            console.log(response.status)
-            setStarttempnode(true);
-            let options = {
-                method:"POST",
-                credentials: 'same-origin',
-                mode: 'same-origin',
-                headers:{
-                    "Content-Type":"application/json",
-                    "Accept": "application/json",
-                },
-                body:JSON.stringify({
-                  
-                })
-            }
-            fetch('http://webwallet.knuct.com/sapi/createwallet',options)
-             .then(response=>{
-                console.log(response)
-             })
-             .catch(error=>{
-                Toast.show(error,Toast.LONG)
-             })
+
+    const challengeApi = async(hashval)=>{
+      let options = {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify ({ 
+          hash: hashval
+        })
+      }
+      try {
+        if(!checkwallet){
+          const response = await fetch('http://webwallet.knuct.com/sapi/auth/challenge',options);
+          const responseJson = await response.json();
+          console.log("Response JSON: ", responseJson)
+          if(response.status===200 && responseJson){
+            console.log(responseJson.data.challenge)
+            setChallengeRes(responseJson.data.challenge)
+            setCheckwallet(true)
+          }
         }
-     })
-     .catch(error=>{
-        Toast.show(error,Toast.LONG)
-     })
+      } catch(error){
+        Toast.show(error,Toast.LONG);
+      }
+    }
+
+    const responseApi = async()=>{
+      let options = {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify ({ 
+          hash: hashval
+        })
+      }
+      try {
+        const response = await fetch('http://webwallet.knuct.com/sapi/auth/response',options);
+        const responseJson = await response.json();
+        console.log("Response JSON: ", responseJson)
+        if(response.status===200 && responseJson){
+          console.log(responseJson.data.challenge)
+          setAuthenticate(true)
+        }
+      } catch(error){
+        Toast.show(error,Toast.LONG);
+      }
+    }
 
     return(
         <ScrollView style={styles.content}>
