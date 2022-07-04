@@ -98,7 +98,7 @@ const App = () => {
     <Stack.Screen name="Get Private Share" component={Get_Private_Share} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Tab Bar" component={TabBar} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Dashboard" component={Dashboard} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
-   // <Stack.Screen name="Display" component={Display} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
+   {/* // <Stack.Screen name="Display" component={Display} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} /> */}
   </Stack.Navigator>
   </NavigationContainer>
     
