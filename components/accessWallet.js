@@ -121,7 +121,7 @@ const AccessWallet = ({ navigation, route}) => {
         console.log("Response JSON: ", responseJson)
         if(response.status===200 && responseJson) {
           setFetchdata(true)
-          // navigation.navigate("Tab Bar",{"did":responseJson.data.did})
+          navigation.navigate("Tab Bar",{"did":responseJson.data.did})
         }
       } catch(error) {
         Toast.show(error,Toast.LONG);
