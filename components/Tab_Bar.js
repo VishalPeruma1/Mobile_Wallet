@@ -5,8 +5,9 @@ import Dashboard from './Dashboard.js';
 import UploadPrivateShare from './uploadprivateshare.js';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const TabBar= ({ navigation}) => {
+const TabBar= ({ navigation, route}) => {
 
+    const did = route.params.did
     const [pagename,setPagename] = React.useState("Dashboard")
     const pages = [
         {displayname:"Dashboard",navName:"Dashboard",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(pagename==="Dashboard"?"#1976D2":"#808080"), fontSize:25}}/>},
@@ -14,8 +15,20 @@ const TabBar= ({ navigation}) => {
         {displayname:"Contacts",navName:"Contacts",icon:<MaterialIcons name="contact-page" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:25}}/>}
     ]
 
-    function TabScreen({data}){
+    const LogoutApi = async()=>{
+        try {
+          const response = await fetch('http://webwallet.knuct.com/sapi/logout');
+          console.log(response)
+          console.log(response.status)
+          if(response.status===204) {
+            navigation.navigate("Home")
+          }
+        } catch(error) {
+          Toast.show(error,Toast.LONG);
+        }
+      }
 
+    const TabScreen = ({data})=>{
         return(
             <TouchableOpacity onPress={()=>setPagename(data.navName)}>
             <View style={{alignItems:"center", justifyContent:"center"}}>
@@ -29,7 +42,7 @@ const TabBar= ({ navigation}) => {
     return (
         <View style={{flex:1}}>
             {pagename==="Dashboard" ? 
-                <Dashboard /> : null
+                <Dashboard data={did}/> : null
             }
             {pagename==="Contacts" ? 
                 <UploadPrivateShare /> : null
