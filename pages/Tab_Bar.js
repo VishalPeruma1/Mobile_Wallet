@@ -2,7 +2,7 @@ import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Dashboard from './Dashboard.js';
-import UploadPrivateShare from './uploadprivateshare.js';
+import UploadPrivateShare from './UploadPrivateShare.js';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const TabBar= ({ navigation, route}) => {
