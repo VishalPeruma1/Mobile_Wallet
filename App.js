@@ -4,15 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import UploadPrivateShare from './components/uploadprivateshare';
-import ActionBarImage from './components/ActionBarImage';
-import AccessWallet from './components/accessWallet';
-import ChooseWords from './components/choose_words';
-import Wallet_Creation from './components/wallet_creation';
-import Get_Private_Share from './components/Get_Private_Share';
-import TabBar from './components/Tab_Bar'; 
-import Dashboard from './components/Dashboard';
-import Logout from './components/Logout';
+import UploadPrivateShare from './Pages/uploadprivateshare';
+import ActionBarImage from './Pages/ActionBarImage';
+import AccessWallet from './Pages/accessWallet';
+import ChooseWords from './Pages/choose_words';
+import Wallet_Creation from './Pages/wallet_creation';
+import Get_Private_Share from './Pages/Get_Private_Share';
+import TabBar from './Pages/Tab_Bar'; 
+import Dashboard from './Pages/Dashboard';
+import Logout from './Pages/Logout';
 
 const Stack = createNativeStackNavigator();
 
