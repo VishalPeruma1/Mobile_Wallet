@@ -68,21 +68,21 @@ const Balance = () => {
   }
 
   return (
-    <Card containerStyle={{borderRadius:10, padding:0, backgroundColor:'rgb(66, 165, 245)',}} wrapperStyle={{padding:10}}>
-        <RadialGradient colors={['rgba(0,0,0,0)','rgba(0,0,0,0.1)','rgba(0,0,0,0.05)','rgba(0,0,0,0.03)','rgba(255,255,255,0.05)']} stops={[0.03,0.2,0.2,0.6,0.6]} center={[0,0]}>
-        <View style={{flexDirection:"row", alignItems:"baseline", justifyContent:"space-between"}}>        
+    <Card containerStyle={{padding:0, borderRadius:10,backgroundColor:'rgb(66, 165, 245)'}}>
+        <RadialGradient colors={['rgba(0,0,0,0)','rgba(0,0,0,0.1)','rgba(0,0,0,0.05)','rgba(0,0,0,0.03)','rgba(255,255,255,0.05)']} stops={[0.03,0.2,0.2,0.6,0.6]}center={[5,155]} radius={420}>
+        <View style={{padding:10, paddingTop:20, flexDirection:"row", alignItems:"baseline", justifyContent:"space-between"}}>        
           <Card.Title style={{ fontSize: 20, color:"white"}}>Your Balance</Card.Title>
           <TouchableOpacity onPress={()=>handleRefersh()}>
           <FontAwesome name="refresh" style={{fontSize:20, fontWeight:"bold", color:"white",transform: [{rotate: '90deg'}]}} />
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection:"row", justifyContent:"space-between"}}>        
-          <Text style={{ color: "#FFFFFF", fontSize: 17.5 }}>KNUCT</Text>
-          <Text style={{ color: "#FFFFFF", fontSize: 17.5 }}>NFT</Text>
+        <View style={{padding:10, paddingTop:0, paddingBottom:0, flexDirection:"row", justifyContent:"space-between"}}>        
+          <Text style={{color: "#FFFFFF", fontSize: 17.5 }}>KNUCT</Text>
+          <Text style={{paddingRight:100, color: "#FFFFFF", fontSize: 17.5 }}>NFT</Text>
         </View>
-        <View style={{flexDirection:"row", justifyContent:"space-between"}}>        
-          <Text style={{ color: "white", fontSize: 17.5 }}>{balance}</Text>
-          <Text style={{ color: "white", fontSize: 17.5 }}>{nftBalance}</Text>
+        <View style={{padding:10, paddingTop:0, flexDirection:"row", justifyContent:"space-between"}}>        
+          <Text style={{color: "white", fontSize: 27.5 }}>{balance}</Text>
+          <Text style={{ paddingRight:115,color: "white", fontSize: 27.5 }}>{nftBalance}</Text>
         </View>
         </RadialGradient>
     </Card>
