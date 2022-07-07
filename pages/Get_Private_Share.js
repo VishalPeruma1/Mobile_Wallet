@@ -4,11 +4,13 @@ import {
   StyleSheet,
   Text, 
   TouchableOpacity,
-  View
+  View,
+  Platform
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util';
+import RNFS from 'react-native-fs';
 import Toast from 'react-native-simple-toast';
 
 const Get_Private_Share = ({ navigation, route}) => {
@@ -16,66 +18,65 @@ const Get_Private_Share = ({ navigation, route}) => {
     const [privateShare, setPrivateshare] = React.useState(false);
     const  [checkbox,setCheckbox] = React.useState(false);
     const privShareKey = route.params.Key;
-    var RNFetchBlob = require('rn-fetch-blob').default
 
-
-    function getprivshare () {
+    const getprivshare = async()=>{
       console.log("Getting Private Share")
       console.log('http://webwallet.knuct.com/sapi'+privShareKey)
       try {
-        RNFetchBlob
-      .config({
-        fileCache : true,
-        path : RNFetchBlob.fs.dirs.DownloadDir+'/'+'PrivateShare.png',
-        addAndroidDownloads: { 
-          title: RNFetchBlob.fs.dirs.DownloadDir+'/'+'PrivateShare.png', 
-          description: `Download ${RNFetchBlob.fs.dirs.DownloadDir+'/'+'PrivateShare.png'}`,
-          useDownloadManager: false, 
-          notification: true,
-        }, 
-        appendExt : 'png'
-      })
-      .fetch('GET', 'http://webwallet.knuct.com/sapi'+privShareKey, {
-      })
-      .then((res) => {
-        // Toast.show('The file saved to ', res.path())
-        setPrivateshare(true)
-      })
-      .catch((error) => {
-        console.log(error)
-      })} 
+        ReactNativeBlobUtil
+        .config({
+          fileCache : true,
+          addAndroidDownloads: { 
+            title: 'PrivateShare', 
+            description: 'Downloaded PrivateShare.png',
+            path: Platform.OS=="ios" ? RNFS.LibraryDirectoryPath+'/PrivateShare.png' : RNFS.DownloadDirectoryPath +'/PrivateShare.png',
+            useDownloadManager: true, 
+            notification: true,
+            mediaScannable:true,
+            mime: 'image/png'
+          }, 
+          appendExt : 'png'
+        })
+        .fetch('GET', 'http://webwallet.knuct.com/sapi'+privShareKey,{})
+        .then((response) => {
+          Toast.show('The file saved to '+ response.path())
+          console.log('The file saved to '+ response.path())
+          setPrivateshare(true)
+        })
+        .catch((error) => {
+          console.log(error)
+        })} 
        catch(error){
-        //  Toast.show(error,Toast.LONG)
+        Toast.show(error,Toast.LONG)
       }
     }
 
     return(
         <ScrollView style={styles.content}>
             <View style={{justifyContent:"center",flex:1}}>
-            <Text style={styles.headline}>Wallet Created</Text>
-            <Text style={styles.content}>
-                Your wallet was successfully created. Now to use this wallet you have to download the private share.
-            </Text>
-            <Text style={styles.sectionTitle}>Step 1</Text>
-            <Text style={styles.content}>
-                Save the private share safely. Its your key to access your wallet so do not loose it.
-            </Text>
-            <View style={styles.note}>
-              <MaterialIcons name='report-problem' style={{color:'red',fontSize:18}}/>
-              <Text style={{textAlign:'center', color:'gray', marginLeft:10}}>
-                Do not share your private share with anyone.
+              <Text style={styles.headline}>Wallet Created</Text>
+              <Text style={styles.content}>
+                  Your wallet was successfully created. Now to use this wallet you have to download the private share.
               </Text>
-            </View>
+              <Text style={styles.sectionTitle}>Step 1</Text>
+              <Text style={styles.content}>
+                  Save the private share safely. Its your key to access your wallet so do not loose it.
+              </Text>
+              <View style={styles.note}>
+                <MaterialIcons name='report-problem' style={{color:'red',fontSize:18}}/>
+                <Text style={{textAlign:'center', color:'gray', marginLeft:10}}>
+                  Do not share your private share with anyone.
+                </Text>
+              </View>
             <View style={styles.download}>
-            <View style={{backgroundColor:privateShare?"white":'#1976D2', padding:12, borderWidth:1, borderRadius:5, borderColor: "#1976D2"}}>
-            <TouchableOpacity onPress={()=>{
-                getprivshare()
-              }}>
-            <View style={{flexDirection:'row'}}>
-                <MaterialIcons name='file-download' style={{color:privateShare?'#1976D2':"white",fontSize:20, marginTop:1}}/>
-                <Text style={{color: privateShare?'#1976D2':"white", fontSize:14, marginLeft:5}}>DOWNLOAD PRIVATE SHARE</Text>
-            </View>
-            </TouchableOpacity></View>
+              <View style={{backgroundColor:privateShare?"white":'#1976D2', padding:12, borderWidth:1, borderRadius:5, borderColor: "#1976D2"}}>
+                <TouchableOpacity onPress={()=>{getprivshare()}}>
+                <View style={{flexDirection:'row'}}>
+                    <MaterialIcons name='file-download' style={{color:privateShare?'#1976D2':"white",fontSize:20, marginTop:1}}/>
+                    <Text style={{color: privateShare?'#1976D2':"white", fontSize:14, marginLeft:5}}>DOWNLOAD PRIVATE SHARE</Text>
+                </View>
+                </TouchableOpacity>
+              </View>
             </View>
             <View style={{display: privateShare?"flex":"none"}}>
               <Text style={styles.sectionTitle}>Step 2</Text>

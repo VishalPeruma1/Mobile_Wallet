@@ -11,9 +11,9 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Card, ListItem } from "react-native-elements";
-import Balance from './Components/Balance';
-import GetDID from './Components/GetDID';
-import WalletStats from './Components/WalletStats';
+import Balance from './components/Balance';
+import Did from './components/Did';
+import WalletStats from './components/WalletStats';
 
 const Dashboard = (did,{ navigation}) => {
 
@@ -22,7 +22,7 @@ const Dashboard = (did,{ navigation}) => {
     <ScrollView  style={styles.content}>
     <View style={{display:"flex", flexDirection:"column"}}>
       <Balance/>
-      <GetDID/>
+      <Did/>
     </View>
     <View>
       <WalletStats/>

@@ -4,15 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import UploadPrivateShare from './Pages/uploadprivateshare';
-import ActionBarImage from './Pages/ActionBarImage';
-import AccessWallet from './Pages/accessWallet';
-import ChooseWords from './Pages/choose_words';
-import Wallet_Creation from './Pages/wallet_creation';
-import Get_Private_Share from './Pages/Get_Private_Share';
-import TabBar from './Pages/Tab_Bar'; 
-import Dashboard from './Pages/Dashboard';
-import Logout from './Pages/Logout';
+import UploadPrivateShare from './pages/UploadPrivateShare';
+import ActionBarImage from './pages/ActionBarImage';
+import AccessWallet from './pages/AccessWallet';
+import ChooseWords from './pages/choose_words';
+import CreateWallet from './pages/CreateWallet';
+import Get_Private_Share from './pages/Get_Private_Share';
+import TabBar from './pages/Tab_Bar'; 
+import Dashboard from './pages/Dashboard';
+import Logout from './pages/Logout';
 
 const Stack = createNativeStackNavigator();
 
@@ -96,10 +96,9 @@ const App = () => {
     <Stack.Screen name="Upload Private Share" component={UploadPrivateShare} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}}/>
     <Stack.Screen name="Access Wallet" component={AccessWallet} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Choose Words" component={ChooseWords} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
-    <Stack.Screen name="Wallet Creation" component={Wallet_Creation} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
+    <Stack.Screen name="Create Wallet" component={CreateWallet} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Get Private Share" component={Get_Private_Share} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Tab Bar" component={TabBar} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>, headerRight: ()=><Logout/>}} />
-    <Stack.Screen name="Dashboard" component={Dashboard} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
   </Stack.Navigator>
   </NavigationContainer>
     

@@ -8,7 +8,7 @@ import {
 
 import { Card } from "react-native-elements";
 
-const GetDID = () => {
+const Did = () => {
   return (
     <Card containerStyle={{borderRadius:10, height: 400, backgroundColor:"white", borderWidth:0}} wrapperStyle={{height: 250}}>
     <Card.Title style={{ fontSize: 25, color:"black" , textAlign:"left"}}>Your DID</Card.Title>
@@ -24,7 +24,7 @@ const GetDID = () => {
     
 }
 
-export default GetDID;
+export default Did;
 
 
 

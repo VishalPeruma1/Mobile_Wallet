@@ -110,7 +110,7 @@ const ChooseWords = ({ navigation}) => {
               param2.push(JSON.parse(i).val.toLowerCase())
             }
             console.log(param1,param2)
-            navigation.navigate('Wallet Creation',{"param1":param1,"param2":param2})
+            navigation.navigate('Create Wallet',{"param1":param1,"param2":param2})
           }
           catch(err){
             console.log(err)
