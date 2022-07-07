@@ -4,11 +4,13 @@ import {
   StyleSheet,
   Text, 
   TouchableOpacity,
-  View
+  View,
+  Platform
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import ReactNativeBlobUtil from 'react-native-blob-util'
+import ReactNativeBlobUtil from 'react-native-blob-util';
+import RNFS from 'react-native-fs';
 import Toast from 'react-native-simple-toast';
 
 const Get_Private_Share = ({ navigation, route}) => {
@@ -24,12 +26,14 @@ const Get_Private_Share = ({ navigation, route}) => {
         ReactNativeBlobUtil
         .config({
           fileCache : true,
-          path : `${ReactNativeBlobUtil.fs.dirs.DownloadDir}/PrivateShare.png`,
           addAndroidDownloads: { 
-            title: ReactNativeBlobUtil.fs.dirs.DownloadDir+'/'+'PrivateShare.png', 
-            description: `Download ${ReactNativeBlobUtil.fs.dirs.DownloadDir+'/'+'PrivateShare.png'}`,
+            title: 'PrivateShare', 
+            description: 'Downloaded PrivateShare.png',
+            path: Platform.OS=="ios" ? RNFS.LibraryDirectoryPath+'/PrivateShare.png' : RNFS.DownloadDirectoryPath +'/PrivateShare.png',
             useDownloadManager: true, 
             notification: true,
+            mediaScannable:true,
+            mime: 'image/png'
           }, 
           appendExt : 'png'
         })
