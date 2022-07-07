@@ -3,6 +3,7 @@ import { SafeAreaView ,ScrollView, StyleSheet, Text, Button, View, TouchableOpac
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {request, PERMISSIONS} from 'react-native-permissions';
+import Toast from 'react-native-simple-toast';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import UploadPrivateShare from './pages/UploadPrivateShare';
 import ActionBarImage from './pages/ActionBarImage';
@@ -11,8 +12,6 @@ import ChooseWords from './pages/choose_words';
 import CreateWallet from './pages/CreateWallet';
 import Get_Private_Share from './pages/Get_Private_Share';
 import TabBar from './pages/Tab_Bar'; 
-import Dashboard from './pages/Dashboard';
-import Logout from './pages/Logout';
 import NewContact from './pages/NewContact'
 
 const Stack = createNativeStackNavigator();
@@ -92,15 +91,35 @@ const App = () => {
   return (
   
  <NavigationContainer>
-  <Stack.Navigator >
-    <Stack.Screen name="Home" component={HomeScreen} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}}/>
-    <Stack.Screen name="Upload Private Share" component={UploadPrivateShare} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}}/>
-    <Stack.Screen name="Access Wallet" component={AccessWallet} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
-    <Stack.Screen name="Choose Words" component={ChooseWords} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
-    <Stack.Screen name="Create Wallet" component={CreateWallet} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
-    <Stack.Screen name="Get Private Share" component={Get_Private_Share} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
-    <Stack.Screen name="Tab Bar" component={TabBar} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>, headerRight: ()=><Logout/>}} />
-    <Stack.Screen name="NewContact" component={NewContact} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>, headerRight: ()=><Logout/>}} />
+  <Stack.Navigator screenOptions={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} >
+    <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Screen name="Upload Private Share" component={UploadPrivateShare} />
+    <Stack.Screen name="Access Wallet" component={AccessWallet} />
+    <Stack.Screen name="Choose Words" component={ChooseWords} />
+    <Stack.Screen name="Create Wallet" component={CreateWallet} />
+    <Stack.Screen name="Get Private Share" component={Get_Private_Share} />
+    <Stack.Screen name="Tab Bar" component={TabBar} options ={({ navigation }) => ({
+              headerRight: () => (
+                <TouchableOpacity onPress={async() => {
+                  try {
+                    const response = await fetch('http://webwallet.knuct.com/sapi/logout');
+                    console.log(response)
+                    console.log(response.status)
+                    if(response.status===204) {
+                      console.log("Home")
+                      navigation.navigate("Home")
+                    }else{
+                      Toast.show("Unable to logout at the moment. Try again")
+                    }
+                  } catch(error) {
+                    Toast.show(error,Toast.LONG);
+                  }
+                }}>
+                <Text style={{color:"#00000099", fontSize:18}}>Logout</Text>
+                </TouchableOpacity>
+              ),
+            })} />
+    <Stack.Screen name="NewContact" component={NewContact} />
   </Stack.Navigator>
   </NavigationContainer>
     
