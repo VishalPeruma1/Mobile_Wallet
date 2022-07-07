@@ -13,6 +13,7 @@ import Get_Private_Share from './pages/Get_Private_Share';
 import TabBar from './pages/Tab_Bar'; 
 import Dashboard from './pages/Dashboard';
 import Logout from './pages/Logout';
+import NewContact from './pages/NewContact'
 
 const Stack = createNativeStackNavigator();
 
@@ -99,6 +100,7 @@ const App = () => {
     <Stack.Screen name="Create Wallet" component={CreateWallet} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Get Private Share" component={Get_Private_Share} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>}} />
     <Stack.Screen name="Tab Bar" component={TabBar} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>, headerRight: ()=><Logout/>}} />
+    <Stack.Screen name="NewContact" component={NewContact} options ={{title:'Knuct Wallet',headerStyle:{backgroundColor:'#d8d8d8'},headerLeft: ()=><ActionBarImage/>, headerRight: ()=><Logout/>}} />
   </Stack.Navigator>
   </NavigationContainer>
     

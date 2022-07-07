@@ -2,7 +2,8 @@ import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Dashboard from './Dashboard.js';
-import UploadPrivateShare from './UploadPrivateShare.js';
+import Contacts from './Contacts.js';
+import Transactions from './Transactions.js';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const TabBar= ({ navigation, route}) => {
@@ -11,7 +12,7 @@ const TabBar= ({ navigation, route}) => {
     const [pagename,setPagename] = React.useState("Dashboard")
     const pages = [
         {displayname:"Dashboard",navName:"Dashboard",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(pagename==="Dashboard"?"#1976D2":"#808080"), fontSize:25}}/>},
-        {displayname:"Transaction",navName:"Contacts",icon:<MaterialIcons name="compare-arrows" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:25}}/>},
+        {displayname:"Transaction",navName:"Transactions",icon:<MaterialIcons name="compare-arrows" style={{color:(pagename==="Transactions"?"#1976D2":"#808080"), fontSize:25}}/>},
         {displayname:"Contacts",navName:"Contacts",icon:<MaterialIcons name="contact-page" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:25}}/>}
     ]
 
@@ -44,8 +45,11 @@ const TabBar= ({ navigation, route}) => {
             {pagename==="Dashboard" ? 
                 <Dashboard data={did}/> : null
             }
+            {pagename==="Transactions" ? 
+                <Transactions/> : null
+            }
             {pagename==="Contacts" ? 
-                <UploadPrivateShare /> : null
+                <Contacts data={navigation}/> : null
             }
           <View style={styles.tabbarstyle}>
             {pages.map((data,id) => (
