@@ -1349,6 +1349,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@react-native-clipboard/clipboard@^1.10.0":
+  "integrity" "sha512-1L+I0vmeUJgMi8MnNsqI00391/RFLkmmxj9qAuOS2madpvce/oNqJb8Pwk2Fc/uxIJSxOckTpq+dQwyPU6s+7w=="
+  "resolved" "https://registry.npmjs.org/@react-native-clipboard/clipboard/-/clipboard-1.10.0.tgz"
+  "version" "1.10.0"
+
 "@react-native-community/cli-debugger-ui@^7.0.3":
   "integrity" "sha512-G4SA6jFI0j22o+j+kYP8/7sxzbCDqSp2QiHA/X5E0lsGEd2o9qN2zbIjiFr8b8k+VVAYSUONhoC0+uKuINvmkA=="
   "resolved" "https://registry.npmjs.org/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-7.0.3.tgz"
@@ -6175,7 +6180,7 @@
     "escape-string-regexp" "2.0.0"
     "invariant" "2.2.4"
 
-"react-native@*", "react-native@^0.68.2", "react-native@>=0.63.3":
+"react-native@*", "react-native@^0.68.2", "react-native@>=0.57.0", "react-native@>=0.63.3":
   "integrity" "sha512-qNMz+mdIirCEmlrhapAtAG+SWVx6MAiSfCbFNhfHqiqu1xw1OKXdzIrjaBEPihRC2pcORCoCHduHGQe/Pz9Yuw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.68.2.tgz"
   "version" "0.68.2"
@@ -6236,7 +6241,7 @@
     "react-shallow-renderer" "^16.13.1"
     "scheduler" "^0.20.2"
 
-"react@*", "react@^16.0.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0", "react@^17.0.0", "react@>=16.13.1", "react@17.0.2":
+"react@*", "react@^16.0.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0", "react@^17.0.0", "react@>=16.0", "react@>=16.13.1", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"

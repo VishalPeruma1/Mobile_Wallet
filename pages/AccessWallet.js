@@ -33,7 +33,7 @@ const AccessWallet = ({ navigation, route}) => {
         let hashRaw = privShareUtils.mh_md5(AlphaprivShare)
         var hashval = privShareUtils.mb_base32(hashRaw) 
         console.log("Hash : ",hashval)
-        challengeApi(hashval)
+        askForChallenge(hashval)
       }
       if(checkwallet && !authenticate) {
         const myBuffer = Buffer.from(priv_share.base64, 'base64');
@@ -42,13 +42,7 @@ const AccessWallet = ({ navigation, route}) => {
         var AlphaprivShare = privShareUtils.removeAlphaChannel(png.data)
         const signature = nlssUtils.createChallengeResponse(String(challengeRes),32,AlphaprivShare)
         console.log(signature)
-        responseApi(signature)
-      }
-      if(authenticate && !startwallet) {
-        startNodeApi()
-      }
-      if(startwallet && !fetchdata) {
-        fetchDataApi()
+        sendResponse(signature)
       }
     }
 
@@ -57,7 +51,7 @@ const AccessWallet = ({ navigation, route}) => {
     })
 
 
-    const challengeApi = async(hashval)=>{
+    const askForChallenge = async(hashval)=>{
       let options = {
         method:"POST",
         headers:{
@@ -81,7 +75,7 @@ const AccessWallet = ({ navigation, route}) => {
       }
     }
 
-    const responseApi = async(signature)=>{
+    const sendResponse = async(signature)=>{
       let options = {
         method:"POST",
         headers:{
@@ -96,25 +90,27 @@ const AccessWallet = ({ navigation, route}) => {
         console.log(response)
         if(response.status===204) {
           setAuthenticate(true)
+          startNode()
         }
       } catch(error) {
         Toast.show(error,Toast.LONG);
       }
     }
 
-    const startNodeApi = async()=>{
+    const startNode = async()=>{
       try {
         const response = await fetch('http://webwallet.knuct.com/sapi/startnode');
         console.log(response)
         if(response.status===204) {
           setStartwallet(true)
+          fetchInitData()
         }
       } catch(error) {
         Toast.show(error,Toast.LONG);
       }
     }
 
-    const fetchDataApi = async()=>{
+    const fetchInitData = async()=>{
       try {
         const response = await fetch('http://webwallet.knuct.com/sapi/walletdata');
         const responseJson = await response.json();
