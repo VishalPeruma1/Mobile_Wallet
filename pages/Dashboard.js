@@ -21,8 +21,8 @@ const Dashboard = (did,{ navigation}) => {
     <>
     <ScrollView  style={styles.content}>
     <View style={{display:"flex", flexDirection:"column"}}>
-      <Balance/>
-      <Did/>
+      {Balance()}
+      {Did(did.data)}
     </View>
     <View>
       <WalletStats/>

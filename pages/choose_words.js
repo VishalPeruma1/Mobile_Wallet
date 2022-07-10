@@ -26,6 +26,7 @@ const ChooseWords = ({ navigation}) => {
     }, []); 
 
     const [text, onChangeText] = React.useState("");
+    const [textInputHeight,setTextInputHeight] = React.useState(40)
     const [state,setState] = React.useState(Array(16).fill(false));
     const [selected,setSelected] = React.useState([]);
     // const [var1,changevar] = React.useState(null);
@@ -130,7 +131,8 @@ const ChooseWords = ({ navigation}) => {
             Enter a passphrase
         </Text>
         
-        <TextInput placeholder='Passphrase' placeholderTextColor="grey" style={styles.textinput} onChangeText={onChangeText} value={text} />
+        <TextInput placeholder='Passphrase' multiline={true} placeholderTextColor="grey" style={[styles.textinput,{height:textInputHeight, maxHeight:85}]} onChangeText={onChangeText} value={text}
+        onContentSizeChange={(e) => setTextInputHeight(e.nativeEvent.contentSize.height) } />
 
         <Text style={{marginTop: 25, fontSize: 15, fontWeight: '400', paddingStart:10, color:'black',}}>
             Choose any 4 words from below.
@@ -227,7 +229,6 @@ const styles = StyleSheet.create({
     },
     textinput:{
         color: "black",
-        height: 40,
         marginTop: 12,
         marginStart:12,
         marginEnd:12,
