@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text, 
   View,
+  ActivityIndicator,
   TouchableOpacity
 } from 'react-native';
 
@@ -73,7 +74,9 @@ const Balance = () => {
         <View style={{padding:10, paddingTop:20, flexDirection:"row", alignItems:"baseline", justifyContent:"space-between"}}>        
           <Card.Title style={{ fontSize: 20, color:"white"}}>Your Balance</Card.Title>
           <TouchableOpacity onPress={()=>handleRefersh()}>
+          {!refresh?
           <FontAwesome name="refresh" style={{fontSize:20, fontWeight:"bold", color:"white",transform: [{rotate: '90deg'}]}} />
+          :<ActivityIndicator  color={'white'} style={{fontSize:20, fontWeight:"bold"}} />}
           </TouchableOpacity>
         </View>
         <View style={{padding:10, paddingTop:0, paddingBottom:0, flexDirection:"row", justifyContent:"space-between"}}>        
