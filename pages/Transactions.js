@@ -41,7 +41,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
     const token = ()=>{
       return(
-        <Card containerStyle={{width:375, height:450, borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
+        <Card containerStyle={{width:"auto", height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
         {/* <Text style={{color: '#00000099', fontWeight:'bold', fontSize:14, fontFamily:'Roboto' , marginLeft:5}}>TOKEN</Text> */}
       
             <View style={{flexDirection:'column'}}>
@@ -78,7 +78,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
   }
   const Nft = ()=>{
     return(
-      <Card containerStyle={{width:375, height:450, borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
+      <Card containerStyle={{width:"auto", height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
       {/* <Text style={{color: '#00000099', fontWeight:'bold', fontSize:14, fontFamily:'Roboto' , marginLeft:5}}>NFT</Text> */}
     
           <View style={{flexDirection:'column'}}>

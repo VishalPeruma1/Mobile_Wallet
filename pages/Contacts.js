@@ -9,19 +9,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import NewContact from './NewContact';
 
 const Contacts = ({navigation}) => {
-    const [type,setType] = React.useState("Token");
-    const [Token, onChangeToken] = React.useState("");
-    const [RDID, onChangeRDID] = React.useState("");
-    const [com, onChangecom] = React.useState("");
-
+    
     
   return (
-    <Card containerStyle={{width:375, height:250, borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
+    <Card containerStyle={{width:"auto", height:250, borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
     <View style={{flexDirection:'row'}}>
       <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Contacts</Text>
-      <TouchableOpacity style={{flexDirection:"row"}} onPress={()=>navigation.navigate('NewContact')}>
+      <TouchableOpacity onPress={()=>navigation.navigate('NewContact')} style={{flexDirection:"row"}}>
        
-        <Text style={{fontSize:14,marginLeft:135,color:'#1976D2',marginTop:6,}}> NEW CONTACT</Text>
+        <Text style={{fontSize:14,marginLeft:135,color:'#1976D2',marginTop:6,}}>NEW CONTACT</Text>
       
       </TouchableOpacity>
       

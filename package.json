@@ -25,6 +25,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-image-picker": "^4.8.4",
     "react-native-permissions": "^3.3.1",
+    "react-native-qrcode-svg": "^6.1.2",
     "react-native-radial-gradient": "^1.1.1",
     "react-native-safe-area-context": "^3.4.1",
     "react-native-screens": "^3.13.1",
