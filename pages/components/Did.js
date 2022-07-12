@@ -38,13 +38,6 @@ const Did = (did) => {
   const printDID = ()=>{
 
   }
-
-  React.useEffect(()=>{
-    // if(showQrCode){
-    //   Alert.alert('Hellp')
-    //   setShowQrCode(false)
-    // }
-  })
   
   return (
     <Card containerStyle={{borderRadius:10, backgroundColor:"white", borderWidth:0}} >
@@ -74,20 +67,17 @@ const Did = (did) => {
         </View>
         <Modal visible={showQrCode} transparent={true} onRequestClose={() => {setShowQrCode(false)}}>
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    <View style={{margin: 20, backgroundColor: "white", borderRadius: 20, padding: 35, alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  }}>
-            <QRCode value={did} size={250} color="black" />
-            <TouchableOpacity onPress={()=>setShowQrCode(false)}>
-              <Text>Close</Text>
-            </TouchableOpacity>
+            <View style={styles.qrcode}>
+              <Text style={{fontWeight:'bold', fontSize:20, color:'black'}}>DID QR code</Text>
+              <QRCode value={did} size={250} color="black" />
+              <View style={{flexDirection:'row', justifyContent:'space-around', alignItems:'center', alignContent:'space-around', marginTop:20}}>
+              <TouchableOpacity onPress={()=>printDID()}>
+                <Text style={{fontSize:20, fontWeight:'bold'}}>Print</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>setShowQrCode(false)}>
+                <Text style={{fontSize:20, fontWeight:'bold'}}>Close</Text>
+              </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>
@@ -107,6 +97,23 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       textAlign: 'center'
     },
+  qrcode: {
+    margin: 10, 
+    backgroundColor: "white", 
+    borderRadius: 20, 
+    padding: 25, 
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 25,
+    flexDirection:'column',
+    justifyContent:'space-evenly'
+  }
 });
 
 export default Did;
