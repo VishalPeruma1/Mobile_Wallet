@@ -12,7 +12,8 @@ import ChooseWords from './pages/choose_words';
 import CreateWallet from './pages/CreateWallet';
 import Get_Private_Share from './pages/Get_Private_Share';
 import TabBar from './pages/Tab_Bar'; 
-import NewContact from './pages/NewContact'
+import NewContact from './pages/NewContact';
+import Contacts from './pages/Contacts';
 
 const Stack = createNativeStackNavigator();
 
@@ -120,6 +121,8 @@ const App = () => {
               ),
             })} />
     <Stack.Screen name="NewContact" component={NewContact} />
+    <Stack.Screen name="Contacts" component={Contacts} />
+
   </Stack.Navigator>
   </NavigationContainer>
     

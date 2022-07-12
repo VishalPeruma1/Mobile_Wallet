@@ -16,6 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Avatar } from "react-native-elements";
 import {launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
+import Contacts from './Contacts';
 
 const NewContact = ({navigation}) => {
   const [Token, onChangeToken] = React.useState("");
@@ -61,7 +62,7 @@ const NewContact = ({navigation}) => {
     
     <Card containerStyle={{width:"auto", height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=>navigation.navigate('Contacts')}>
       <View style={{flexDirection:'row'}}>
       <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:20,marginTop:3}}/>
       <Text style={{color: '#1976D2', fontSize:14, fontFamily:'Roboto', marginTop:3}}>BACK</Text>
@@ -96,6 +97,12 @@ const NewContact = ({navigation}) => {
 
             <Text style={{color: '#00000099',fontSize:12, fontFamily:'Roboto' , marginLeft:20, paddingTop:10}}>Name for new contact</Text>
             </View>
+
+            <TouchableOpacity style={{backgroundColor:'#1976D2', height:40, width:150, borderRadius:10,alignSelf:'flex-end'}}>
+              <Text style={{padding:10,textAlign:'center',fontWeight:'bold',fontFamily:'Roboto',color:'#fff', fontSize:15}}>
+                SAVE CONTACT
+              </Text>
+                </TouchableOpacity>
   
       </Card>
   );

@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import NewContact from './NewContact';
 
+
 const Contacts = ({navigation}) => {
     
     
