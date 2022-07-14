@@ -68,7 +68,7 @@ const Did = (did) => {
         <Modal visible={showQrCode} transparent={true} onRequestClose={() => {setShowQrCode(false)}}>
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <View style={styles.qrcode}>
-              <Text style={{fontWeight:'bold', fontSize:20, color:'black'}}>DID QR code</Text>
+              <Text style={{fontWeight:'bold', fontSize:20, color:'black', paddingBottom:35}}>DID QR code</Text>
               <QRCode value={did} size={250} color="black" />
               <View style={{flexDirection:'row', justifyContent:'space-around', alignItems:'center', alignContent:'space-around', marginTop:20}}>
               <TouchableOpacity onPress={()=>printDID()}>

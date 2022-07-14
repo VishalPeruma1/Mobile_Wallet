@@ -14,6 +14,7 @@ import Get_Private_Share from './pages/Get_Private_Share';
 import TabBar from './pages/Tab_Bar'; 
 import NewContact from './pages/NewContact';
 import Contacts from './pages/Contacts';
+import OpenCamera from './pages/OpenCamera';
 
 const Stack = createNativeStackNavigator();
 
@@ -122,7 +123,7 @@ const App = () => {
             })} />
     <Stack.Screen name="NewContact" component={NewContact} />
     <Stack.Screen name="Contacts" component={Contacts} />
-
+    <Stack.Screen name="Open Camera" component={OpenCamera} />
   </Stack.Navigator>
   </NavigationContainer>
     

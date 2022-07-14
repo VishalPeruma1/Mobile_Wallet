@@ -4,10 +4,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Dashboard from './Dashboard.js';
 import Contacts from './Contacts.js';
 import Transactions from './Transactions.js';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, PermissionsAndroid } from 'react-native';
+import { NavigationHelpersContext } from '@react-navigation/native';
 
 const TabBar= ({ navigation, route}) => {
 
+    const [camerapermission,setcamerapermission] = React.useState("denied")
     const did = route.params.did
     const [pagename,setPagename] = React.useState("Dashboard")
     const pages = [
@@ -16,18 +18,39 @@ const TabBar= ({ navigation, route}) => {
         {displayname:"Contacts",navName:"Contacts",icon:<MaterialIcons name="contact-page" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:25}}/>}
     ]
 
-    const LogoutApi = async()=>{
-        try {
-          const response = await fetch('http://webwallet.knuct.com/sapi/logout');
-          console.log(response)
-          console.log(response.status)
-          if(response.status===204) {
-            navigation.navigate("Home")
+    const getcamerapermission = () => {
+      if(camerapermission==="denied") {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'App Camera Permission',
+            message: 'App needs access to your camera ',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        ).then((result) => {
+          console.log(result)
+          if(result==="granted") {
+            setcamerapermission(true)
+            console.log("Permission Granted")
+          } else{
+            console.log("Permission Denied")
+            Alert.alert(
+              "Permission Required",
+              "Need Camera Permission to work.",
+              [
+                {
+                  text: "Allow",
+                }
+              ]
+            )
           }
-        } catch(error) {
-          Toast.show(error,Toast.LONG);
-        }
+        });
+      } else {
+        navigation.navigate("Open Camera")
       }
+    }
 
     const TabScreen = ({data})=>{
         return(
@@ -55,6 +78,12 @@ const TabBar= ({ navigation, route}) => {
             {pages.map((data,id) => (
                 <TabScreen key={id} data={data} />
             ))}
+            <TouchableOpacity onPress={() => getcamerapermission()}>
+              <View style={{alignItems:"center", justifyContent:"center"}}>
+                  <MaterialCommunityIcons name="camera" style={{color:"#808080", fontSize:25}}/>
+                  <Text style={{color:"#808080", fontSize:13}} >Camera</Text> 
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       );
