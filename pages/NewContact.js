@@ -9,7 +9,7 @@ import {
   Button,
   ActivityIndicator
 } from 'react-native';
-import { Card, ListItem } from "react-native-elements";
+import { Card } from "react-native-elements";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,7 +21,7 @@ import Contacts from './Contacts';
 const NewContact = ({navigation}) => {
   const [Token, onChangeToken] = React.useState("");
   const [RDID, onChangeRDID] = React.useState("");
- 
+  const [ImgPath, setImgPath] = React.useState("");
 
   const chooseImage = () =>{
 
@@ -50,13 +50,16 @@ const NewContact = ({navigation}) => {
           Toast.show("File size must be less than 1 MB",Toast.LONG)
         }
         else{
+          //Sconsole.log(pro_image.uri)
+          setImgPath(pro_image.uri)
+          console.log("Success",ImgPath);
+          // return img
           
-          console.log("Success",pro_image.uri);
-         
         }
       }
     })
   }
+
 
   return (
     
@@ -78,12 +81,17 @@ const NewContact = ({navigation}) => {
 
        <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> Giving names to DIDs for better organization</Text>
       
-      <View style={{alignItems:'center',justifyContent:'space-around'}}>
+      <View style={{alignItems:'center',justifyContent:'space-around', height:230, marginTop:10, marginBottom:0}}>
         
       <TouchableOpacity onPress={chooseImage}>
-        <FontAwesome5 name="user-circle" style={{fontWeight:50,color: '#1976D2',fontSize:150,marginTop:3,}}/>
+        {ImgPath===""?
+      <FontAwesome5 name="user-circle" style={{fontWeight:50,color: '#1976D2',fontSize:185,marginTop:3}}/>
+          :
+            <Image source={{uri:ImgPath}} style={{height:185, width:185, borderRadius:100}} />
+       }
+        
       </TouchableOpacity>
-      
+  
       </View>
      
     </View>
