@@ -19,9 +19,71 @@ import Toast from 'react-native-simple-toast';
 import Contacts from './Contacts';
 
 const NewContact = ({navigation}) => {
-  const [Token, onChangeToken] = React.useState("");
-  const [RDID, onChangeRDID] = React.useState("");
+  const [DID, onChangeDID] = React.useState("");
+  const [name, onChangename] = React.useState("");
   const [ImgPath, setImgPath] = React.useState("");
+
+  const addNewContact = async(did,NAME) => {
+    console.log(NAME,did);
+    if (did.length===46 && NAME.length>=3)
+    {
+      let formData = new FormData();
+      formData.append('did', did);
+      formData.append('nickname',NAME);
+  
+      let options = {
+        method: "POST",
+        headers: { 'Content-Type': 'multipart/form-data'},
+        body: formData,     
+        
+      }
+      
+      try{
+        const response = await fetch('http://webwallet.knuct.com/capi/addContact',options);
+        const responseJson = await response.json();
+        console.log("Response JSON: ", responseJson);
+        if(response!==undefined){
+          console.log("Response data ", responseJson.data);
+          if(responseJson.data.response)
+          {
+            if(responseJson.data.response.message){
+              console.log("error")
+  
+            }
+            else if(responseJson.data.response === "Added"){
+              console.log("Success");
+  
+            }
+            else{
+              console.log(responseJson.data.response);
+              if(responseJson.data.response!==undefined){
+                Toast.show(responseJson.data.response)
+              }
+            }
+          }
+          else {
+            console.log("Response is Undefined")
+          }
+        }
+        
+      }
+      catch(error){
+        Toast.show(error,Toast.LONG);
+  
+      }
+      
+  
+    }
+    else{
+      if(DID.length !==46){
+        Toast.show("Wrong DID Format (DID length: 46)");
+  
+      }
+      if(name.length < 3){
+        Toast.show("Wrong nickname Format (min length: 3)")
+      }
+    }
+  }
 
   const chooseImage = () =>{
 
@@ -97,16 +159,16 @@ const NewContact = ({navigation}) => {
     </View>
     
             <View style={{flexDirection:'column'}}>
-            <TextInput placeholder='DID' placeholderTextColor="grey" style={styles.textinput} onChangeText={onChangeToken} value={Token} />
+            <TextInput placeholder='DID' placeholderTextColor="grey" style={styles.textinput} onChangeText={onChangeDID} value={DID} />
             <Text style={{color: '#00000099',fontSize:12, fontFamily:'Roboto' , marginLeft:20, paddingTop:10}}>DID for new contact</Text>
             </View>
             <View style={{flexDirection:'column'}}>
-            <TextInput placeholder='Nickname' placeholderTextColor="grey" style={styles.textinput} onChangeText={onChangeRDID} value={RDID}  />
+            <TextInput placeholder='Nickname' placeholderTextColor="grey" style={styles.textinput} onChangeText={onChangename} value={name}  />
 
             <Text style={{color: '#00000099',fontSize:12, fontFamily:'Roboto' , marginLeft:20, paddingTop:10}}>Name for new contact</Text>
             </View>
 
-            <TouchableOpacity style={{backgroundColor:'#1976D2', height:40, width:150, borderRadius:10,alignSelf:'flex-end'}}>
+            <TouchableOpacity onPress={()=>addNewContact(DID,name)} style={{backgroundColor:'#1976D2', height:40, width:150, borderRadius:10,alignSelf:'flex-end'}}>
               <Text style={{padding:10,textAlign:'center',fontWeight:'bold',fontFamily:'Roboto',color:'#fff', fontSize:15}}>
                 SAVE CONTACT
               </Text>
