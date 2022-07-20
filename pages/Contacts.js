@@ -47,15 +47,18 @@ const Contacts = ({navigation}) => {
 
   const ContactsCard = ({data})=>{
     return(
-      <Card containerStyle={{marginLeft:10, marginRight:10,height:100,borderRadius:10,backgroundColor:"white", borderColor:"white",elevation:5}} wrapperStyle={{height:105,width:180}}>
-        <View style={{flexDirection:'row'}}>
-        <Image source={require('../assets/knuct-logo.png')}/>     
-        <View >
-        <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}> {data.nickname}</Text>
-        <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> {data.did}</Text>
-        </View> 
-        </View>
-      </Card>
+      <TouchableOpacity onPress={() => navigation.navigate('Contact Details', {"nickname":data.nickname,"did":data.did})}>
+        <Card containerStyle={{marginLeft:10, marginRight:10,height:100,borderRadius:10,backgroundColor:"white", borderColor:"white",elevation:5}} wrapperStyle={{height:105,width:180}}>
+          <View style={{flexDirection:'row'}}>
+            <Image source={require('../assets/knuct-logo.png')}/>     
+            <View >
+              <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}> {data.nickname}</Text>
+              <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> {data.did}</Text>
+            </View> 
+          </View>
+        </Card>
+      </TouchableOpacity>
+      
     )
 }
 

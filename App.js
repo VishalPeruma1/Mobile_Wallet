@@ -15,6 +15,8 @@ import TabBar from './pages/Tab_Bar';
 import NewContact from './pages/NewContact';
 import Contacts from './pages/Contacts';
 import OpenCamera from './pages/OpenCamera';
+import ContactDetails from './pages/ContactDetails';
+import Transactions from './pages/Transactions';
 
 const Stack = createNativeStackNavigator();
 
@@ -124,6 +126,8 @@ const App = () => {
     <Stack.Screen name="NewContact" component={NewContact} />
     <Stack.Screen name="Contacts" component={Contacts} />
     <Stack.Screen name="Open Camera" component={OpenCamera} />
+    <Stack.Screen name="Contact Details" component={ContactDetails} />
+    <Stack.Screen name="Transactions" component={Transactions} />
   </Stack.Navigator>
   </NavigationContainer>
     
