@@ -72,7 +72,7 @@ const TabBar= ({ navigation, route}) => {
                 <Transactions/> : null
             }
             {pagename==="Contacts" ? 
-                <Contacts data={navigation}/> : null
+                <Contacts navigation={navigation}/> : null
             }
           <View style={styles.tabbarstyle}>
             {pages.map((data,id) => (

@@ -16,7 +16,7 @@ const Contacts = ({navigation}) => {
     <Card containerStyle={{width:"auto", height:250, borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
     <View style={{flexDirection:'row'}}>
       <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Contacts</Text>
-      <TouchableOpacity onPress={()=>navigation.navigate('NewContact')} style={{flexDirection:"row"}}>
+      <TouchableOpacity onPress={() => navigation.navigate('NewContact')} style={{flexDirection:"row"}}>
        
         <Text style={{fontSize:14,marginLeft:135,color:'#1976D2',marginTop:6,}}>NEW CONTACT</Text>
       
