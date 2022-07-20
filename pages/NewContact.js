@@ -126,8 +126,8 @@ const NewContact = ({navigation}) => {
   return (
     
     <Card containerStyle={{width:"auto", height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
-
-      <TouchableOpacity onPress={()=>navigation.navigate('Contacts')}>
+      
+      <TouchableOpacity onPress={()=>navigation.goBack(null)}>
       <View style={{flexDirection:'row'}}>
       <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:20,marginTop:3}}/>
       <Text style={{color: '#1976D2', fontSize:14, fontFamily:'Roboto', marginTop:3}}>BACK</Text>
@@ -144,16 +144,22 @@ const NewContact = ({navigation}) => {
        <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> Giving names to DIDs for better organization</Text>
       
       <View style={{alignItems:'center',justifyContent:'space-around', height:230, marginTop:10, marginBottom:0}}>
-        
-      <TouchableOpacity onPress={chooseImage}>
+    
+      <View style={{position: 'relative'}}>
+      
         {ImgPath===""?
       <FontAwesome5 name="user-circle" style={{fontWeight:50,color: '#1976D2',fontSize:185,marginTop:3}}/>
           :
             <Image source={{uri:ImgPath}} style={{height:185, width:185, borderRadius:100}} />
        }
-        
+       <TouchableOpacity onPress={chooseImage}>
+      <FontAwesome5 
+          name="camera" 
+          size={26} 
+          color={"rgb(25, 118, 210)"} 
+          style={{position: 'absolute', zIndex: 90, right: 20, bottom: 10}} />
       </TouchableOpacity>
-  
+      </View>
       </View>
      
     </View>
