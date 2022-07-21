@@ -21,7 +21,8 @@ import Contacts from './Contacts';
 const NewContact = ({navigation}) => {
   const [DID, onChangeDID] = React.useState("");
   const [name, onChangename] = React.useState("");
-  const [ImgPath, setImgPath] = React.useState("");
+  const [ImgData, setImgData] = React.useState("");
+  const [dp,setDP] = React.useState(null);
 
   const addNewContact = async(did,NAME) => {
     console.log(NAME,did);
@@ -35,7 +36,6 @@ const NewContact = ({navigation}) => {
         method: "POST",
         headers: { 'Content-Type': 'multipart/form-data'},
         body: formData,     
-        
       }
       
       try{
@@ -48,11 +48,9 @@ const NewContact = ({navigation}) => {
           {
             if(responseJson.data.response.message){
               console.log("error")
-  
             }
             else if(responseJson.data.response === "Added"){
               console.log("Success");
-  
             }
             else{
               console.log(responseJson.data.response);
@@ -65,19 +63,14 @@ const NewContact = ({navigation}) => {
             console.log("Response is Undefined")
           }
         }
-        
       }
       catch(error){
         Toast.show(error,Toast.LONG);
-  
       }
-      
-  
     }
     else{
       if(DID.length !==46){
         Toast.show("Wrong DID Format (DID length: 46)");
-  
       }
       if(name.length < 3){
         Toast.show("Wrong nickname Format (min length: 3)")
@@ -85,8 +78,7 @@ const NewContact = ({navigation}) => {
     }
   }
 
-  const chooseImage = () =>{
-
+  const chooseImage = (DID) =>{
     var options = {
       title:"Choose profile image",
       mediaType:'photo',
@@ -106,20 +98,56 @@ const NewContact = ({navigation}) => {
         console.log("User tapped into custom button");
         alert(res.customButton);
       }
-      else{
+      else {
         var pro_image = res.assets[0]
-        if(pro_image.fileSize > 1000000){
+        if(pro_image.fileSize > 1048576) {
           Toast.show("File size must be less than 1 MB",Toast.LONG)
         }
-        else{
-          //Sconsole.log(pro_image.uri)
-          setImgPath(pro_image.uri)
-          console.log("Success",ImgPath);
-          // return img
-          
+        else {
+          // setDP(res.assets.uri)
+          setImgData(pro_image)
+          console.log(ImgData)
         }
       }
     })
+  }
+
+  const addDisplayPicture = async(did,dp) => {
+    console.log("Adding Display Picture")
+    if (dp && dp.fileSize < 1048576 && did.length === 46) {
+        console.log("Inside If")
+        let formData = new FormData();
+        formData.append('did', did);
+        formData.append('dp', dp);
+
+        let options = {
+            method: "POST",
+            headers: { 'Content-Type': 'multipart/form-data'},
+            body: formData,     
+        }
+        try {
+          const response = await fetch('http://webwallet.knuct.com/capi/addDp',options);
+          const responseJson = await response.json();
+          console.log("Response JSON: ", responseJson);
+          if (responseJson.data.response === 'Added') {
+            console.log("DP Added")
+            setDid("")
+            setNickName("")
+            setDP(null)
+           }
+        }
+        catch(error){
+          Toast.show(error,Toast.LONG);
+        }
+      }
+      else {
+        if(did.length !==46){
+          Toast.show("Wrong DID Format (DID length: 46)");
+        }
+        if(dp.fileSize > 1048576){
+          Toast.show("File Size Large")
+        }
+      }
   }
 
 
@@ -147,12 +175,12 @@ const NewContact = ({navigation}) => {
     
       <View style={{position: 'relative'}}>
       
-        {ImgPath===""?
+        {ImgData===""?
       <FontAwesome5 name="user-circle" style={{fontWeight:50,color: '#1976D2',fontSize:185,marginTop:3}}/>
           :
-            <Image source={{uri:ImgPath}} style={{height:185, width:185, borderRadius:100}} />
+            <Image source={{uri:ImgData.uri}} style={{height:185, width:185, borderRadius:100}} />
        }
-       <TouchableOpacity onPress={chooseImage}>
+       <TouchableOpacity onPress={()=>chooseImage(DID)}>
       <FontAwesome5 
           name="camera" 
           size={26} 
@@ -174,7 +202,8 @@ const NewContact = ({navigation}) => {
             <Text style={{color: '#00000099',fontSize:12, fontFamily:'Roboto' , marginLeft:20, paddingTop:10}}>Name for new contact</Text>
             </View>
 
-            <TouchableOpacity onPress={()=>addNewContact(DID,name)} style={{backgroundColor:'#1976D2', height:40, width:150, borderRadius:10,alignSelf:'flex-end'}}>
+            <TouchableOpacity onPress={()=>{addDisplayPicture(DID,ImgData) 
+                addNewContact(DID,name) }} style={{backgroundColor:'#1976D2', height:40, width:150, borderRadius:10,alignSelf:'flex-end'}}>
               <Text style={{padding:10,textAlign:'center',fontWeight:'bold',fontFamily:'Roboto',color:'#fff', fontSize:15}}>
                 SAVE CONTACT
               </Text>

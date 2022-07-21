@@ -51,8 +51,6 @@ const ContactDetails = ({navigation, route}) => {
                             <Text style={{color:"white", fontWeight:"bold", textAlign:"center"}}>Online</Text>
                         </View>
                     }
-                    
-                    
                 </View>
                 <View>
                     <Text style={{fontSize:25,color:"black",textAlign:"center",fontWeight:"bold", letterSpacing:1.5, marginBottom:10}}>{nickname}</Text>

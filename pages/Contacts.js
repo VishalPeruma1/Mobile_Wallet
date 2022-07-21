@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {View, Text, TouchableOpacity,Image,TextInput,StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity,Image,TextInput,StyleSheet, ScrollView} from 'react-native';
 import { Card, ListItem } from "react-native-elements";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -63,7 +63,8 @@ const Contacts = ({navigation}) => {
 }
 
   return (
-    <Card containerStyle={{width:"auto", height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
+    <ScrollView>
+    <Card containerStyle={{width:"auto", height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white", marginBottom:75 }}>
     <View style={{flexDirection:'row'}}>
 
       <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Contacts</Text>
@@ -91,6 +92,7 @@ const Contacts = ({navigation}) => {
     </View>
     
       </Card>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
