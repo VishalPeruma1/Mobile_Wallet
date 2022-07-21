@@ -24,13 +24,18 @@ const NewContact = ({navigation}) => {
   const [ImgData, setImgData] = React.useState("");
   const [dp,setDP] = React.useState(null);
 
-  const addNewContact = async(did,NAME) => {
+  const addNewContact = async(did,NAME,dp) => {
     console.log(NAME,did);
     if (did.length===46 && NAME.length>=3)
     {
       let formData = new FormData();
       formData.append('did', did);
       formData.append('nickname',NAME);
+      formData.append('dp', {
+        uri:dp.uri,
+        name:dp.fileName,
+        type:dp.type,
+    });
   
       let options = {
         method: "POST",
@@ -41,7 +46,7 @@ const NewContact = ({navigation}) => {
       try{
         const response = await fetch('http://webwallet.knuct.com/capi/addContact',options);
         const responseJson = await response.json();
-        console.log("Response JSON: ", responseJson);
+        console.log("Add Contact Response JSON: ", responseJson);
         if(response!==undefined){
           console.log("Response data ", responseJson.data);
           if(responseJson.data.response)
@@ -50,6 +55,7 @@ const NewContact = ({navigation}) => {
               console.log("error")
             }
             else if(responseJson.data.response === "Added"){
+              Toast.show("Contact Added Sucessfully");
               console.log("Success");
             }
             else{
@@ -118,7 +124,11 @@ const NewContact = ({navigation}) => {
         console.log("Inside If")
         let formData = new FormData();
         formData.append('did', did);
-        formData.append('dp', dp);
+        formData.append('dp', {
+          uri:dp.uri,
+          name:dp.fileName,
+          type:dp.type,
+      });
 
         let options = {
             method: "POST",
@@ -128,8 +138,9 @@ const NewContact = ({navigation}) => {
         try {
           const response = await fetch('http://webwallet.knuct.com/capi/addDp',options);
           const responseJson = await response.json();
-          console.log("Response JSON: ", responseJson);
+          console.log("Add DP Response JSON: ", responseJson);
           if (responseJson.data.response === 'Added') {
+            Toast.show(responseJson.data.response)
             console.log("DP Added")
             setDid("")
             setNickName("")
@@ -202,8 +213,7 @@ const NewContact = ({navigation}) => {
             <Text style={{color: '#00000099',fontSize:12, fontFamily:'Roboto' , marginLeft:20, paddingTop:10}}>Name for new contact</Text>
             </View>
 
-            <TouchableOpacity onPress={()=>{addDisplayPicture(DID,ImgData) 
-                addNewContact(DID,name) }} style={{backgroundColor:'#1976D2', height:40, width:150, borderRadius:10,alignSelf:'flex-end'}}>
+            <TouchableOpacity onPress={()=>{addNewContact(DID,name,ImgData) }} style={{backgroundColor:'#1976D2', height:40, width:150, borderRadius:10,alignSelf:'flex-end'}}>
               <Text style={{padding:10,textAlign:'center',fontWeight:'bold',fontFamily:'Roboto',color:'#fff', fontSize:15}}>
                 SAVE CONTACT
               </Text>
