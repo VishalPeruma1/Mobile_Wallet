@@ -13,7 +13,7 @@ const Contacts = ({navigation}) => {
     
   const [contact, setContact] = React.useState('')
   const [contacts, setContacts] = React.useState([])
-  const [count, setCount] = React.useState(-1)
+  const [count, setCount] = React.useState()
   const [foundContacts, setFoundContacts] = React.useState([]);
   const [selected, setSelected] = React.useState(null)
 
@@ -39,6 +39,8 @@ const Contacts = ({navigation}) => {
       const response = await fetch('http://webwallet.knuct.com/capi/getContactsListStatus');
       const responseJson = await response.json();
       console.log("getContactsListStatus - Response JSON: ", responseJson.data.response)
+      console.log("getContactsListStatus - Count JSON: ", responseJson.data.count)
+      setCount(responseJson.data.count)
       setContacts(responseJson.data.response)
     } catch(error) {
       Toast.show(error,Toast.LONG);
@@ -76,7 +78,12 @@ const Contacts = ({navigation}) => {
      
     </View>
     
-    <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> 0 Contact(s)</Text>
+    {
+      (count === 1)?
+      <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> {count} Contact</Text>
+        :
+      <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> {count} Contacts</Text>
+    }
     
     <View>
         {contacts.map((data,id) => (
