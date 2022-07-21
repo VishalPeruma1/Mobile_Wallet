@@ -47,7 +47,7 @@ const Contacts = ({navigation}) => {
 
   const ContactsCard = ({data})=>{
     return(
-      <TouchableOpacity onPress={() => navigation.navigate('Contact Details', {"nickname":data.nickname,"did":data.did})}>
+      <TouchableOpacity onPress={() => navigation.navigate('Contact Details', {"nickname":data.nickname,"did":data.did,"onlineStatus":data.onlineStatus})}>
         <Card containerStyle={{marginLeft:10, marginRight:10,height:100,borderRadius:10,backgroundColor:"white", borderColor:"white",elevation:5}} wrapperStyle={{height:105,width:180}}>
           <View style={{flexDirection:'row'}}>
             <Image source={require('../assets/knuct-logo.png')}/>     

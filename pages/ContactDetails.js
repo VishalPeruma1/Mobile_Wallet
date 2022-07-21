@@ -15,6 +15,7 @@ const ContactDetails = ({navigation, route}) => {
 
     const nickname = route.params.nickname;
     const did = route.params.did;
+    const onlineStatus = route.params.onlineStatus;
 
     const [copiedText, setCopiedText] = React.useState('')
 
@@ -41,13 +42,21 @@ const ContactDetails = ({navigation, route}) => {
                 </View>
                 <View style={{marginBottom:-20}}>
                     <FontAwesome5 name="user-circle" style={{textAlign:"center",fontWeight:50,color:'#1976D2',fontSize:185,marginTop:3}}/>
-                    <View style={{backgroundColor:"red", height:"9%",borderRadius:20,width:"18%", marginLeft:200,bottom:42,marginBottom:0}}>
-                        <Text style={{color:"white", fontWeight:"bold", textAlign:"center"}}>Offline</Text>
-                    </View>
+                    {onlineStatus==="offline"?
+                        <View style={{backgroundColor:"red", height:"9%",borderRadius:20,width:"18%", marginLeft:200,bottom:42,marginBottom:0}}>
+                            <Text style={{color:"white", fontWeight:"bold", textAlign:"center"}}>Offline</Text>
+                        </View>
+                        :
+                        <View style={{backgroundColor:"rgb(46, 125, 50)", height:"9%",borderRadius:20,width:"18%", marginLeft:200,bottom:42,marginBottom:0}}>
+                            <Text style={{color:"white", fontWeight:"bold", textAlign:"center"}}>Online</Text>
+                        </View>
+                    }
+                    
+                    
                 </View>
                 <View>
                     <Text style={{fontSize:25,color:"black",textAlign:"center",fontWeight:"bold", letterSpacing:1.5, marginBottom:10}}>{nickname}</Text>
-                    <Text style={{fontSize:13.5,color:"rgba(0, 0, 0, 0.6)",fontWeight:"450"}}>{did}</Text>
+                    <Text style={{fontSize:13.5,color:"rgba(0, 0, 0, 0.6)",fontWeight:"400"}}>{did}</Text>
                     <TouchableOpacity onPress={() => copyToClipboard()} style={{marginLeft:300}}>
                     <View>
                         {/* <Text style={{color: 'red', fontSize: 14 , fontFamily:'Arial', fontStyle: 'bold', textAlign: 'center', marginTop: 3, marginLeft: 25, marginBottom: 17}}> 
