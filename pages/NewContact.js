@@ -31,11 +31,15 @@ const NewContact = ({navigation}) => {
       let formData = new FormData();
       formData.append('did', did);
       formData.append('nickname',NAME);
-      formData.append('dp', {
-        uri:dp.uri,
-        name:dp.fileName,
-        type:dp.type,
-    });
+      if (dp!==null){
+        if(dp && dp.fileSize < 1048576){
+          formData.append('dp', {
+            uri:dp.uri,
+            name:dp.fileName,
+            type:dp.type,
+        });
+        }
+        }
   
       let options = {
         method: "POST",
@@ -148,6 +152,7 @@ const NewContact = ({navigation}) => {
            }
         }
         catch(error){
+          console.log(error)
           Toast.show(error,Toast.LONG);
         }
       }

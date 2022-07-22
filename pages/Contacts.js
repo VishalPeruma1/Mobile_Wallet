@@ -3,6 +3,7 @@ import React from 'react';
 import {View, Text, TouchableOpacity,Image,TextInput,StyleSheet, ScrollView} from 'react-native';
 import { Card, ListItem } from "react-native-elements";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useIsFocused } from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-simple-toast';
@@ -16,11 +17,14 @@ const Contacts = ({navigation}) => {
   const [count, setCount] = React.useState()
   const [foundContacts, setFoundContacts] = React.useState([]);
   const [selected, setSelected] = React.useState(null)
+  const isFocused = useIsFocused();
 
   React.useEffect(()=>{
     getContactsList()
     getContactsListStatus()
-  }, [])
+  }, [isFocused])
+
+
     
   const getContactsList = async()=>{
     try {
@@ -28,10 +32,12 @@ const Contacts = ({navigation}) => {
       const response = await fetch('http://webwallet.knuct.com/capi/getContactsList');
       const responseJson = await response.json();
       console.log("getContactsList - Response JSON: ", responseJson)
+      
     } catch(error) {
       Toast.show(error,Toast.LONG);
     }
   }
+
 
   const getContactsListStatus = async()=>{
     try {
@@ -42,6 +48,7 @@ const Contacts = ({navigation}) => {
       console.log("getContactsListStatus - Count JSON: ", responseJson.data.count)
       setCount(responseJson.data.count)
       setContacts(responseJson.data.response)
+      
     } catch(error) {
       Toast.show(error,Toast.LONG);
     }
@@ -49,13 +56,32 @@ const Contacts = ({navigation}) => {
 
   const ContactsCard = ({data})=>{
     return(
-      <TouchableOpacity onPress={() => navigation.navigate('Contact Details', {"nickname":data.nickname,"did":data.did,"onlineStatus":data.onlineStatus})}>
-        <Card containerStyle={{marginLeft:10, marginRight:10,height:100,borderRadius:10,backgroundColor:"white", borderColor:"white",elevation:5}} wrapperStyle={{height:105,width:180}}>
-          <View style={{flexDirection:'row'}}>
-            <Image source={require('../assets/knuct-logo.png')}/>     
+      <TouchableOpacity onPress={() => navigation.navigate('Contact Details', {"data":data})}>
+        <Card containerStyle={{marginLeft:10, marginRight:10,borderRadius:10,backgroundColor:"white",padding:5, paddingLeft:12, borderColor:"white",elevation:5}} wrapperStyle={{height:105, width:200}}>
+          <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
+            {data.dp===""?
+              // <Image source={require('../assets/knuct-logo.png')}/>
+              <View style={{backgroundColor:"#1976D2", borderRadius:40, width: 80, height:80, alignContent:"center", justifyContent:"center"}}>
+              <Text style={{
+                fontSize: 35,
+                color: "#fff",
+                textAlign: "center",
+                 }}>
+                {data.nickname.slice(0,1)}
+              </Text>
+              </View>
+              :
+              <Image source={{
+                uri:`data:image/jpg;base64,${JSON.parse(data.dp).base64}`
+              }}
+               style={{height:80,width:80, borderRadius:40}} 
+              />
+              // console.log(JSON.parse(data.dp).base64)
+            }  
+
             <View >
-              <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}> {data.nickname}</Text>
-              <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> {data.did}</Text>
+              <Text style={{fontFamily:'Roboto',color:'#000000DE', fontSize:20}}> {data.nickname}</Text>
+              <Text style={{color: 'rgba(0, 0, 0, 0.6)', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> {data.did}</Text>
             </View> 
           </View>
         </Card>
