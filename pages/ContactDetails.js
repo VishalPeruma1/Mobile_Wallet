@@ -20,12 +20,11 @@ const ContactDetails = ({navigation, route}) => {
 
     const data = route.params.data
 
-    const [copiedText, setCopiedText] = React.useState('')
+    // const [copiedText, setCopiedText] = React.useState('')
 
     const copyToClipboard = () => {
         Clipboard.setString(data.did)
-        const text = Clipboard.getString()
-        setCopiedText(text)
+
     }
 
     // const fetchCopiedText = async () => {
