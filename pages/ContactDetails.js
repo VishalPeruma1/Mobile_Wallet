@@ -1,6 +1,6 @@
 import React from "react";
 
-import {View,Text,TouchableOpacity,Image,TextInput,StyleSheet} from 'react-native';
+import {View,Text,TouchableOpacity,Image,TextInput,StyleSheet,Modal} from 'react-native';
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Card, ListItem } from "react-native-elements";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -17,8 +17,88 @@ const ContactDetails = ({navigation, route}) => {
     // const did = route.params.did;
     // const onlineStatus = route.params.onlineStatus;
     // const dp = route.params.dp;
+    const [newDp,setnewDp] = React.useState(false)
+    const[Img,setImg]=React.useState("");
+    const chooseImage = () =>{
+
+        var options = {
+          title:"Choose profile image",
+          mediaType:'photo',
+          customButtons:[{name:'customOptionKey', title:'Choose file from Gallery'}],storageOptions:{skipBackup:true,path:'images'},
+        };
+        launchImageLibrary(options,res =>{
+    
+          console.log("Response = ",res)
+          if(res.didCancel)
+          {console.log("User Cancelled");}
+    
+          else if(res.error){
+            console.log("Error: ",res.error);
+    
+          }
+          else if(res.customButton){
+            console.log("User tapped into custom button");
+            alert(res.customButton);
+          }
+          else{
+            var pro_image = res.assets[0]
+            if(pro_image.fileSize > 1000000){
+              Toast.show("File size must be less than 1 MB",Toast.LONG)
+            }
+            else{
+              setImg(pro_image)
+              console.log("Success",pro_image.uri);
+    
+            }
+          }
+        })
+      }
+      const addDisplayPicture = async(did,dp) => {
+        console.log("Replacing Display Picture")
+        if (dp && dp.fileSize < 1048576 && did.length === 46) {
+            console.log("Inside If")
+            let formData = new FormData();
+            formData.append('did', did);
+            formData.append('dp', {
+              uri:dp.uri,
+              name:dp.fileName,
+              type:dp.type,
+          });
+    
+            let options = {
+                method: "POST",
+                headers: { 'Content-Type': 'multipart/form-data'},
+                body: formData,     
+            }
+            try {
+              const response = await fetch('http://webwallet.knuct.com/capi/addDp',options);
+              const responseJson = await response.json();
+              console.log("Add DP Response JSON: ", responseJson);
+              if (responseJson.data.response === 'Added') {
+                Toast.show(responseJson.data.response)
+                console.log("DP Added")
+                setDid("")
+                setNickName("")
+                setDP(null)
+               }
+            }
+            catch(error){
+              console.log(error)
+              Toast.show(error,Toast.LONG);
+            }
+          }
+          else {
+            if(did.length !==46){
+              Toast.show("Wrong DID Format (DID length: 46)");
+            }
+            if(dp.fileSize > 1048576){
+              Toast.show("File Size Large")
+            }
+          }
+      }
 
     const data = route.params.data
+    
 
     // const [copiedText, setCopiedText] = React.useState('')
 
@@ -42,6 +122,7 @@ const ContactDetails = ({navigation, route}) => {
                         </View>
                     </TouchableOpacity>
                 </View>
+                <TouchableOpacity onPress={()=>setnewDp(true)}> 
                 <View style={{alignItems:"center",flexDirection:"column"}}>
                     {/* <FontAwesome5 name="user-circle" style={{textAlign:"center",fontWeight:50,color:'#1976D2',fontSize:185,marginTop:3}}/> */}
                     {data.dp===""?
@@ -73,6 +154,56 @@ const ContactDetails = ({navigation, route}) => {
                         </View>
                     }
                 </View>
+                </TouchableOpacity>
+                <Modal visible={newDp} transparent={true} onRequestClose={()=>{setnewDp(false)}}>
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={styles.qrcode}>
+                        <View style={{width:250,height:250}}>
+                        {data.dp===""?
+                        <View style={{flexDirection: 'column',height:250,width:250, alignContent:"center", justifyContent:"center",backgroundColor:"#FFF4E5"}}>
+    
+                            <Ionicons name='warning-outline' style={{color: 'rgb(255, 152, 0)',fontSize:55,marginLeft:100,marginTop:35}}/>
+                        <Text style={{
+                            fontSize: 18,
+                            color: "#663C00",
+                            marginLeft:45,
+                            }}>
+                            No Display Picture available ...!
+                        </Text>
+                        </View>
+                        :
+                        <Image source={{
+                            uri:`data:image/jpg;base64,${JSON.parse(data.dp).base64}`
+                        }}
+                        style={{height:250,width:250}} 
+                        />
+                    }
+                                  
+            </View>
+            
+            <View style={{marginTop:15,marginBottom:15,flexDirection:'row'}}>
+                <TouchableOpacity onPress={chooseImage}>
+                <MaterialCommunityIcons name="camera" style={{marginTop:6,padding:10,fontSize:30, color:"#1976D2"}}/>
+                 
+                </TouchableOpacity>
+            <TouchableOpacity onPress={()=>setnewDp(false)}>
+                <Text style={{fontSize:15,color:'#1976D2',fontFamily:'Roboto',marginTop:6,padding:10,}}>CONFIRM</Text>
+              </TouchableOpacity>
+
+            <TouchableOpacity onPress={()=>setnewDp(false)}>
+                <Text style={{fontSize:15,color:'#D32F2F',fontFamily:'Roboto',marginTop:6,padding:10,}}>CANCEL</Text>
+              </TouchableOpacity>
+
+
+            </View>
+            
+
+
+                        </View>
+                </View>
+                
+                </Modal>
+
                 <View>
                     <Text style={{fontSize:25,color:"black",textAlign:"center",fontWeight:"bold", letterSpacing:1.5, marginBottom:10}}>{data.nickname}</Text>
                     <Text style={{fontSize:13.5,color:"rgba(0, 0, 0, 0.6)",fontWeight:"400"}}>{data.did}</Text>
@@ -104,5 +235,24 @@ const ContactDetails = ({navigation, route}) => {
         </View>
     );
 };
+const styles = StyleSheet.create({
+
+  qrcode: {
+      margin: 10, 
+      backgroundColor: "white", 
+      borderRadius: 5,  
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 25,
+      flexDirection:'column',
+      justifyContent:'space-evenly'
+    },
+})
 
 export default ContactDetails;

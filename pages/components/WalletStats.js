@@ -100,21 +100,21 @@ const WalletStats = () => {
         </Card>
       </View>
       <View style={{display:"flex", flexDirection:"row"}}>
-        <Card containerStyle={{height:105, borderRadius:10,backgroundColor:"white", borderColor:"white" }} wrapperStyle={{height:105}}>
+        <Card containerStyle={{height:105, width:"auto",borderRadius:10,backgroundColor:"white", borderColor:"white" }} wrapperStyle={{height:105}}>
           <Card.Title style={{ fontSize: 15, color:"black"}}>Wallet ID</Card.Title>
          
-          <View style={{position: "relative" }}>
+          <View style={{position: "relative",flexDirection:'row' }}>
             <TextInput editable={true} value={details.wid} multiline={false} 
             style={{      
               color: "rgb(118, 118, 118)",
               marginStart:12,
               marginEnd:0,
               padding: 5,
-              paddingLeft:15,
+              // paddingLeft:15,
               borderWidth: 1, 
               borderRadius: 5,
               borderColor:"grey",     
-              right:14
+              right:20
               }}
               // autoFocus={true}
               // selectTextOnFocus={true}
@@ -127,7 +127,7 @@ const WalletStats = () => {
                
           <TouchableOpacity onPress={copyToClipboard}>
           {/* <View style={{flexDirection:'column',alignItems:'center'}}> */}
-            <MaterialIcons name="content-copy" style={{fontSize:22, color:"grey", bottom:29,left:312}}/>
+            <MaterialIcons name="content-copy" style={{fontSize:22, color:"grey",right:17,top:7}}/>
             {/* <Text style={{fontSize:15, color:'#9c27b0'}}>copy</Text> */}
           {/* </View> */}
           </TouchableOpacity>
