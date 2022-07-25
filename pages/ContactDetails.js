@@ -7,6 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {launchImageLibrary} from 'react-native-image-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Toast from 'react-native-simple-toast';
 import NewContact from './NewContact';
@@ -19,9 +20,10 @@ const ContactDetails = ({navigation, route}) => {
     // const dp = route.params.dp;
     const [newDp,setnewDp] = React.useState(false)
     const[Img,setImg]=React.useState("");
+    const[showImg,setshowImg]=React.useState(false);
     const chooseImage = () =>{
 
-        var options = {
+        let options = {
           title:"Choose profile image",
           mediaType:'photo',
           customButtons:[{name:'customOptionKey', title:'Choose file from Gallery'}],storageOptions:{skipBackup:true,path:'images'},
@@ -48,7 +50,7 @@ const ContactDetails = ({navigation, route}) => {
             else{
               setImg(pro_image)
               console.log("Success",pro_image.uri);
-    
+              setshowImg(true)
             }
           }
         })
@@ -64,7 +66,7 @@ const ContactDetails = ({navigation, route}) => {
               name:dp.fileName,
               type:dp.type,
           });
-    
+          console.log(dp.uri)
             let options = {
                 method: "POST",
                 headers: { 'Content-Type': 'multipart/form-data'},
@@ -77,9 +79,9 @@ const ContactDetails = ({navigation, route}) => {
               if (responseJson.data.response === 'Added') {
                 Toast.show(responseJson.data.response)
                 console.log("DP Added")
-                setDid("")
-                setNickName("")
-                setDP(null)
+                // setDid("")
+                // setNickName("")
+                // setDP(null)
                }
             }
             catch(error){
@@ -159,7 +161,7 @@ const ContactDetails = ({navigation, route}) => {
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         <View style={styles.qrcode}>
                         <View style={{width:250,height:250}}>
-                        {data.dp===""?
+                        {data.dp===""&&!showImg?
                         <View style={{flexDirection: 'column',height:250,width:250, alignContent:"center", justifyContent:"center",backgroundColor:"#FFF4E5"}}>
     
                             <Ionicons name='warning-outline' style={{color: 'rgb(255, 152, 0)',fontSize:55,marginLeft:100,marginTop:35}}/>
@@ -171,7 +173,12 @@ const ContactDetails = ({navigation, route}) => {
                             No Display Picture available ...!
                         </Text>
                         </View>
-                        :
+                        :showImg?                        
+                        <Image source={{
+                          uri:Img.uri
+                        }}
+                        style={{height:250,width:250}} 
+                        />:
                         <Image source={{
                             uri:`data:image/jpg;base64,${JSON.parse(data.dp).base64}`
                         }}
@@ -186,7 +193,7 @@ const ContactDetails = ({navigation, route}) => {
                 <MaterialCommunityIcons name="camera" style={{marginTop:6,padding:10,fontSize:30, color:"#1976D2"}}/>
                  
                 </TouchableOpacity>
-            <TouchableOpacity onPress={()=>setnewDp(false)}>
+            <TouchableOpacity onPress={()=>{addDisplayPicture(data.did,Img)}}>
                 <Text style={{fontSize:15,color:'#1976D2',fontFamily:'Roboto',marginTop:6,padding:10,}}>CONFIRM</Text>
               </TouchableOpacity>
 

@@ -17,6 +17,7 @@ import Contacts from './pages/Contacts';
 import OpenCamera from './pages/OpenCamera';
 import ContactDetails from './pages/ContactDetails';
 import Transactions from './pages/Transactions';
+import RecentTransactions from './pages/RecentTransactions';
 
 const Stack = createNativeStackNavigator();
 
@@ -128,6 +129,7 @@ const App = () => {
     <Stack.Screen name="Open Camera" component={OpenCamera} />
     <Stack.Screen name="Contact Details" component={ContactDetails} />
     <Stack.Screen name="Transactions" component={Transactions} />
+    <Stack.Screen name="RecentTransactions" component={RecentTransactions} />
   </Stack.Navigator>
   </NavigationContainer>
     

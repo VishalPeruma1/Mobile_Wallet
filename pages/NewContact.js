@@ -88,7 +88,7 @@ const NewContact = ({navigation}) => {
     }
   }
 
-  const chooseImage = (DID) =>{
+  const chooseImage = () =>{
     var options = {
       title:"Choose profile image",
       mediaType:'photo',
@@ -196,7 +196,7 @@ const NewContact = ({navigation}) => {
           :
             <Image source={{uri:ImgData.uri}} style={{height:185, width:185, borderRadius:100}} />
        }
-       <TouchableOpacity onPress={()=>chooseImage(DID)}>
+       <TouchableOpacity onPress={()=>chooseImage()}>
       <FontAwesome5 
           name="camera" 
           size={26} 
