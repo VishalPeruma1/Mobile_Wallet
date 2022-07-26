@@ -19,6 +19,7 @@ const Contacts = ({navigation}) => {
   const [selected, setSelected] = React.useState(null)
   const isFocused = useIsFocused();
 
+
   React.useEffect(()=>{
     getContactsList()
     getContactsListStatus()
@@ -38,6 +39,22 @@ const Contacts = ({navigation}) => {
     }
   }
 
+  const generateColor = ({data}) => {
+    try{
+      var s_red = 1.75 * data.did.charAt(10).charCodeAt()
+      var s_green =  1.2 * data.did.toString().charAt(20).charCodeAt() 
+      var s_blue = data.did.toString().charAt(30).charCodeAt() 
+      var s_contactColor = "rgb(" + String(s_red) + "," + String(s_green) + "," + String(s_blue) + ")"
+      console.log("CONTACT COLOR => ",s_contactColor)
+      return s_contactColor
+    }
+
+    catch(error){
+      console.log(error)
+    }
+
+  };
+
 
   const getContactsListStatus = async()=>{
     try {
@@ -48,11 +65,13 @@ const Contacts = ({navigation}) => {
       console.log("getContactsListStatus - Count JSON: ", responseJson.data.count)
       setCount(responseJson.data.count)
       setContacts(responseJson.data.response)
+
       
     } catch(error) {
       Toast.show(error,Toast.LONG);
     }
   }
+
 
   const ContactsCard = ({data})=>{
     return(
@@ -61,7 +80,7 @@ const Contacts = ({navigation}) => {
           <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
             {data.dp===""?
               // <Image source={require('../assets/knuct-logo.png')}/>
-              <View style={{backgroundColor:"#1976D2", borderRadius:40, width: 80, height:80, alignContent:"center", justifyContent:"center"}}>
+              <View style={{backgroundColor:generateColor({data}), borderRadius:40, width: 80, height:80, alignContent:"center", justifyContent:"center"}}>
               <Text style={{
                 fontSize: 35,
                 color: "#fff",

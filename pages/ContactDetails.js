@@ -108,7 +108,21 @@ const ContactDetails = ({navigation, route}) => {
         Clipboard.setString(data.did)
 
     }
-
+    const generateColor = ({data}) => {
+      try{
+        var s_red = 1.75 * data.did.charAt(10).charCodeAt()
+        var s_green =  1.2 * data.did.toString().charAt(20).charCodeAt() 
+        var s_blue = data.did.toString().charAt(30).charCodeAt() 
+        var s_contactColor = "rgb(" + String(s_red) + "," + String(s_green) + "," + String(s_blue) + ")"
+        console.log("CONTACT COLOR => ",s_contactColor)
+        return s_contactColor
+      }
+  
+      catch(error){
+        console.log(error)
+      }
+  
+    };
     // const fetchCopiedText = async () => {
     //     const text = await Clipboard.getString()
     //     setCopiedText(text)
@@ -128,7 +142,7 @@ const ContactDetails = ({navigation, route}) => {
                 <View style={{alignItems:"center",flexDirection:"column"}}>
                     {/* <FontAwesome5 name="user-circle" style={{textAlign:"center",fontWeight:50,color:'#1976D2',fontSize:185,marginTop:3}}/> */}
                     {data.dp===""?
-                        <View style={{backgroundColor:"#1976D2", borderRadius:100, width: 150, height:150, alignContent:"center", justifyContent:"center"}}>
+                        <View style={{backgroundColor:generateColor({data}), borderRadius:100, width: 150, height:150, alignContent:"center", justifyContent:"center"}}>
                         <Text style={{
                             fontSize: 65,
                             color: "#fff",

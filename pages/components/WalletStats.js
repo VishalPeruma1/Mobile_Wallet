@@ -42,7 +42,7 @@ const WalletStats = () => {
   }
   const copyToClipboard = ()=>{
     Clipboard.setString(details.wid)
-    Toast.show("DID Copied to clipboard")
+    Toast.show("Wallet ID Copied to clipboard")
   }
 
   return (
@@ -103,18 +103,19 @@ const WalletStats = () => {
         <Card containerStyle={{height:105, width:"auto",borderRadius:10,backgroundColor:"white", borderColor:"white" }} wrapperStyle={{height:105}}>
           <Card.Title style={{ fontSize: 15, color:"black"}}>Wallet ID</Card.Title>
          
-          <View style={{position: "relative",flexDirection:'row' }}>
-            <TextInput editable={true} value={details.wid} multiline={false} 
+          <View style={{position: "relative" }}>
+            <TextInput editable={false} value={details.wid} multiline={false} 
             style={{      
               color: "rgb(118, 118, 118)",
               marginStart:12,
               marginEnd:0,
               padding: 5,
-              // paddingLeft:15,
+              paddingLeft:15,
+              paddingRight: 15,
               borderWidth: 1, 
               borderRadius: 5,
               borderColor:"grey",     
-              right:20
+              right:14
               }}
               // autoFocus={true}
               // selectTextOnFocus={true}
@@ -127,12 +128,11 @@ const WalletStats = () => {
                
           <TouchableOpacity onPress={copyToClipboard}>
           {/* <View style={{flexDirection:'column',alignItems:'center'}}> */}
-            <MaterialIcons name="content-copy" style={{fontSize:22, color:"grey",right:17,top:7}}/>
+            <MaterialIcons name="content-copy" style={{fontSize:22, color:"grey", bottom:29,left:312}}/>
             {/* <Text style={{fontSize:15, color:'#9c27b0'}}>copy</Text> */}
           {/* </View> */}
           </TouchableOpacity>
           </View>
-          
         </Card>
       </View>
       <View>
