@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-simple-toast';
+import {scale, ScaledSheet} from 'react-native-size-matters';
 
 const ChooseWords = ({ navigation}) => {
 
@@ -83,9 +84,9 @@ const ChooseWords = ({ navigation}) => {
       return (
         
           <TouchableOpacity onPress={()=>seedwords({data})} style={styles.cellStyle}>
-          <View style={{ paddingStart:6, paddingBottom:10, paddingTop:10, paddingEnd:6, alignItems:'center', justifyContent:'center', borderRadius:4,
-          backgroundColor: (state[data.id-1] ? 'rgb(207, 150, 217)' : '#ffffff')}}>
-              <Text style={{color : (state[data.id-1] ? 'white' : 'black'), fontSize:13}}>{data.val}</Text>              
+          <View style={ [styles.cellView,{ 
+          backgroundColor: (state[data.id-1] ? 'rgb(207, 150, 217)' : '#ffffff')}]}>
+              <Text style={{color : (state[data.id-1] ? 'white' : 'black'), fontSize:scale(12)}}>{data.val}</Text>              
             </View>
           </TouchableOpacity>
         
@@ -131,7 +132,7 @@ const ChooseWords = ({ navigation}) => {
             Enter a passphrase
         </Text>
         
-        <TextInput placeholder='Passphrase' multiline={true} placeholderTextColor="grey" style={[styles.textinput,{height:textInputHeight, maxHeight:85}]} onChangeText={onChangeText} value={text}
+        <TextInput placeholder='Passphrase' multiline={true} placeholderTextColor="grey" style={[styles.textinput,{height:textInputHeight}]} onChangeText={onChangeText} value={text}
         onContentSizeChange={(e) => setTextInputHeight(e.nativeEvent.contentSize.height) } />
 
         <Text style={{marginTop: 25, fontSize: 15, fontWeight: '400', paddingStart:10, color:'black',}}>
@@ -164,9 +165,11 @@ const ChooseWords = ({ navigation}) => {
 
     );
 };
-const styles = StyleSheet.create({
+
+
+const styles = ScaledSheet.create({
     gridContainer: {
-        marginTop: 15,
+        marginTop: '15@s',
         alignItems:'center',
         justifyContent:'center',
     },
@@ -177,26 +180,27 @@ const styles = StyleSheet.create({
     },
     cellStyle: {
       flex: 1,
-      marginStart:5,
-      marginBottom:10,
-      marginTop:10,
-      marginEnd:5,
-      borderWidth:1,
-      borderRadius:5,
+      marginStart:'5@s',
+      marginBottom:'10@s',
+      marginTop:'10@s',
+      marginEnd:'5@s',
+      borderWidth:'1@s',
+      borderRadius:'5@s',
     },
-    sectionContainer: {
-      marginTop: 32,
-      paddingHorizontal: 24,
-    },
-    sectionTitle: {
-      fontSize: 24,
-      fontWeight: '600',
+    cellView: {
+      paddingStart:'5@s', 
+      paddingBottom:'10@s', 
+      paddingTop:'10@s', 
+      paddingEnd:'5@s', 
+      alignItems:'center', 
+      justifyContent:'center', 
+      borderRadius:4,
     },
     backBtn:{
       alignItems:'center',
       textAlign:'center',
-      flex:2,
-      marginTop:25,
+      flex:'2@s',
+      marginTop:'25@s',
       flex:1,
       justifyContent:'center',
       flexDirection:'row'
@@ -205,69 +209,55 @@ const styles = StyleSheet.create({
       color: "gray",
       flex:2 ,
       textAlign:'center',
-      fontSize: 15,
-      marginTop: 25,
-      paddingEnd:20,
-      paddingStart:20
+      fontSize: '14@s',
+      marginTop: '20@s',
+      paddingEnd: '15@s',
+      paddingStart:'15@s'
       // justifyContent: 'center',
       // marginLeft: 37
     },
     btnStyle:{
       borderColor:'#1976D2',
       flexDirection:'row',
-      borderWidth:1,
-      paddingStart:55,
-      paddingEnd:55,
-      paddingTop:12,
-      paddingBottom:12, 
+      borderWidth:'1@s',
+      paddingStart:'55@s',
+      paddingEnd:'55@s',
+      paddingTop:'12@s',
+      paddingBottom:'12@s', 
       justifyContent:'center',
       flex:1,
-      borderRadius:5,
+      borderRadius:'5@s',
       backgroundColor:'#1976D2',
-      marginTop:20,
+      marginTop:'20@s',
       alignSelf: 'center'
     },
     textinput:{
         color: "black",
-        marginTop: 12,
-        marginStart:12,
-        marginEnd:12,
-        padding: 10,
-        borderWidth: 1, 
-        borderRadius: 5,
+        marginTop: '12@s',
+        marginStart:'12@s',
+        marginEnd:'12@s',
+        padding: '10@s',
+        borderWidth: '1@s', 
+        borderRadius: '5@s',
+        maxHeight:'85@s',
       },
-    Button_style:{
-      flex:2 ,
-      textAlign:'center',
-      fontSize: 20,
-      // justifyContent: 'center',
-      // marginLeft: 37,
-      alignItems: 'center'
-    },
     container: {
       alignItems: 'center',
    },
-   text: {
-      borderWidth: 1,
-      padding: 25,
-      borderColor: 'black',
-      backgroundColor: 'red'
-   }
-  ,
     headline: {
       textAlign: 'center', // <-- the magic
       fontWeight: 'bold',
       color:'black',
-      fontSize: 35,
+      fontSize: '30@s',
       // justifyContent: 'center',
       // marginLeft: 37,
       alignItems: 'center'
     },
     sectionDescription: {
-      marginTop: 35,
-      fontSize: 15,
+      marginTop: '20@s',
+      fontSize: '15@s',
       fontWeight: '400',
-      paddingStart:10,
+      paddingStart:'10@s',
       color:'black',
     },
     highlight: {

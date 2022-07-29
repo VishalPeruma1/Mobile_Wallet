@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -29,8 +29,10 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
     const [showNFT, setshowNFT] = React.useState(false);
     const [showQR, setshowQR] = React.useState(false);
     // const [showTransaction,setShowTransaction] = React.useState(false);
+    const [transactionList,setTransactionList, getTransactionList] = React.useState("");
     const [res,setres] = React.useState("");
     const isFocused = useIsFocused();
+    var transList =[];
 
     React.useEffect(()=> {
       getTxnByCount()
@@ -52,43 +54,19 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
           const responseJson = await response.json();
           console.log("Response JSON: ", responseJson)
           if(response.status===200 && responseJson) {
-            setres(responseJson.data.response)
-            console.log(Object.keys(res[2].tokens).length)
-            // setShowTransaction(true)
+            setTransactionList(responseJson.data.response)
           }
       } catch(error) {
         Toast.show(error,Toast.LONG);
       }
-    }
+    } 
 
-    const TransactionCard = ({res})=>{
+    const TransactionCard = ({data})=>{
       return(
         <TouchableOpacity>
-          <Card containerStyle={{marginLeft:10, marginRight:10,borderRadius:10,backgroundColor:"white",padding:5, paddingLeft:12, borderColor:"white",elevation:5}} wrapperStyle={{height:105, width:200}}>
+          <Card containerStyle={{marginLeft:10, marginRight:10,borderRadius:10,backgroundColor:"black",padding:5, paddingLeft:12, borderColor:"black",elevation:5}} wrapperStyle={{height:105, width:200}}>
             <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
-              {showTransaction?
-                <View style={{backgroundColor:"#1976D2", borderRadius:40, width: 80, height:80, alignContent:"center", justifyContent:"center"}}>
-                <Text style={{
-                  fontSize: 35,
-                  color: "#fff",
-                  textAlign: "center",
-                   }}>
-                  {res[0].tokens}
-                </Text>
-                </View>
-                :
-                <Image source={{
-                  uri:`data:image/jpg;base64,${JSON.parse(data.dp).base64}`
-                }}
-                 style={{height:80,width:80, borderRadius:40}} 
-                />
-                // console.log(JSON.parse(data.dp).base64)
-              }  
-  
-              <View >
-                <Text style={{fontFamily:'Roboto',color:'#000000DE', fontSize:20}}> {data.nickname}</Text>
-                <Text style={{color: 'rgba(0, 0, 0, 0.6)', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}> {data.did}</Text>
-              </View> 
+              <Text style={{color:"black"}}>Testing</Text>
             </View>
           </Card>
         </TouchableOpacity>
@@ -356,9 +334,9 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
           <TouchableOpacity>
             <Text style={{fontSize:14,marginLeft:75,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
           </TouchableOpacity>
-          {/* {res.slice(0,3).map((res,id) => (
-            <TransactionCard key={id} data={res} />
-            ))} */}
+          {transactionList.slice(0,3).map((data,id) => (
+            <TransactionCard key={id} data={data} />
+            ))}
         </View>
         </Card>
 

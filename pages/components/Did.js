@@ -72,7 +72,7 @@ const Did = (did) => {
               <QRCode value={did} size={250} color="black" />
               <View style={{flexDirection:'row', justifyContent:'space-around', alignItems:'center', alignContent:'space-around', marginTop:20}}>
               <TouchableOpacity onPress={()=>printDID()}>
-                <Text style={{fontSize:20, fontWeight:'bold', color:'black'}}>Print</Text>
+                <Text style={{fontSize:20, fontWeight:'bold', color:'black', paddingRight:40}}>Print</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={()=>setShowQrCode(false)}>
                 <Text style={{fontSize:20, fontWeight:'bold', color:'black'}}>Close</Text>

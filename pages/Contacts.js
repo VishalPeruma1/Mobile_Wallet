@@ -65,7 +65,7 @@ const Contacts = ({navigation}) => {
       console.log("getContactsListStatus - Count JSON: ", responseJson.data.count)
       setCount(responseJson.data.count)
       setContacts(responseJson.data.response)
-
+      console.log(contacts)
       
     } catch(error) {
       Toast.show(error,Toast.LONG);
