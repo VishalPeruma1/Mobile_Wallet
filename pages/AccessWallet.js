@@ -14,6 +14,7 @@ import * as nlssUtils from '../utils/nlss';
 import { Buffer } from 'buffer';
 import { PNG } from 'pngjs/browser';
 import { sign } from 'crypto';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const AccessWallet = ({ navigation, route}) => {
 
@@ -62,7 +63,7 @@ const AccessWallet = ({ navigation, route}) => {
         })
       }
       try {
-          const response = await fetch('http://webwallet.knuct.com/sapi/auth/challenge',options);
+          const response = await fetch('https://webwallet.knuct.com/sapi/auth/challenge',options);
           const responseJson = await response.json();
           console.log("Response JSON: ", responseJson)
           if(response.status===200 && responseJson) {
@@ -86,7 +87,7 @@ const AccessWallet = ({ navigation, route}) => {
         })
       }
       try {
-        const response = await fetch('http://webwallet.knuct.com/sapi/auth/response',options);
+        const response = await fetch('https://webwallet.knuct.com/sapi/auth/response',options);
         console.log(response)
         if(response.status===204) {
           setAuthenticate(true)
@@ -99,7 +100,7 @@ const AccessWallet = ({ navigation, route}) => {
 
     const startNode = async()=>{
       try {
-        const response = await fetch('http://webwallet.knuct.com/sapi/startnode');
+        const response = await fetch('https://webwallet.knuct.com/sapi/startnode');
         console.log(response)
         if(response.status===204) {
           setStartwallet(true)
@@ -112,7 +113,7 @@ const AccessWallet = ({ navigation, route}) => {
 
     const fetchInitData = async()=>{
       try {
-        const response = await fetch('http://webwallet.knuct.com/sapi/walletdata');
+        const response = await fetch('https://webwallet.knuct.com/sapi/walletdata');
         const responseJson = await response.json();
         console.log("Response JSON: ", responseJson)
         if(response.status===200 && responseJson) {
@@ -130,20 +131,20 @@ const AccessWallet = ({ navigation, route}) => {
             <Text style={styles.content}>
                 This will take some time. Please wait until the procedure completes. 
             </Text>
-            <View style={{alignItems:"center", justifyContent:"center", marginTop:40, flexDirection:"row"}}>
-                <Text style={{color:checkwallet?'green':'grey', fontSize:15, marginRight:5}}>
+            <View style={styles.checkWalletView}>
+                <Text style={{color:checkwallet?'green':'grey', fontSize:scale(15), marginRight:scale(5)}}>
                     Checking Wallet
                 </Text>
-                {checkwallet?<MaterialIcons name='check' style={{color:'green',fontSize:18}}/>:<ActivityIndicator  color={'grey'} />}
+                {checkwallet?<MaterialIcons name='check' style={{color:'green',fontSize:scale(18)}}/>:<ActivityIndicator  color={'grey'} />}
             </View> 
-            <View style={{alignItems:"center", justifyContent:"center", marginTop:20, flexDirection:"row"}}>
-                <Text style={{color:authenticate?'green': checkwallet ? "grey" : "#A9A9A9", fontSize:15, marginRight:5}}>
+            <View style={styles.authenticatingView}>
+                <Text style={{color:authenticate?'green': checkwallet ? "grey" : "#A9A9A9", fontSize:scale(15), marginRight:scale(5)}}>
                     Authenticating
                 </Text>
                 {
                   (() => {
                     if(authenticate){
-                      return <MaterialIcons name='check' style={{color:'green',fontSize:18}}/>
+                      return <MaterialIcons name='check' style={{color:'green',fontSize:scale(18)}}/>
                     }
                     else{
                       if(checkwallet){
@@ -156,14 +157,14 @@ const AccessWallet = ({ navigation, route}) => {
                   })()
                 }
             </View>
-            <View style={{alignItems:"center", justifyContent:"center", marginTop:20, flexDirection:"row"}}>
-                <Text style={{color:startwallet?'green': authenticate ? "grey" : "#A9A9A9", fontSize:15, marginRight:5}}>
+            <View style={styles.startWalletView}>
+                <Text style={{color:startwallet?'green': authenticate ? "grey" : "#A9A9A9", fontSize:scale(15), marginRight:scale(5)}}>
                     Starting Wallet Node
                 </Text>
                 {
                   (() => {
                     if(startwallet){
-                      return <MaterialIcons name='check' style={{color:'green',fontSize:18}}/>
+                      return <MaterialIcons name='check' style={{color:'green',fontSize:scale(18)}}/>
                     }
                     else{
                       if(authenticate){
@@ -176,14 +177,14 @@ const AccessWallet = ({ navigation, route}) => {
                   })()
                 }
             </View>
-            <View style={{alignItems:"center", justifyContent:"center", marginTop:20, flexDirection:"row"}}>
-                <Text style={{color:fetchdata?'green': startwallet ? "grey" : "#A9A9A9", fontSize:15, marginRight:5}}>
+            <View style={styles.fetchDataView}>
+                <Text style={{color:fetchdata?'green': startwallet ? "grey" : "#A9A9A9", fontSize:scale(15), marginRight:scale(5)}}>
                     Fetching Initital Data
                 </Text>
                 {
                   (() => {
                     if(fetchdata){
-                      return <MaterialIcons name='check' style={{color:'green',fontSize:18}}/>
+                      return <MaterialIcons name='check' style={{color:'green',fontSize:scale(18)}}/>
                     }
                     else{
                       if(startwallet){
@@ -197,49 +198,66 @@ const AccessWallet = ({ navigation, route}) => {
                 }
             </View>
             <TouchableOpacity onPress={()=>navigation.navigate('Upload Private Share')}>
-            <View style={{alignItems:"center", justifyContent:"center", marginTop:45, flexDirection:"row"}}>
-                <Text style={{color:'red',fontSize:15}}>
+            <View style={styles.cancel}>
+                <Text style={{color:'red',fontSize:scale(15)}}>
                     CANCEL
                 </Text>
-                <MaterialIcons name='close' style={{color:'red',fontSize:18, marginLeft:5}}/>
+                <MaterialIcons name='close' style={styles.cancelLogo}/>
                 </View>
             </TouchableOpacity>    
         </ScrollView>
     );
 };
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
     sectionTitle: {
-      fontSize: 24,
+      fontSize: '24@s',
     },
     content:{
       color:'black',
       flex:2 ,
       textAlign:'center',
-      fontSize: 16,
-      marginTop: 25,
-      paddingEnd:20,
-      paddingStart:20
+      fontSize: '16@s',
+      marginTop: '25@s',
+      paddingEnd:'20@s',
+      paddingStart:'20@s'
       // justifyContent: 'center',
       // marginLeft: 37
+    },
+    cancel:{
+      alignItems:"center", 
+      justifyContent:"center", 
+      marginTop:'45@s', 
+      flexDirection:"row"
+    },
+    cancelLogo:{
+      color:'red',
+      fontSize:'18@s', 
+      marginLeft:'5@s'
     },
     Button_style:{
       borderColor:'#1976D2',
       flexDirection:'row',
-      borderWidth:1,
-      padding:12, 
+      borderWidth:'1@s',
+      padding:'12@s', 
       justifyContent:'center',
       flex:1,
-      borderRadius:5,
+      borderRadius:'5@s',
       backgroundColor:'#1976D2',
-      marginTop:20,
+      marginTop:'20@s',
       alignSelf: 'center'
+    },
+    authenticatingView:{
+      alignItems:"center", 
+      justifyContent:"center", 
+      marginTop:'20@s', 
+      flexDirection:"row"
     },
     backBtn:{
       alignItems:'center',
       textAlign:'center',
       flex:2,
-      marginTop:25,
+      marginTop:'25@s',
       flex:1,
       justifyContent:'center',
       flexDirection:'row'
@@ -247,9 +265,21 @@ const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
    },
+   checkWalletView:{
+    alignItems:"center", 
+    justifyContent:"center", 
+    marginTop:'40@s', 
+    flexDirection:"row"
+  },
+  fetchDataView:{
+    alignItems:"center", 
+    justifyContent:"center", 
+    marginTop:'20@s', 
+    flexDirection:"row"
+  },
    text: {
-      borderWidth: 1,
-      padding: 25,
+      borderWidth: '1@s',
+      padding: '25@s',
       borderColor: 'black',
       backgroundColor: 'red'
    }
@@ -258,20 +288,26 @@ const styles = StyleSheet.create({
       textAlign: 'center', // <-- the magic
       fontWeight: 'bold',
       color:'black',
-      fontSize: 35,
-      marginTop: 250,
+      fontSize: '35@s',
+      marginTop: '130@s',
       // justifyContent: 'center',
       // marginLeft: 37,
       alignItems: 'center'
     },
     sectionDescription: {
-      marginTop: 8,
-      fontSize: 18,
+      marginTop: '8@s',
+      fontSize: '18@s',
       fontWeight: '400',
     },
     highlight: {
       fontWeight: '700',
     },
+    startWalletView:{
+      alignItems:"center", 
+      justifyContent:"center", 
+      marginTop:'20@s', 
+      flexDirection:"row"
+    }
   });
 
   export default AccessWallet; 

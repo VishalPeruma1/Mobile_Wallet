@@ -21,7 +21,7 @@ const Get_Private_Share = ({ navigation, route}) => {
 
     const getprivshare = async()=>{
       console.log("Getting Private Share")
-      console.log('http://webwallet.knuct.com/sapi'+privShareKey)
+      console.log('https://webwallet.knuct.com/sapi'+privShareKey)
       try {
         ReactNativeBlobUtil
         .config({
@@ -37,7 +37,7 @@ const Get_Private_Share = ({ navigation, route}) => {
           }, 
           appendExt : 'png'
         })
-        .fetch('GET', 'http://webwallet.knuct.com/sapi'+privShareKey,{})
+        .fetch('GET', 'https://webwallet.knuct.com/sapi'+privShareKey,{})
         .then((response) => {
           Toast.show('The file saved to '+ response.path())
           console.log('The file saved to '+ response.path())

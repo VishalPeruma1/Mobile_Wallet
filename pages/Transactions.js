@@ -32,7 +32,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
     const [transactionList,setTransactionList, getTransactionList] = React.useState("");
     const [res,setres] = React.useState("");
     const isFocused = useIsFocused();
-    var transList =[];
+
 
     React.useEffect(()=> {
       getTxnByCount()
@@ -50,7 +50,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
         })
       }
       try {
-          const response = await fetch('http://webwallet.knuct.com/capi/getTxnByCount',options);
+          const response = await fetch('https://webwallet.knuct.com/capi/getTxnByCount',options);
           const responseJson = await response.json();
           console.log("Response JSON: ", responseJson)
           if(response.status===200 && responseJson) {
@@ -334,9 +334,9 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
           <TouchableOpacity>
             <Text style={{fontSize:14,marginLeft:75,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
           </TouchableOpacity>
-          {transactionList.slice(0,3).map((data,id) => (
+          {/* {transactionList.slice(0,3).map((data,id) => (
             <TransactionCard key={id} data={data} />
-            ))}
+            ))} */}
         </View>
         </Card>
 

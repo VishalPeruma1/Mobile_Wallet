@@ -30,7 +30,7 @@ const Contacts = ({navigation}) => {
   const getContactsList = async()=>{
     try {
       console.log("Getting Contacts List")
-      const response = await fetch('http://webwallet.knuct.com/capi/getContactsList');
+      const response = await fetch('https://webwallet.knuct.com/capi/getContactsList');
       const responseJson = await response.json();
       console.log("getContactsList - Response JSON: ", responseJson)
       
@@ -59,7 +59,7 @@ const Contacts = ({navigation}) => {
   const getContactsListStatus = async()=>{
     try {
       console.log("Getting Contacts List Status")
-      const response = await fetch('http://webwallet.knuct.com/capi/getContactsListStatus');
+      const response = await fetch('https://webwallet.knuct.com/capi/getContactsListStatus');
       const responseJson = await response.json();
       console.log("getContactsListStatus - Response JSON: ", responseJson.data.response)
       console.log("getContactsListStatus - Count JSON: ", responseJson.data.count)

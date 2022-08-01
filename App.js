@@ -18,6 +18,7 @@ import OpenCamera from './pages/OpenCamera';
 import ContactDetails from './pages/ContactDetails';
 import Transactions from './pages/Transactions';
 import RecentTransactions from './pages/RecentTransactions';
+import {scale, ScaledSheet} from 'react-native-size-matters';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,7 +65,7 @@ const HomeScreen = ({ navigation }) => {
   }, [navigation]);
 
   return (
-      <SafeAreaView>
+      <SafeAreaView style={{marginTop:scale(100)}}>
         <ScrollView>  
           <Text style={styles.headline}>Welcome to Knuct Wallet.</Text>
           <Text style={styles.content}>
@@ -73,16 +74,16 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.accesswallet}>
           <TouchableOpacity onPress={()=>navigation.navigate('Upload Private Share')}>
           <View style={{flexDirection:'row'}}>
-            <MaterialIcons name='auto-awesome' style={{color:'#1976D2',fontSize:20}}/>
-            <Text style={{color: '#1976D2', fontWeight:'bold', fontSize:14, marginLeft:5}}>ACCESS WALLET</Text>
+            <MaterialIcons name='auto-awesome' style={{color:'#1976D2',fontSize:scale(20)}}/>
+            <Text style={styles.accessWalletBtnText}>ACCESS WALLET</Text>
           </View>
           </TouchableOpacity>
           </View>
           <View style={styles.newwallet}>
           <TouchableOpacity onPress={()=>navigation.navigate('Choose Words')}>
           <View style={{flexDirection:'row'}}>
-              <MaterialIcons name='add-circle-outline' style={{color:'#ffffff',fontSize:20}}/>
-            <Text style={{fontWeight:'bold', color:'#ffffff', fontSize:14, marginLeft:5}}>CREATE A NEW WALLET</Text>
+              <MaterialIcons name='add-circle-outline' style={{color:'#ffffff',fontSize:scale(20)}}/>
+            <Text style={styles.createWalletBtnText}>CREATE A NEW WALLET</Text>
           </View>
           </TouchableOpacity>
           </View>
@@ -107,7 +108,7 @@ const App = () => {
               headerRight: () => (
                 <TouchableOpacity onPress={async() => {
                   try {
-                    const response = await fetch('http://webwallet.knuct.com/sapi/logout');
+                    const response = await fetch('https://webwallet.knuct.com/sapi/logout');
                     console.log(response)
                     console.log(response.status)
                     if(response.status===204) {
@@ -138,23 +139,25 @@ const App = () => {
 
 
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+    marginTop: '32@s',
+    paddingHorizontal: '24@s',
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: '24@s',
     fontWeight: '600',
   },
   content:{
     color:'black',
     flex:2 ,
     textAlign:'center',
-    fontSize: 15,
-    marginTop: 25,
-    paddingEnd:20,
-    paddingStart:20,
+    fontSize: '15@s',
+    marginTop: '25@s',
+    paddingEnd: '20@s',
+    paddingStart: '20@s',
+    marginStart:'7@s',
+    marginEnd:'7@s',
     // justifyContent: 'center',
     // marginLeft: 37,
     alignItems: 'center'
@@ -162,23 +165,35 @@ const styles = StyleSheet.create({
   accesswallet:{
     borderColor:'#1976D2',
     flexDirection:'row',
-    borderWidth:1,
-    padding:12, 
+    borderWidth:'1@s',
+    padding:'12@s', 
     justifyContent:'center',
     flex:1,
-    borderRadius:5,
-    marginTop:30,
+    borderRadius:'5@s',
+    marginTop:'30@s',
     alignSelf: 'center',
+  },
+  accessWalletBtnText:{
+    color: '#1976D2', 
+    fontWeight:'bold', 
+    fontSize:'14@s', 
+    marginLeft:'5@s'
+  },
+  createWalletBtnText:{
+    fontWeight:'bold', 
+    color:'#ffffff', 
+    fontSize:'14@s', 
+    marginLeft:'5@s'
   },
   newwallet:{
     borderColor:'#1976D2',
     flexDirection:'row',
-    borderWidth:1,
-    padding:12, 
+    borderWidth:'1@s',
+    padding:'12@s', 
     justifyContent:'center',
     flex:1,
-    borderRadius:5,
-    marginTop:30,
+    borderRadius:'5@s',
+    marginTop:'22@s',
     alignSelf: 'center',
     backgroundColor:'#1976D2'
   },
@@ -186,8 +201,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
  },
  text: {
-    borderWidth: 1,
-    padding: 25,
+    borderWidth: '1@s',
+    padding: '25@s',
     borderColor: 'black',
     backgroundColor: 'red'
  }
@@ -196,15 +211,15 @@ const styles = StyleSheet.create({
     textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
     color:'black',
-    fontSize: 35,
-    marginTop: 75,
+    fontSize: '35@s',
+    marginTop: '75@s',
     // justifyContent: 'center',
     // marginLeft: 37,
     alignItems: 'center'
   },
   sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
+    marginTop: '8@s',
+    fontSize: '18@s',
     fontWeight: '400',
   },
   highlight: {

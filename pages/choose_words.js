@@ -135,7 +135,7 @@ const ChooseWords = ({ navigation}) => {
         <TextInput placeholder='Passphrase' multiline={true} placeholderTextColor="grey" style={[styles.textinput,{height:textInputHeight}]} onChangeText={onChangeText} value={text}
         onContentSizeChange={(e) => setTextInputHeight(e.nativeEvent.contentSize.height) } />
 
-        <Text style={{marginTop: 25, fontSize: 15, fontWeight: '400', paddingStart:10, color:'black',}}>
+        <Text style={styles.chooseWordsText}>
             Choose any 4 words from below.
         </Text>
 
@@ -148,16 +148,16 @@ const ChooseWords = ({ navigation}) => {
         <View style={styles.btnStyle}>
         <TouchableOpacity onPress={()=>Create_Wallet()}>
             <View style={{flexDirection:'row'}}>
-                <Text style={{color: '#ffffff',fontSize:14, marginRight:5}}>CONTINUE</Text>
-                <Ionicons name='arrow-forward-outline' style={{color:'#ffffff',fontSize:20}}/>
+                <Text style={styles.continueBtnText}>CONTINUE</Text>
+                <Ionicons name='arrow-forward-outline' style={styles.continueArrow}/>
             </View>
         </TouchableOpacity>
         </View>
       <View style={styles.backBtn}>
       <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
             <View style={{flexDirection:'row'}}>
-                <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:20,marginTop:3}}/>
-                <Text style={{color: '#1976D2',fontSize:18, marginLeft:5}}>Back</Text>
+                <Ionicons name='arrow-back-outline' style={styles.backArrow}/>
+                <Text style={styles.backBtnText}>Back</Text>
             </View>
       </TouchableOpacity>
       </View>
@@ -194,7 +194,7 @@ const styles = ScaledSheet.create({
       paddingEnd:'5@s', 
       alignItems:'center', 
       justifyContent:'center', 
-      borderRadius:4,
+      borderRadius:'4@s',
     },
     backBtn:{
       alignItems:'center',
@@ -204,6 +204,22 @@ const styles = ScaledSheet.create({
       flex:1,
       justifyContent:'center',
       flexDirection:'row'
+    },
+    backBtnText:{
+      color: '#1976D2',
+      fontSize:'16@s', 
+      marginLeft:'5@s'
+    },
+    continueBtnText:{
+      color: '#ffffff',
+      fontSize:'14@s', 
+      paddingRight:'5@s',
+      justifyContent:"center"
+    },
+    continueArrow:{
+      color:'#ffffff',
+      fontSize:'17@s',
+      paddingRight:'2.5@s'
     },
     content:{
       color: "gray",
@@ -216,14 +232,21 @@ const styles = ScaledSheet.create({
       // justifyContent: 'center',
       // marginLeft: 37
     },
+    chooseWordsText:{
+      marginTop: '25@s', 
+      fontSize: '15@s', 
+      fontWeight: '400', 
+      paddingStart:'10@s', 
+      color:'black'
+    },
     btnStyle:{
       borderColor:'#1976D2',
       flexDirection:'row',
       borderWidth:'1@s',
-      paddingStart:'55@s',
-      paddingEnd:'55@s',
-      paddingTop:'12@s',
-      paddingBottom:'12@s', 
+      paddingStart:'50@s',
+      paddingEnd:'50@s',
+      paddingTop:'10@s',
+      paddingBottom:'10@s', 
       justifyContent:'center',
       flex:1,
       borderRadius:'5@s',
@@ -240,6 +263,11 @@ const styles = ScaledSheet.create({
         borderWidth: '1@s', 
         borderRadius: '5@s',
         maxHeight:'85@s',
+      },
+      backArrow:{
+        color: '#1976D2',
+        fontSize:'17@s',
+        marginTop:'3@s'
       },
     container: {
       alignItems: 'center',

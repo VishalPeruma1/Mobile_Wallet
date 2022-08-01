@@ -12,6 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const UploadPrivateShare = ({ navigation, route}) => {
 
@@ -62,16 +63,16 @@ const UploadPrivateShare = ({ navigation, route}) => {
         <View style={styles.Button_style}>
         <TouchableOpacity onPress={choosePrivateShare}>
             <View style={{flexDirection:'row'}}>
-                <MaterialIcons name='bubble-chart' style={{color:'#ffffff',fontSize:20}}/>
-                <Text style={{color: '#ffffff',fontSize:14, marginLeft:5}}>CHOOSE PRIVATE SHARE</Text>
+                <MaterialIcons name='bubble-chart' style={{color:'#ffffff',fontSize:scale(20)}}/>
+                <Text style={styles.choosePrivateShareBtnText}>CHOOSE PRIVATE SHARE</Text>
             </View>
         </TouchableOpacity>
         </View>
         <View style={styles.backBtn}>
         <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
             <View style={{flexDirection:'row'}}>
-                <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:20,marginTop:3}}/>
-                <Text style={{color: '#1976D2',fontSize:18, marginLeft:5}}>Back</Text>
+                <Ionicons name='arrow-back-outline' style={styles.backArrow}/>
+                <Text style={styles.backText}>Back</Text>
             </View>
         </TouchableOpacity>
         </View>
@@ -79,44 +80,58 @@ const UploadPrivateShare = ({ navigation, route}) => {
     );
 };
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
     sectionContainer: {
-      marginTop: 32,
-      paddingHorizontal: 24,
+      marginTop: '32@s',
+      paddingHorizontal:'24@s',
     },
     sectionTitle: {
-      fontSize: 24,
+      fontSize: '24@s',
       fontWeight: '600',
     },
     content:{
       color:'black',
       flex:2 ,
       textAlign:'center',
-      fontSize: 15,
-      marginTop: 25,
-      paddingEnd:20,
-      paddingStart:20
+      fontSize: '15@s',
+      marginTop: '12@s',
+      paddingEnd:'20@s',
+      paddingStart:'20@s'
       // justifyContent: 'center',
       // marginLeft: 37
     },
     Button_style:{
       borderColor:'#1976D2',
       flexDirection:'row',
-      borderWidth:1,
-      padding:12, 
+      borderWidth:'1@s',
+      padding:'12@s', 
       justifyContent:'center',
       flex:1,
-      borderRadius:5,
+      borderRadius:'5@s',
       backgroundColor:'#1976D2',
-      marginTop:20,
+      marginTop:'25@s',
       alignSelf: 'center'
+    },
+    backArrow:{
+      color: '#1976D2',
+      fontSize: '20@s',
+      marginTop: '3@s'
+    },
+    backText:{
+      color: '#1976D2',
+      fontSize:'18@s', 
+      marginLeft:'5@s'
+    },
+    choosePrivateShareBtnText:{
+      color: '#ffffff',
+      fontSize: '14@s', 
+      marginLeft: '5@s'
     },
     backBtn:{
       alignItems:'center',
       textAlign:'center',
       flex:2,
-      marginTop:45,
-      flex:1,
+      marginTop:'35@s',
       justifyContent:'center',
       flexDirection:'row'
     },
@@ -124,8 +139,8 @@ const styles = StyleSheet.create({
       alignItems: 'center',
    },
    text: {
-      borderWidth: 1,
-      padding: 25,
+      borderWidth: '1@s',
+      padding: '25@s',
       borderColor: 'black',
       backgroundColor: 'red'
    }
@@ -134,15 +149,15 @@ const styles = StyleSheet.create({
       textAlign: 'center', // <-- the magic
       fontWeight: 'bold',
       color:'black',
-      fontSize: 35,
-      marginTop: 250,
+      fontSize: '35@s',
+      marginTop: '200@s',
       // justifyContent: 'center',
       // marginLeft: 37,
       alignItems: 'center'
     },
     sectionDescription: {
-      marginTop: 8,
-      fontSize: 18,
+      marginTop: '8@s',
+      fontSize: '18@s',
       fontWeight: '400',
     },
     highlight: {

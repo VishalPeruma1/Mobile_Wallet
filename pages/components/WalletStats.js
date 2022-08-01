@@ -27,7 +27,7 @@ const WalletStats = () => {
   const getDashboardDetails = async() =>{
     try{
       console.log("Getting Dashboard Details")
-      const response = await fetch('http://webwallet.knuct.com/capi/getDashboard')
+      const response = await fetch('https://webwallet.knuct.com/capi/getDashboard')
       const responseJson = await response.json();
       console.log("getDashboardDetails - Response JSON: ", responseJson)
       console.log("WID: ", responseJson.data.response.wid)

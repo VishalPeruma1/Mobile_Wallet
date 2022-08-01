@@ -48,7 +48,7 @@ const NewContact = ({navigation}) => {
       }
       
       try{
-        const response = await fetch('http://webwallet.knuct.com/capi/addContact',options);
+        const response = await fetch('https://webwallet.knuct.com/capi/addContact',options);
         const responseJson = await response.json();
         console.log("Add Contact Response JSON: ", responseJson);
         if(response!==undefined){
@@ -140,7 +140,7 @@ const NewContact = ({navigation}) => {
             body: formData,     
         }
         try {
-          const response = await fetch('http://webwallet.knuct.com/capi/addDp',options);
+          const response = await fetch('https://webwallet.knuct.com/capi/addDp',options);
           const responseJson = await response.json();
           console.log("Add DP Response JSON: ", responseJson);
           if (responseJson.data.response === 'Added') {

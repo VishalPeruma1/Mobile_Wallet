@@ -73,7 +73,7 @@ const ContactDetails = ({navigation, route}) => {
                 body: formData,     
             }
             try {
-              const response = await fetch('http://webwallet.knuct.com/capi/addDp',options);
+              const response = await fetch('https://webwallet.knuct.com/capi/addDp',options);
               const responseJson = await response.json();
               console.log("Add DP Response JSON: ", responseJson);
               if (responseJson.data.response === 'Added') {

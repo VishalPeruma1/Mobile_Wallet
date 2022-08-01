@@ -33,7 +33,7 @@ const Balance = () => {
   const getBalance = async()=>{
     if(refresh){
       try {
-        const response = await fetch('http://webwallet.knuct.com/capi/getDashboard');
+        const response = await fetch('https://webwallet.knuct.com/capi/getDashboard');
         const responseJson = await response.json();
         //console.log("Response JSON: ", responseJson)
         if(response.status===200){
@@ -52,7 +52,7 @@ const Balance = () => {
   const getNftBalance = async()=>{
     if(refreshNft){
       try {
-        const response = await fetch('http://webwallet.knuct.com/capi/getNftDashboard');
+        const response = await fetch('https://webwallet.knuct.com/capi/getNftDashboard');
         const responseJson = await response.json();
         //console.log("Response JSON: ", responseJson)
         if(response.status===200){

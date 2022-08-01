@@ -14,6 +14,7 @@ import { Card, ListItem } from "react-native-elements";
 import Balance from './components/Balance';
 import Did from './components/Did';
 import WalletStats from './components/WalletStats';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const Dashboard = (did,{ navigation}) => {
 
@@ -28,10 +29,10 @@ const Dashboard = (did,{ navigation}) => {
       <WalletStats/>
     </View>
     <View>
-    <Text style={{fontSize: 22.5, color:"black", marginTop:25, fontWeight:"bold", marginLeft: 16}}>Actions</Text>
-    <View style={{display:"flex", flexDirection:"column", marginBottom: 75}}>
+    <Text style={styles.actionText}>Actions</Text>
+    <View style={styles.buttonsView}>
     <TouchableOpacity>
-    <Card containerStyle={{height:75, borderRadius:10,backgroundColor:"white", borderColor:"white" }} wrapperStyle={{height:105}}>
+    <Card containerStyle={styles.transferTokenCardStyle} wrapperStyle={{height:scale(105)}}>
       <View style={{flexDirection:"row"}}>
         <MaterialIcons name="arrow-forward" style={{color:'#a1887f', fontSize:36}}/>
       <View style={{flexDirection:"column" }}>
@@ -70,16 +71,34 @@ const Dashboard = (did,{ navigation}) => {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
     content:{
       color:'black',
       flex:2 ,
       textAlign:'center',
-      fontSize: 15,
-      marginTop: 25,
+      fontSize: '15@s',
+      marginTop: '25@s',
       // justifyContent: 'center',
       // marginLeft: 37
     },
+    actionText:{
+      fontSize: '22.5@s', 
+      color:"black", 
+      marginTop:'25@s', 
+      fontWeight:"bold", 
+      marginLeft: '16@s'
+    },
+    buttonsView:{
+      display:"flex", 
+      flexDirection:"column", 
+      marginBottom: '75@s'
+    },
+    transferTokenCardStyle:{
+      height:'75@s', 
+      borderRadius:'10@s',
+      backgroundColor:"white", 
+      borderColor:"white" 
+    }
   });
 
 export default Dashboard;
