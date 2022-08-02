@@ -5,13 +5,15 @@ import Dashboard from './Dashboard.js';
 import Contacts from './Contacts.js';
 import Transactions from './Transactions.js';
 import { View, Text, TouchableOpacity, StyleSheet, PermissionsAndroid } from 'react-native';
-import { NavigationHelpersContext } from '@react-navigation/native';
+import * as ImagePicker from 'react-native-image-picker';
+import RNFS from 'react-native-fs';
 
 const TabBar= ({ navigation, route}) => {
 
     const [camerapermission,setcamerapermission] = React.useState("denied")
     const did = route.params.did
     const [pagename,setPagename] = React.useState("Dashboard")
+    const [responseCamera, setResponseCamera] = React.useState(null);
     const pages = [
         {displayname:"Dashboard",navName:"Dashboard",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(pagename==="Dashboard"?"#1976D2":"#808080"), fontSize:25}}/>},
         {displayname:"Transaction",navName:"Transactions",icon:<MaterialIcons name="compare-arrows" style={{color:(pagename==="Transactions"?"#1976D2":"#808080"), fontSize:25}}/>},
@@ -48,9 +50,30 @@ const TabBar= ({ navigation, route}) => {
           }
         });
       } else {
-        navigation.navigate("Open Camera")
+        OpenCamera()
       }
     }
+
+    function OpenCamera () {
+      var imgName = "img_"+new Date().getTime().toString()+".jpg"
+      let options = {
+        storageOptions: {
+          skipBackup: true,
+          path: Platform.OS=="ios" ? RNFS.LibraryDirectoryPath+'/PrivateShare.jpg' : RNFS.DownloadDirectoryPath +'/PrivateShare.jpg',
+          mediaType: 'photo',
+          includeBase64: false,
+          saveToPhotos: true,
+        },
+  
+      };
+        ImagePicker.launchCamera ( options,
+          (response) => {
+            console.log(response);
+            setResponseCamera(response);
+            navigation.navigate("Open Camera")
+          },
+        )
+      }
 
     const TabScreen = ({data})=>{
         return(
@@ -69,7 +92,7 @@ const TabBar= ({ navigation, route}) => {
                 <Dashboard data={did}/> : null
             }
             {pagename==="Transactions" ? 
-                <Transactions/> : null
+                <Transactions navigation={navigation}/> : null
             }
             {pagename==="Contacts" ? 
                 <Contacts navigation={navigation}/> : null

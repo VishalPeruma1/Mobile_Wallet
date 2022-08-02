@@ -7,7 +7,6 @@ import { useIsFocused } from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-simple-toast';
-import NewContact from './NewContact';
 
 
 const Contacts = ({navigation}) => {
@@ -118,7 +117,7 @@ const Contacts = ({navigation}) => {
     <View style={{flexDirection:'row'}}>
 
       <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Contacts</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('NewContact')} style={{flexDirection:"row"}}>
+      <TouchableOpacity onPress={() => navigation.navigate('New Contact')} style={{flexDirection:"row"}}>
        
         <Text style={{fontSize:14,marginLeft:135,color:'#1976D2',marginTop:6}}>NEW CONTACT</Text>
       
@@ -141,7 +140,7 @@ const Contacts = ({navigation}) => {
     </View>
 
     <View>
-      <TouchableOpacity style={{backgroundColor:'#1976D2',height:40,width:40,borderRadius:25 ,marginLeft:280, marginTop:20}} onPress={()=>navigation.navigate('NewContact')}>
+      <TouchableOpacity style={{backgroundColor:'#1976D2',height:40,width:40,borderRadius:25 ,marginLeft:280, marginTop:20}} onPress={()=>navigation.navigate('New Contact')}>
           <Entypo name="plus" style={{color:'white',fontSize:35,alignSelf:'center'}}/>      
       </TouchableOpacity>
     </View>

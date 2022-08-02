@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 1,
     paddingHorizontal: 8,
+    color:"black",
   },
   icon: {
     marginRight: 5,
@@ -124,9 +125,11 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
+    color:"black"
   },
   selectedTextStyle: {
     fontSize: 16,
+    color:"black"
   },
   iconStyle: {
     width: 20,

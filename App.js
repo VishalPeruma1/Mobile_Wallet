@@ -125,12 +125,12 @@ const App = () => {
                 </TouchableOpacity>
               ),
             })} />
-    <Stack.Screen name="NewContact" component={NewContact} />
+    <Stack.Screen name="New Contact" component={NewContact} />
     <Stack.Screen name="Contacts" component={Contacts} />
     <Stack.Screen name="Open Camera" component={OpenCamera} />
     <Stack.Screen name="Contact Details" component={ContactDetails} />
     <Stack.Screen name="Transactions" component={Transactions} />
-    <Stack.Screen name="RecentTransactions" component={RecentTransactions} />
+    <Stack.Screen name="Recent Transactions" component={RecentTransactions} />
   </Stack.Navigator>
   </NavigationContainer>
     

@@ -29,13 +29,14 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
     const [showNFT, setshowNFT] = React.useState(false);
     const [showQR, setshowQR] = React.useState(false);
     // const [showTransaction,setShowTransaction] = React.useState(false);
-    const [transactionList,setTransactionList, getTransactionList] = React.useState("");
-    const [res,setres] = React.useState("");
+    const [transactionList,setTransactionList] = React.useState([]);
+    const [tokensList,setTokensList] = React.useState([])
     const isFocused = useIsFocused();
 
 
     React.useEffect(()=> {
       getTxnByCount()
+      viewTokens()
       }, [isFocused])
 
 
@@ -61,12 +62,33 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
       }
     } 
 
+    const viewTokens = async()=> {
+      try {
+        const response = await fetch('https://webwallet.knuct.com/capi/viewTokens');
+        const responseJson = await response.json();
+        if(response.status===200){
+          console.log("Tokens: "+responseJson.data.response)
+          setTokensList(responseJson.data.response)
+        }
+      } catch(error){
+        Toast.show(error,Toast.LONG);
+      }
+    }
+
     const TransactionCard = ({data})=>{
       return(
         <TouchableOpacity>
-          <Card containerStyle={{marginLeft:10, marginRight:10,borderRadius:10,backgroundColor:"black",padding:5, paddingLeft:12, borderColor:"black",elevation:5}} wrapperStyle={{height:105, width:200}}>
+          <Card containerStyle={{marginLeft:10, marginRight:10,backgroundColor:"white",padding:5, paddingLeft:12,elevation:5}} wrapperStyle={{width:200}}>
             <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
-              <Text style={{color:"black"}}>Testing</Text>
+            <View style={{display:"flex",flexDirection:"column"}}>
+              {data.role==="Receiver"?
+                <Text style={{color:"green",fontSize:18, paddingBottom:6}}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+              :          
+                <Text style={{color:"red", fontSize:18, paddingBottom:6}}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+              }
+              <Text style={{fontSize:14,color:"black", width:295}}>{data.role==="Receiver" ? data.senderDID : data.receiverDID}</Text>
+              <Text style={{fontSize:14, color:"grey"}}>{data.Date}</Text>
+              </View>
             </View>
           </Card>
         </TouchableOpacity>
@@ -328,16 +350,21 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
             
 
       
-        <Card containerStyle={{width:375, height:250, borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
+        <Card containerStyle={{width:375,height:"auto",borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
         <View style={{flexDirection:'row'}}>
           <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Recent Transcations</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Recent Transactions")}>
             <Text style={{fontSize:14,marginLeft:75,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
           </TouchableOpacity>
-          {/* {transactionList.slice(0,3).map((data,id) => (
-            <TransactionCard key={id} data={data} />
-            ))} */}
         </View>
+        {
+        // (() => {if(transactionList!=="") {
+            transactionList.slice(0,3).map((data,id) => (
+            <TransactionCard key={id} data={data} />
+            ))
+          //   }}
+          // )
+        }
         </Card>
 
           <Card containerStyle={{width:375, height:250, borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
