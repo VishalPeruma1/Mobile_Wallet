@@ -11,6 +11,7 @@ import { Card, ListItem } from "react-native-elements";
 import RadialGradient from 'react-native-radial-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Toast from 'react-native-simple-toast';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const Balance = () => {
 
@@ -69,27 +70,86 @@ const Balance = () => {
   }
 
   return (
-    <Card containerStyle={{padding:0, borderRadius:10,backgroundColor:'rgb(66, 165, 245)'}}>
-        <RadialGradient colors={['rgba(0,0,0,0)','rgba(0,0,0,0.1)','rgba(0,0,0,0.05)','rgba(0,0,0,0.03)','rgba(255,255,255,0.05)']} stops={[0.03,0.2,0.2,0.6,0.6]}center={[5,155]} radius={420}>
-        <View style={{padding:10, paddingTop:20, flexDirection:"row", alignItems:"baseline", justifyContent:"space-between"}}>        
-          <Card.Title style={{ fontSize: 20, color:"white"}}>Your Balance</Card.Title>
+    <Card containerStyle={styles.card}>
+        <RadialGradient 
+        colors={['rgba(0,0,0,0)','rgba(0,0,0,0.1)','rgba(0,0,0,0.05)','rgba(0,0,0,0.03)','rgba(255,255,255,0.05)']} 
+        stops={[0.03,0.2,0.2,0.6,0.6]}
+        center={[5,155]} 
+        radius={scale(420)}>
+        <View style={styles.firstRow}>        
+          <Card.Title style={{ fontSize: scale(20), color:"white"}}>Your Balance</Card.Title>
           <TouchableOpacity onPress={()=>handleRefersh()}>
           {!refresh?
-          <FontAwesome name="refresh" style={{fontSize:20, fontWeight:"bold", color:"white",transform: [{rotate: '90deg'}]}} />
-          :<ActivityIndicator  color={'white'} style={{fontSize:20, fontWeight:"bold"}} />}
+          <FontAwesome name="refresh" style={styles.refresh} />
+          :<ActivityIndicator  color={'white'} style={styles.refreshActivity} />}
           </TouchableOpacity>
         </View>
-        <View style={{padding:10, paddingTop:0, paddingBottom:0, flexDirection:"row", justifyContent:"space-between"}}>        
-          <Text style={{color: "#FFFFFF", fontSize: 17.5 }}>KNUCT</Text>
-          <Text style={{paddingRight:100, color: "#FFFFFF", fontSize: 17.5 }}>NFT</Text>
+        <View style={styles.secondRow}>        
+          <Text style={styles.knctTxt}>KNUCT</Text>
+          <Text style={styles.nftTxt}>NFT</Text>
         </View>
-        <View style={{padding:10, paddingTop:0, flexDirection:"row", justifyContent:"space-between"}}>        
-          <Text style={{color: "white", fontSize: 27.5 }}>{balance}</Text>
-          <Text style={{ paddingRight:115,color: "white", fontSize: 27.5 }}>{nftBalance}</Text>
+        <View style={styles.thirdRow}>        
+          <Text style={styles.knctBalanceTxt}>{balance}</Text>
+          <Text style={styles.nftBalanceTxt}>{nftBalance}</Text>
         </View>
         </RadialGradient>
     </Card>
     )
 }
+
+const styles = ScaledSheet.create({
+  card:{
+    padding:'0@s', 
+    borderRadius:'10@s',
+    backgroundColor:'rgb(66, 165, 245)'},
+    firstRow:{
+      padding:'10@s', 
+      paddingTop:'20@s',
+      flexDirection:"row", 
+      alignItems:"baseline", 
+      justifyContent:"space-between"
+    },
+    refresh:{
+      fontSize:'20@s', 
+      fontWeight:"bold", 
+      color:"white",
+      transform: [{rotate: '90deg'}]
+    },
+    refreshActivity:{
+      fontSize: '20@s',
+      fontWeight:"bold"
+    },
+    secondRow:{
+      padding:'10@s', 
+      paddingTop:'0@s', 
+      paddingBottom:'0@s', 
+      flexDirection:"row", 
+      justifyContent:"space-between"
+    },
+    knctTxt:{
+      color: "#FFFFFF", 
+      fontSize: '17.5@s'
+    },
+    nftTxt:{
+      paddingRight:'100@s', 
+      color: "#FFFFFF", 
+      fontSize: '17.5@s' 
+    },
+    thirdRow:{
+      padding:'10@s', 
+      paddingTop:'0@s', 
+      flexDirection:"row", 
+      justifyContent:"space-between"
+    },
+    knctBalanceTxt:{
+      color: "white", 
+      fontSize: '27.5@s' 
+    },
+    nftBalanceTxt:{ 
+      paddingRight:'115@s',
+      color: "white", 
+      fontSize: '27.5@s' 
+    }
+});
 
 export default Balance; 

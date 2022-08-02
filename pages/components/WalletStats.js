@@ -14,6 +14,7 @@ import Toast from 'react-native-simple-toast';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const WalletStats = () => {
 
@@ -47,36 +48,37 @@ const WalletStats = () => {
 
   return (
     <View>
-    <Text style={{fontSize: 22.5, color:"black", marginTop:25, fontWeight:"bold",marginLeft: 16}}>Wallet Stats</Text>
-       <View style={{display:"flex", flexDirection:"row"}}>
-        <Card containerStyle={{width:175, height:105, borderRadius:10, backgroundColor:"white", borderColor:"white" }} wrapperStyle={{width:175, height:105}}>
-          <Card.Title style={{ fontSize: 15, right:15, color:"black"}}>KNCT Transactions</Card.Title>
+    <Text style={styles.walletStatsText}>Wallet Stats</Text>
+    <View style={styles.flexColView}>
+       <View style={{display:"flex", flexDirection:"row",justifyContent:"space-around",alignItems:"center"}}>
+        <Card containerStyle={styles.card} wrapperStyle={styles.cardWrapperStyle}>
+          <Card.Title style={styles.cardTitle}>KNCT Transactions</Card.Title>
           <View style={{position: "relative" }}>
-            <Text style={{ color: "black", fontSize: 27.5, bottom:22,left:5}}>{details.totalTxn}            
+            <Text style={styles.knctTotalTxn}>{details.totalTxn}            
               <View>
-                <Text style={{color:"green", fontSize: 15,left:25, bottom:-16}}>
-                  <Ionicons name="arrow-down" style={{fontSize:15, color:"green"}}/>
+                <Text style={styles.knctTxnReceiver}>
+                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"green"}}/>
                   {details.receiverTxn}
                 </Text>    
-                <Text style={{color:"red", fontSize: 15,left:62, bottom: 5}}>
-                  <Ionicons name="arrow-down" style={{fontSize:15, color:"red"}}/>
+                <Text style={styles.knctTxnSender}>
+                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"red"}}/>
                   {details.senderTxn}
                 </Text>
               </View>
             </Text>
           </View>
         </Card>
-        <Card containerStyle={{width:175, height:105, right: 17, borderRadius:10, backgroundColor:"white", borderColor:"white"}} wrapperStyle={{width:175, height:105}}>
-          <Card.Title style={{ fontSize: 15, right:15, color:"black"}}>NFT Transactions</Card.Title>
+        <Card containerStyle={styles.card} wrapperStyle={styles.cardWrapperStyle}>
+          <Card.Title style={styles.cardTitle}>NFT Transactions</Card.Title>
           <View style={{position: "relative" }}>
-            <Text style={{ color: "black", fontSize: 27.5, bottom:22,left:10}}>{(details.buyerTxn + details.sellerTxn)}           
+            <Text style={styles.totalNftTxn}>{(details.buyerTxn + details.sellerTxn)}           
               <View>
-                <Text style={{color:"green", fontSize: 15,left:25, bottom:-16}}>
-                  <Ionicons name="arrow-down" style={{fontSize:15, color:"green"}}/>
+                <Text style={styles.nftTxnBuyer}>
+                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"green"}}/>
                   {details.buyerTxn}
                 </Text>
-                <Text style={{color:"red", fontSize: 15,left:60, bottom: 5}}>
-                  <Ionicons name="arrow-down" style={{fontSize:15, color:"red"}}/>
+                <Text style={styles.nftTxnSeller}>
+                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"red"}}/>
                   {details.sellerTxn}
                 </Text>
               </View>
@@ -85,42 +87,33 @@ const WalletStats = () => {
           </View>
         </Card>
       </View>
-      <View style={{display:"flex", flexDirection:"row"}}>
-        <Card containerStyle={{width:175, height:105, borderRadius:10, backgroundColor:"white", borderColor:"white"}} wrapperStyle={{width:175, height:105}}>
-          <Card.Title style={{ fontSize: 15, right:15, color:"black"}}>Proof Credits</Card.Title>
+
+      <View style={{display:"flex", flexDirection:"row",justifyContent:"space-around",alignItems:"center"}}>
+        <Card containerStyle={styles.card} wrapperStyle={styles.cardWrapperStyle}>
+          <Card.Title style={styles.cardTitle}>Proof Credits</Card.Title>
           <View style={{position: "relative" }}>
-            <Text style={{ color: "black", fontSize: 27.5, left:65}}>{details.proofCredits}</Text>
+            <Text style={styles.proofCredits}>{details.proofCredits}</Text>
           </View>
         </Card>
-        <Card containerStyle={{width:175, height:105, right: 17, borderRadius:10, backgroundColor:"white", borderColor:"white"}} wrapperStyle={{width:175, height:105}}>
-          <Card.Title style={{ fontSize: 15, right:15, color:"black"}}>Active Nodes</Card.Title>
+        <Card containerStyle={styles.card} wrapperStyle={styles.cardWrapperStyle}>
+          <Card.Title style={styles.cardTitle}>Active Nodes</Card.Title>
           <View style={{position: "relative" }}>
-            <Text style={{ color: "black", fontSize: 27.5, left:45 }}>{details.contactsCount}</Text>
+            <Text style={styles.activeNodes}>{details.contactsCount}</Text>
           </View>
         </Card>
       </View>
+      </View>
       <View style={{display:"flex", flexDirection:"row"}}>
-        <Card containerStyle={{height:105, width:"auto",borderRadius:10,backgroundColor:"white", borderColor:"white" }} wrapperStyle={{height:105}}>
-          <Card.Title style={{ fontSize: 15, color:"black"}}>Wallet ID</Card.Title>
+        <Card containerStyle={styles.walletIdCard} wrapperStyle={{height:scale(105)}}>
+          <Card.Title style={styles.walletIdCardTitle}>Wallet ID</Card.Title>
          
           <View style={{position: "relative" }}>
             <TextInput editable={false} value={details.wid} multiline={false} 
-            style={{      
-              color: "rgb(118, 118, 118)",
-              marginStart:12,
-              marginEnd:0,
-              padding: 5,
-              paddingLeft:15,
-              paddingRight: 15,
-              borderWidth: 1, 
-              borderRadius: 5,
-              borderColor:"grey",     
-              right:14
-              }}
+            style={styles.walletIdTextInput}
               // autoFocus={true}
               // selectTextOnFocus={true}
-              selection={{start:0, end:46}}
-              showSoftInputOnFocus={false}
+              selection={{start:0, end:1}} //end:46
+              showSoftInputOnFocus={true}
               // keyboardType=""
               // selectionColor={"#1976D2"}
               // maxLength={10}
@@ -128,7 +121,7 @@ const WalletStats = () => {
                
           <TouchableOpacity onPress={copyToClipboard}>
           {/* <View style={{flexDirection:'column',alignItems:'center'}}> */}
-            <MaterialIcons name="content-copy" style={{fontSize:22, color:"grey", bottom:29,left:312}}/>
+            <MaterialIcons name="content-copy" style={styles.clipboardIcon}/>
             {/* <Text style={{fontSize:15, color:'#9c27b0'}}>copy</Text> */}
           {/* </View> */}
           </TouchableOpacity>
@@ -143,6 +136,115 @@ const WalletStats = () => {
     
 }
 
+const styles = ScaledSheet.create({
+  walletStatsText:{
+    fontSize: '22.5@s', 
+    color:"black", 
+    marginTop:'25@s', 
+    fontWeight:"bold",
+    marginLeft: '16@s'
+  },
+  flexColView:{
+    flexDirection:"column", 
+    marginStart:'8@s', 
+    marginEnd:'7@s'
+  },
+  card:{
+    width:'150@s',
+    height:'90@s', 
+    borderRadius:'8@s', 
+    backgroundColor:"white", 
+    borderColor:"white"
+  },
+  cardTitle:{ 
+    fontSize: '13@s', 
+    right:'20@s', 
+    color:"black"
+  },
+  cardWrapperStyle:{
+    width:'160@s',
+    height:'105@s'
+  },
+  knctTotalTxn:{ 
+    color: "black", 
+    fontSize: '25@s', 
+    bottom:'21@s',
+    left:'5@s'
+  },
+  knctTxnReceiver:{
+    color:"green", 
+    fontSize: '15@s',
+    left:'25@s', 
+    bottom:'-16@s'
+  },
+  knctTxnSender:{
+    color:"red", 
+    fontSize: '15@s',
+    left:'62@s', 
+    bottom: '5@s'
+  },
+  totalNftTxn:{ 
+    color: "black", 
+    fontSize: '25@s', 
+    bottom:'22@s',
+    left:'10@s'
+  },
+  nftTxnBuyer:{
+    color:"green", 
+    fontSize: '15@s',
+    left:'25@s', 
+    bottom:'-16@s'
+  },
+  nftTxnSeller:{
+    color:"red", 
+    fontSize: '15@s',
+    left:'60@s', 
+    bottom: '5@s'
+  },
+  proofCredits:{ 
+    color: "black", 
+    fontSize: '25@s', 
+    left:'50@s',
+    bottom:'8@s'
+  },
+  activeNodes:{ 
+    color: "black", 
+    fontSize: '25@s', 
+    left:'37@s',
+    bottom:'8@s'
+   },
+   walletIdCard:{
+    height:'105@s', 
+    width:"auto",
+    borderRadius:'10@s',
+    backgroundColor:"white", 
+    borderColor:"white" 
+  },
+  walletIdCardTitle:{ 
+    fontSize: '13@s', 
+    // right:'22@s', 
+    justifyContent:"center",
+    color:"black"
+  },
+  walletIdTextInput:{      
+    color: "rgb(118, 118, 118)",
+    marginStart:'12@s',
+    marginEnd:'0@s',
+    padding: '5@s',
+    paddingLeft:'15@s',
+    paddingRight: '15@s',
+    borderWidth: '1@s', 
+    borderRadius: '5@s',
+    borderColor:"grey",     
+    right:'14@s'
+    },
+    clipboardIcon:{
+      fontSize:'22@s', 
+      color:"grey", 
+      bottom:'29@s',
+      left:'282@s'
+    }
+});
 export default WalletStats;
 
 
