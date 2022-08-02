@@ -64,7 +64,10 @@ const Contacts = ({navigation}) => {
       console.log("getContactsListStatus - Response JSON: ", responseJson.data.response)
       console.log("getContactsListStatus - Count JSON: ", responseJson.data.count)
       setCount(responseJson.data.count)
-      setContacts(responseJson.data.response)
+      let temp = responseJson.data.response
+    temp.sort((a,b)=>(a.nickname.toLowerCase()> b.nickname.toLowerCase()) ? 1 :(a.nickname.toLowerCase() === b.nickname.toLowerCase())?((a.did > b.did)?1:-1):-1)
+   setContacts(temp)
+      // setContacts(responseJson.data.response)
       console.log(contacts)
       
     } catch(error) {
