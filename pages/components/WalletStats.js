@@ -61,7 +61,7 @@ const WalletStats = () => {
                   {details.receiverTxn}
                 </Text>    
                 <Text style={styles.knctTxnSender}>
-                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"red"}}/>
+                  <Ionicons name="arrow-up" style={{fontSize:scale(15), color:"red"}}/>
                   {details.senderTxn}
                 </Text>
               </View>
@@ -78,7 +78,7 @@ const WalletStats = () => {
                   {details.buyerTxn}
                 </Text>
                 <Text style={styles.nftTxnSeller}>
-                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"red"}}/>
+                  <Ionicons name="arrow-up" style={{fontSize:scale(15), color:"red"}}/>
                   {details.sellerTxn}
                 </Text>
               </View>

@@ -20,6 +20,7 @@ import { useIsFocused } from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 
  const Transactions = ({navigation}) => {
   const [type,setType] = React.useState("Token");
@@ -30,13 +31,20 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
     const [showQR, setshowQR] = React.useState(false);
     // const [showTransaction,setShowTransaction] = React.useState(false);
     const [transactionList,setTransactionList] = React.useState([]);
+    const [transactionCount, setTransactionCount] = React.useState([]);
+    // const [nftTransactionList, setNftTransactionList] = React.useState([]);
     const [tokensList,setTokensList] = React.useState([])
     const isFocused = useIsFocused();
-
+    const [transactions, setTransactions] = React.useState(false)
+    const [transactionMessage, setTransactionMessage] = React.useState("")
+    const [tokenCount, setTokenCount] = React.useState()
+    const [recentNftTransaction, setRecentNftTransaction] = React.useState([])
 
     React.useEffect(()=> {
       getTxnByCount()
       viewTokens()
+      getNftTxnByCount()
+      // getNftTransaction()
       }, [isFocused])
 
 
@@ -54,9 +62,42 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
           const response = await fetch('https://webwallet.knuct.com/capi/getTxnByCount',options);
           const responseJson = await response.json();
           console.log("Response JSON: ", responseJson)
+          console.log("TXN Count: ", responseJson.data.count)
+          // console.log("Response message: ", responseJson.data.response)
+          // console.log("Response Message Value: ",responseJson.data.response[0].Message)
           if(response.status===200 && responseJson) {
+            setTransactionCount(responseJson.data.count)
+            if(responseJson.data.count <= 1 && responseJson.data.response[0].Message){
+              setTransactions(true)
+              setTransactionMessage(responseJson.data.response[0].Message)
+            }
+            else{
             setTransactionList(responseJson.data.response)
           }
+          }
+      } catch(error) {
+        Toast.show(error,Toast.LONG);
+      }
+    } 
+
+    const getNftTxnByCount = async()=>{
+      let options = {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify ({
+          txnCount: 10
+        })
+      }
+      try {
+          const response = await fetch('https://webwallet.knuct.com/capi/getNftTxnByCount',options);
+          const responseJson = await response.json();
+          console.log("NFT Transaction Response JSON: ", responseJson)
+          console.log("NFT Transaction Data: ", responseJson.data)
+          console.log("NFT Transaction Response: ", responseJson.data.response)
+          console.log("Date: ", responseJson.data.response[0].Date)
+          setRecentNftTransaction(responseJson.data.response)
       } catch(error) {
         Toast.show(error,Toast.LONG);
       }
@@ -68,6 +109,8 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
         const responseJson = await response.json();
         if(response.status===200){
           console.log("Tokens: "+responseJson.data.response)
+          console.log("Token count: ", responseJson.data.count)
+          setTokenCount(responseJson.data.count)
           setTokensList(responseJson.data.response)
         }
       } catch(error){
@@ -94,6 +137,25 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
         </TouchableOpacity>
       )
   }
+  const NftTransactionCard = ({data})=>{
+    return(
+      <TouchableOpacity>
+        <Card containerStyle={{marginLeft:10, marginRight:10,backgroundColor:"white",padding:5, paddingLeft:12,elevation:5}} wrapperStyle={{width:300}}>
+          <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
+          <View style={{display:"flex",flexDirection:"column"}}>
+            {data.role==="Buyer"?
+                <Text  style={{color:"rgb(25, 118, 210)", fontWeight:"500",fontSize:18, paddingBottom:6}}>NFT <Text style={{color:"rgba(0, 0, 0, 0.6)"}}>{data.amount}</Text>  <Text style={{color:"purple", fontSize:18, paddingBottom:6}}> KNCT <Text style={{color:"rgb(204, 50, 50)"}}> - {data.amount}</Text></Text></Text>
+              :          
+                <Text  style={{color:"rgb(25, 118, 210)", fontWeight:"500",fontSize:18, paddingBottom:6}}>NFT <Text style={{color:"rgba(0, 0, 0, 0.6)"}}>{data.amount}</Text>  <Text style={{color:"purple", fontSize:18, paddingBottom:6}}> KNCT <Text style={{color:"rgb(45, 201, 55)"}}> + {data.amount}</Text></Text></Text>
+            }
+            <Text style={{color:"black", fontSize:15, paddingBottom:6}}>{data.sellerDID}</Text>
+            <Text style={{color:"rgba(0, 0, 0, 0.38)", fontSize:15, paddingBottom:6}}>{data.Date}</Text>
+            </View>
+          </View>
+        </Card>
+      </TouchableOpacity>
+    )
+}
 
     const chooseImage = () =>{
 
@@ -144,7 +206,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
           </View>
           </TouchableOpacity>
       )
-  }
+    }
 
     const token = ()=> {
       return(
@@ -350,7 +412,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
             
 
       
-        <Card containerStyle={{width:375,height:"auto",borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
+        <Card containerStyle={{width:scale(330),height:"auto",borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
         <View style={{flexDirection:'row'}}>
           <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Recent Transcations</Text>
           <TouchableOpacity onPress={() => navigation.navigate("Recent Transactions")}>
@@ -358,12 +420,14 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
           </TouchableOpacity>
         </View>
         {
-        // (() => {if(transactionList!=="") {
+          (!transactions)?
             transactionList.slice(0,3).map((data,id) => (
             <TransactionCard key={id} data={data} />
             ))
-          //   }}
-          // )
+            :
+            <View>
+              <Text style={{fontSize:20, color:"rgba(0, 0, 0, 0.38)", textAlign:"center", marginTop:20}}>{transactionMessage}</Text>
+            </View>
         }
         </Card>
 
@@ -373,26 +437,64 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
           <TouchableOpacity>
             <Text style={{fontSize:14,marginLeft:28,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
           </TouchableOpacity>
+          </View>
+        <View style={{flexDirection:"column"}}>
+        {
+          (Object.values(recentNftTransaction).length >= 1)?
+            recentNftTransaction.slice(0,3).map((data,id) => (
+            <NftTransactionCard  key={id} data={data} />
+            ))
+            :
+            <View/>
+        }
 
         </View>
 
           </Card>
-        <View style={{paddingBottom:75}}>
-          <Card containerStyle={{width:375, height:250, borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
-        <View style={{flexDirection:'row'}}>
-          <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Tokens</Text>
-          <TouchableOpacity>
-            <Text style={{fontSize:14,marginLeft:200,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
-          </TouchableOpacity>
+          </View>
+       <View style={{paddingBottom:75}}>
+        <Card containerStyle={{width:360, height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
+          <View style={{flexDirection:'row'}}>
+            <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Tokens</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate('Tokens Page')}>
+              <Text style={{fontSize:14,marginLeft:200,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
+            </TouchableOpacity>
 
-        </View>
-        <Text style={{marginLeft:10}}>
-          0 total
-        </Text>
+          </View>
+          <Text style={{marginLeft:scale(5), color: '#000000DE',
+    fontSize:scale(13), 
+    fontFamily:'Roboto' ,
+    paddingTop:scale(6),
+    paddingBottom:scale(8)}}>
+            {tokenCount} total
+          </Text>
+          {
+            Object.values(tokensList).length !== 0 ?
+              tokensList.slice(0,5).map((item,id) => (
+                <View style={{flexDirection:"row", paddingBottom:5}}>
+                  <MaterialCommunityIcons name="cube-outline" color="#1976D2" size={18} style={{paddingRight:5}}/>
+                  <Text key={id} style={{color:"black", fontSize:15, bottom:4, paddingRight:15}} >{item}</Text>
+                </View>
+              ))
+              :
+              <View>
+              <Text style={{fontSize:20, color:"rgba(0, 0, 0, 0.38)", textAlign:"center"}}>No tokens in this account</Text>
+              </View>
+          }
 
-          </Card>
+          {
+            tokenCount > 5 ?
+            <View>
+              <Text style={{color:"rgba(0, 0, 0, 0.38)", fontSize:15, textAlign:"right"}}>
+                {tokenCount - 5} more
+              </Text>
+            </View>
+            :
+            <View/>
+          }
+          
+        </Card>
         </View>
-      </View>
             
             </ScrollView>
         
@@ -400,6 +502,14 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
  };
  
  const styles = StyleSheet.create({
+    transactionCard:{
+      marginLeft:10, 
+      marginRight:10,
+      backgroundColor:"white",
+      padding:5, 
+      paddingLeft:12,
+      elevation:5
+    },
     sectionContainer: {
       marginTop: 32,
       paddingHorizontal: 24,

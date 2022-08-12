@@ -18,6 +18,7 @@ import OpenCamera from './pages/OpenCamera';
 import ContactDetails from './pages/ContactDetails';
 import Transactions from './pages/Transactions';
 import RecentTransactions from './pages/RecentTransactions';
+import TokensPage from './pages/TokensPage';
 import {scale, ScaledSheet} from 'react-native-size-matters';
 
 const Stack = createNativeStackNavigator();
@@ -131,6 +132,7 @@ const App = () => {
     <Stack.Screen name="Contact Details" component={ContactDetails} />
     <Stack.Screen name="Transactions" component={Transactions} />
     <Stack.Screen name="Recent Transactions" component={RecentTransactions} />
+    <Stack.Screen name="Tokens Page" component={TokensPage}/>
   </Stack.Navigator>
   </NavigationContainer>
     
