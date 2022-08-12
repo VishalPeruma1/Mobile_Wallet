@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   ScrollView,
-  StyleSheet,
   Text, 
   TouchableOpacity,
   View,
@@ -16,7 +15,6 @@ const Wallet_Creation = ({ navigation, route}) => {
 
     const [starttempnode,setStarttempnode] = React.useState(false);
     const [createwallet,setCreatewallet] = React.useState(false);
-    const [privShareKey,setPrivShareKey] = React.useState(null)
     const {param1,param2} = route.params;
 
     const tempnodecreation = async() => {
@@ -53,7 +51,6 @@ const Wallet_Creation = ({ navigation, route}) => {
         if(response.status===200){
           setCreatewallet(true)
           console.log("privshare: "+responseJson.data.privshare)
-          setPrivShareKey(String(responseJson.data.privshare)) 
           navigation.navigate("Get Private Share",{"Key":String(responseJson.data.privshare)})
         }
       } catch(error){

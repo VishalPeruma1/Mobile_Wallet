@@ -1,13 +1,12 @@
 import React from 'react';
 import {
-  StyleSheet,
   Text, 
   View,
   ActivityIndicator,
   TouchableOpacity
 } from 'react-native';
 
-import { Card, ListItem } from "react-native-elements";
+import { Card } from "react-native-elements";
 import RadialGradient from 'react-native-radial-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Toast from 'react-native-simple-toast';

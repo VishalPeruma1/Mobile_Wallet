@@ -1,22 +1,16 @@
 import React from 'react';
 import {
-  ScrollView,
   StyleSheet,
   Text, 
   TouchableOpacity,
   View,
   Image,TextInput,
-  Button,
-  ActivityIndicator
 } from 'react-native';
 import { Card } from "react-native-elements";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Avatar } from "react-native-elements";
 import {launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
-import Contacts from './Contacts';
 
 const NewContact = ({navigation}) => {
   const [DID, onChangeDID] = React.useState("");

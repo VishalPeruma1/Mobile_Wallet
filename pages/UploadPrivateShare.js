@@ -1,10 +1,7 @@
 import React from 'react';
-import Dashboard from './Dashboard';
 import {
   ScrollView,
-  StyleSheet,
   Text, 
-  ToastAndroid, 
   TouchableOpacity,
   View,NetInfo, Platform
 } from 'react-native';
