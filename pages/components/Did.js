@@ -1,13 +1,11 @@
 import React from 'react';
 import {
   Text, 
-  StyleSheet,
   View,
   Share,
   TextInput,
   TouchableOpacity,
   Modal,
-  Alert,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';

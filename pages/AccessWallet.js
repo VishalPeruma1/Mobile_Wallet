@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   ScrollView,
-  StyleSheet,
   Text, 
   TouchableOpacity,
   View,
@@ -13,7 +12,6 @@ import * as privShareUtils from '../utils/privShare';
 import * as nlssUtils from '../utils/nlss';
 import { Buffer } from 'buffer';
 import { PNG } from 'pngjs/browser';
-import { sign } from 'crypto';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const AccessWallet = ({ navigation, route}) => {

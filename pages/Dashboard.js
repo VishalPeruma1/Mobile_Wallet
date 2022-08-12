@@ -1,16 +1,14 @@
 import React from 'react';
 import {
   ScrollView,
-  StyleSheet,
   Text, 
-  Image,
   View,
   TouchableOpacity
 } from 'react-native';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Card, ListItem } from "react-native-elements";
+import { Card } from "react-native-elements";
 import Balance from './components/Balance';
 import Did from './components/Did';
 import WalletStats from './components/WalletStats';

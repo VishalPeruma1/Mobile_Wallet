@@ -415,7 +415,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
         <Card containerStyle={{width:scale(330),height:"auto",borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
         <View style={{flexDirection:'row'}}>
           <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Recent Transcations</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Recent Transactions")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Recent Transactions",{"transactionList":transactionList,"transactions":transactions,"transactionCount":transactionCount})}>
             <Text style={{fontSize:14,marginLeft:75,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
           </TouchableOpacity>
         </View>

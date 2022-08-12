@@ -1,12 +1,9 @@
 import React from 'react';
 import {
   Text, 
-  Image,
   View,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
-  ToastAndroid
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Card } from "react-native-elements";
