@@ -5,7 +5,8 @@ import {
   Text, 
   TouchableOpacity,
   View,
-  Platform
+  Platform,
+  BackHandler
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -18,6 +19,11 @@ const Get_Private_Share = ({ navigation, route}) => {
     const [download,setDownload] = React.useState(false);
     const  [checkbox,setCheckbox] = React.useState(false);
     const privShareKey = route.params.Key;
+    
+    React.useEffect(()=>{
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+      return ()=>backHandler.remove()
+     },[])
 
     const getprivshare = async()=>{
       console.log("Getting Private Share")

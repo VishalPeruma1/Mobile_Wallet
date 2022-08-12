@@ -6,7 +6,7 @@ import {
   Text, 
   ToastAndroid, 
   TouchableOpacity,
-  View,
+  View,NetInfo, Platform
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -17,7 +17,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
 const UploadPrivateShare = ({ navigation, route}) => {
 
   choosePrivateShare = () => {
-    var options = {
+    let options = {
       title: 'Choose Private Share',
       mediaType: 'photo',
       includeBase64:true,
@@ -42,7 +42,7 @@ const UploadPrivateShare = ({ navigation, route}) => {
         console.log('User tapped custom button: ', res.customButton);
         alert(res.customButton);
       } else {
-        var priv_share = res.assets[0]
+        let priv_share = res.assets[0]
         if(priv_share.type!=="image/png"){
           Toast.show("Select appropriate private share",Toast.LONG)
         }

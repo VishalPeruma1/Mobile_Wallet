@@ -4,7 +4,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Dashboard from './Dashboard.js';
 import Contacts from './Contacts.js';
 import Transactions from './Transactions.js';
-import { View, Text, TouchableOpacity, StyleSheet, PermissionsAndroid } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, PermissionsAndroid,BackHandler } from 'react-native';
 import * as ImagePicker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 
@@ -19,6 +19,10 @@ const TabBar= ({ navigation, route}) => {
         {displayname:"Transaction",navName:"Transactions",icon:<MaterialIcons name="compare-arrows" style={{color:(pagename==="Transactions"?"#1976D2":"#808080"), fontSize:25}}/>},
         {displayname:"Contacts",navName:"Contacts",icon:<MaterialIcons name="contact-page" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:25}}/>}
     ]
+    React.useEffect(()=>{
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+      return ()=>backHandler.remove()
+     },[])
 
     const getcamerapermission = () => {
       if(camerapermission==="denied") {

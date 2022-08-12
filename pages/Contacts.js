@@ -197,23 +197,23 @@ const styles = ScaledSheet.create({
     width:'80@s', 
     borderRadius:'40@s'
   },
-  did:{
+  did:
+  {
   color: 'rgba(0, 0, 0, 0.6)',
-  fontSize:'10@s', 
+  fontSize:'12@s', 
   fontFamily:'Roboto',
   marginLeft:'5@s', 
   paddingTop:'10@s'
 },
-  nickName:{
+  nickName:
+  {
     fontFamily:'Roboto',
     color:'#000000DE',
     fontSize:'20@s'
-
   },
   plus:{
     color:'white',
     fontSize:'35@s',
-    alignSelf:'center'
   },
 
   plusTO:{
@@ -222,7 +222,9 @@ const styles = ScaledSheet.create({
     width:'40@s',
     borderRadius:'25@s' ,
     marginLeft:'250@s', 
-    marginTop:'20@s'
+    marginTop:'20@s',
+    justifyContent:"center",
+    alignItems:'center'
   },
   searchText:{
     color: '#000000DE',
@@ -233,7 +235,7 @@ const styles = ScaledSheet.create({
   },
   newContText:{
     fontSize:'14@s',
-    marginLeft:'100@s',
+    marginLeft:'125@s',
     color:'#1976D2',
     marginTop:'6@s'
   },

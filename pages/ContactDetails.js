@@ -5,12 +5,11 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { Card, ListItem } from "react-native-elements";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchImageLibrary} from 'react-native-image-picker';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Toast from 'react-native-simple-toast';
-import NewContact from './NewContact';
+import { useIsFocused } from '@react-navigation/native';
+
 
 const ContactDetails = ({navigation, route}) => {
 
@@ -21,6 +20,61 @@ const ContactDetails = ({navigation, route}) => {
     const [newDp,setnewDp] = React.useState(false)
     const[Img,setImg]=React.useState("");
     const[showImg,setshowImg]=React.useState(false);
+    const [transactionList,setTransactionList] = React.useState([]);
+    const isFocused = useIsFocused();
+    const data = route.params.data;
+
+    React.useEffect(()=>{
+     getTxnByDID()
+    },[isFocused])
+
+    const TransactionCard = ({data})=>{
+      return(
+        <TouchableOpacity>
+          <Card containerStyle={{marginLeft:10, marginRight:10,backgroundColor:"white",padding:5, paddingLeft:12,elevation:5}} wrapperStyle={{width:200}}>
+            <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
+            <View style={{display:"flex",flexDirection:"column"}}>
+              {data.role==="Receiver"?
+                <Text style={{color:"green",fontSize:18, paddingBottom:6}}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+              :          
+                <Text style={{color:"red", fontSize:18, paddingBottom:6}}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+              }
+              <Text style={{fontSize:14,color:"black", width:295}}>{data.role==="Receiver" ? data.senderDID : data.receiverDID}</Text>
+              <Text style={{fontSize:14, color:"grey"}}>{data.Date}</Text>
+              </View>
+            </View>
+          </Card>
+        </TouchableOpacity>
+      )
+  }
+
+    const getTxnByDID = async()=>{
+      console.log("Getting Transactions Details")
+      if(data.did && data.did.length === 46){
+        let options = {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json",
+          },
+          body:JSON.stringify ({ 
+            did: data.did
+          })
+        }
+        try {
+      const response = await fetch('https://webwallet.knuct.com/capi/getTxnByDID',options);
+      const responseJson = await response.json();
+      console.log(responseJson.data)
+      setTransactionList(responseJson.data)
+
+        }
+        catch(error){
+          Toast.show(error,Toast.LONG);
+        }
+
+
+      }
+
+    }
     const chooseImage = () =>{
 
         let options = {
@@ -43,7 +97,7 @@ const ContactDetails = ({navigation, route}) => {
             alert(res.customButton);
           }
           else{
-            var pro_image = res.assets[0]
+            let pro_image = res.assets[0]
             if(pro_image.fileSize > 1000000){
               Toast.show("File size must be less than 1 MB",Toast.LONG)
             }
@@ -55,6 +109,7 @@ const ContactDetails = ({navigation, route}) => {
           }
         })
       }
+      
       const addDisplayPicture = async(did,dp) => {
         console.log("Replacing Display Picture")
         if (dp && dp.fileSize < 1048576 && did.length === 46) {
@@ -99,7 +154,7 @@ const ContactDetails = ({navigation, route}) => {
           }
       }
 
-    const data = route.params.data
+    
     
 
     // const [copiedText, setCopiedText] = React.useState('')
@@ -228,7 +283,7 @@ const ContactDetails = ({navigation, route}) => {
                 <View>
                     <Text style={{fontSize:25,color:"black",textAlign:"center",fontWeight:"bold", letterSpacing:1.5, marginBottom:10}}>{data.nickname}</Text>
                     <Text style={{fontSize:13.5,color:"rgba(0, 0, 0, 0.6)",fontWeight:"400"}}>{data.did}</Text>
-                    <TouchableOpacity onPress={() => copyToClipboard()} style={{marginLeft:300}}>
+                    <TouchableOpacity onPress={() => copyToClipboard()} style={{marginLeft:320}}>
                     <View>
                         <MaterialIcons name="content-copy" color="#1976D2" size={18} style={{bottom:12}}/>
                     </View>
@@ -251,7 +306,22 @@ const ContactDetails = ({navigation, route}) => {
             </Card>
 
             <Card>
-                <Text style={{fontSize:18, color:"rgba(0, 0, 0, 0.38)", textAlign:"center", fontWeight:"bold"}}>No Transactions Found</Text>
+            {
+        (() => {
+          if(transactionList.tokens!=="") {
+            transactionList.slice(0,3).map((data,id) => (
+            <TransactionCard key={id} data={data} />
+            ))
+            }
+          else { 
+            <View>
+              <Text style={{color:"#00000061"}}>{transactionList.message}</Text>
+            </View>
+          }
+        }
+          )
+        }
+                {/* <Text style={{fontSize:18, color:"rgba(0, 0, 0, 0.38)", textAlign:"center", fontWeight:"bold"}}>{transactionList.message}</Text> */}
             </Card>
         </View>
     );
