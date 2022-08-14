@@ -22,31 +22,88 @@ const data = [
 const RecentTransactions = ({navigation,route}) => {
     const [filt,setFilt]=React.useState(false);
     const [value, setValue] = useState(10);
-    const [show, setShow] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isFocus, setIsFocus] = useState(false);
+    const [prev,setPrev] = React.useState(true);
+    const [first,setFirst] = React.useState(true);
+    const [next,setNext] = React.useState(false);
+    const [last,setLast] = React.useState(false);
     const transactionList = route.params.transactionList;
     const transactions = route.params.transactions;
     const transactionCount = route.params.transactionCount;
+    const [start,setStart] = React.useState(0);
+    const [end,setEnd] = React.useState(10);
   
-    const TransactionCard = ({data})=>{
-      return(
-        <TouchableOpacity>
-          <Card containerStyle={{marginLeft:10, marginRight:10,backgroundColor:"white",padding:5, paddingLeft:12,elevation:5}} wrapperStyle={{width:200}}>
-            <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
-            <View style={{display:"flex",flexDirection:"column"}}>
-              {data.role==="Receiver"?
-                <Text style={{color:"green",fontSize:18, paddingBottom:6}}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
-              :          
-                <Text style={{color:"red", fontSize:18, paddingBottom:6}}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
-              }
-              <Text style={{fontSize:14,color:"black", width:295}}>{data.role==="Receiver" ? data.senderDID : data.receiverDID}</Text>
-              <Text style={{fontSize:14, color:"grey"}}>{data.Date}</Text>
-              </View>
+    React.useEffect(()=>{
+      if(end>transactionCount){
+        setEnd(transactionCount)
+      }
+      if(transactionCount<=rowsPerPage){
+        setPrev(true)
+        setNext(true)
+        setFirst(true)
+        setLast(true)
+      }
+      else{
+        setPrev(start!==0?false:true)
+        setFirst(start!==0?false:true)
+        setNext(end<transactionCount?false:true)
+        setLast(end<transactionCount?false:true)
+      }
+    })
+
+  const TransactionCard = ({data})=>{
+    return(
+      <TouchableOpacity>
+        <Card containerStyle={{marginLeft:10, marginRight:10,backgroundColor:"white",padding:5, paddingLeft:12,elevation:5}} wrapperStyle={{width:200}}>
+          <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
+          <View style={{display:"flex",flexDirection:"column"}}>
+            {data.role==="Receiver"?
+              <Text style={{color:"rgb(45, 201, 55)",fontSize:18, paddingBottom:6}}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+            :          
+              <Text style={{color:"#cc3232", fontSize:18, paddingBottom:6}}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+            }
+            <Text style={{fontSize:14,color:"black", width:295}}>{data.role==="Receiver" ? data.senderDID : data.receiverDID}</Text>
+            <Text style={{fontSize:14, color:"grey"}}>{data.Date}</Text>
             </View>
-          </Card>
-        </TouchableOpacity>
-      )
+          </View>
+        </Card>
+      </TouchableOpacity>
+    )
+  }
+
+  function First(){
+    setStart(0)
+    setEnd(rowsPerPage)
+    setFirst(true)
+    setPrev(true)
+  }
+
+  function Prev(){
+    setStart(start-rowsPerPage)
+    if(end-rowsPerPage<rowsPerPage){
+      setEnd(rowsPerPage)
     }
+    else{
+      setEnd(end-rowsPerPage)
+    }
+  }
+
+  function Next(){
+    setStart(start+rowsPerPage)
+    setEnd(end+rowsPerPage)
+  }
+
+  function Last(){
+    var x = Math.floor(transactionCount/rowsPerPage)
+    if(transactionCount%rowsPerPage===0){
+      x=x-1
+    }
+    setStart(x*rowsPerPage)
+    setEnd(transactionCount)
+    setLast(true)
+    setNext(true)
+  }
 
   return (
     <ScrollView>
@@ -70,56 +127,65 @@ const RecentTransactions = ({navigation,route}) => {
        </TouchableOpacity>
       </View>
       {
-          (!transactions)?
-      <View>
-        {transactionList.slice(0,show).map((data,id) => (
-            <TransactionCard key={id} data={data} />
-            ))
-        }
-        <View style={{flexDirection:"row", justifyContent:'space-between',alignItems:'center',alignContent:'center', marginTop:scale(10)}}>
-          <Dropdown style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            labelField="label"
-            valueField="value"
-            searchPlaceholder="Search..."
-            placeholder='10'
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              if(item.value==="All"){
-                setShow(transactionCount)
-              }
-              else{
-                setShow(Number(item.value));
-              }
-              setIsFocus(false);}}>
-          </Dropdown> 
-          <View style={{flexDirection:"row"}}>
-            <TouchableOpacity>
-              <AntDesign name="verticleright" style={styles.nextIcon}/>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <AntDesign name="left" style={styles.nextIcon}/>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <AntDesign name="right" style={styles.nextIcon}/>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                  <AntDesign name="verticleleft" style={styles.nextIcon}/>
-            </TouchableOpacity>
+        (!transactions)?
+          <View>
+            {transactionList.slice(start,end).map((data,id) => (
+                <TransactionCard key={id} data={data} />
+                ))
+            }
+            <View style={{flexDirection:"row", justifyContent:'space-between',alignItems:'center',alignContent:'center', marginTop:scale(10)}}>
+              <Dropdown style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={data}
+                labelField="label"
+                valueField="value"
+                searchPlaceholder="Search..."
+                placeholder='10'
+                value={value}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={item => {
+                  setStart(0)
+                  setValue(item.value);
+                  if(item.value==="All"){
+                    setRowsPerPage(transactionCount)
+                    setEnd(transactionCount)
+                  }
+                  else{
+                    setRowsPerPage(Number(item.value));
+                    if(Number(item.value)>transactionCount){
+                      setEnd(transactionCount)
+                    }
+                    else{
+                      setEnd(Number(item.value));
+                    }
+                  }
+                  setIsFocus(false);}}>
+              </Dropdown> 
+              <Text style={{color:"black",fontSize:15}}>{start+1}-{end} of {transactionCount}</Text>
+              <View style={{flexDirection:"row"}}>
+                <TouchableOpacity disabled={first} onPress={()=>{First()}}>
+                  <AntDesign name="verticleright" style={[styles.nextIcon,{color:first?"grey":"black"}]}/>
+                </TouchableOpacity>
+                <TouchableOpacity disabled={prev} onPress={()=>{Prev()}}>
+                    <AntDesign name="left" style={[styles.nextIcon,{color:prev?"grey":"black"}]}/>
+                </TouchableOpacity>
+                <TouchableOpacity disabled={next} onPress={()=>{Next()}}>
+                    <AntDesign name="right" style={[styles.nextIcon,{color:next?"grey":"black"}]}/>
+                </TouchableOpacity>
+                <TouchableOpacity disabled={last} onPress={()=>{Last()}}>
+                      <AntDesign name="verticleleft" style={[styles.nextIcon,{color:last?"grey":"black"}]}/>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-      :
-      <View>
-        <Text style={{fontSize:20, color:"rgba(0, 0, 0, 0.38)", textAlign:"center", marginTop:20}}>No transactions made yet</Text>
-      </View>
+        :
+          <View>
+            <Text style={{fontSize:20, color:"rgba(0, 0, 0, 0.38)", textAlign:"center", marginTop:20}}>No transactions made yet</Text>
+          </View>
       }  
         </Card>
     </ScrollView>
