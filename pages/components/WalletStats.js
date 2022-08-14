@@ -54,11 +54,11 @@ const WalletStats = () => {
             <Text style={styles.knctTotalTxn}>{details.totalTxn}            
               <View>
                 <Text style={styles.knctTxnReceiver}>
-                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"green"}}/>
+                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"rgb(45, 201, 55)"}}/>
                   {details.receiverTxn}
                 </Text>    
                 <Text style={styles.knctTxnSender}>
-                  <Ionicons name="arrow-up" style={{fontSize:scale(15), color:"red"}}/>
+                  <Ionicons name="arrow-up" style={{fontSize:scale(15), color:"#cc3232"}}/>
                   {details.senderTxn}
                 </Text>
               </View>
@@ -71,11 +71,11 @@ const WalletStats = () => {
             <Text style={styles.totalNftTxn}>{(details.buyerTxn + details.sellerTxn)}           
               <View>
                 <Text style={styles.nftTxnBuyer}>
-                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"green"}}/>
+                  <Ionicons name="arrow-down" style={{fontSize:scale(15), color:"rgb(45, 201, 55)"}}/>
                   {details.buyerTxn}
                 </Text>
                 <Text style={styles.nftTxnSeller}>
-                  <Ionicons name="arrow-up" style={{fontSize:scale(15), color:"red"}}/>
+                  <Ionicons name="arrow-up" style={{fontSize:scale(15), color:"#cc3232"}}/>
                   {details.sellerTxn}
                 </Text>
               </View>
@@ -169,13 +169,13 @@ const styles = ScaledSheet.create({
     left:'5@s'
   },
   knctTxnReceiver:{
-    color:"green", 
+    color:"rgb(45, 201, 55)", 
     fontSize: '15@s',
     left:'25@s', 
     bottom:'-16@s'
   },
   knctTxnSender:{
-    color:"red", 
+    color:"#cc3232", 
     fontSize: '15@s',
     left:'62@s', 
     bottom: '5@s'
@@ -187,13 +187,13 @@ const styles = ScaledSheet.create({
     left:'10@s'
   },
   nftTxnBuyer:{
-    color:"green", 
+    color:"rgb(45, 201, 55)", 
     fontSize: '15@s',
     left:'25@s', 
     bottom:'-16@s'
   },
   nftTxnSeller:{
-    color:"red", 
+    color:"#cc3232", 
     fontSize: '15@s',
     left:'60@s', 
     bottom: '5@s'
