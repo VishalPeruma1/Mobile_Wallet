@@ -9,6 +9,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 import { useIsFocused } from '@react-navigation/native';
+import { ScrollView } from "react-native";
+import { scale, ScaledSheet } from "react-native-size-matters";
 
 
 const ContactDetails = ({navigation, route}) => {
@@ -22,6 +24,9 @@ const ContactDetails = ({navigation, route}) => {
     const[showImg,setshowImg]=React.useState(false);
     const [transactionList,setTransactionList] = React.useState([]);
     const isFocused = useIsFocused();
+    const [transactions, setTransactions] = React.useState(false)
+    const [status, setStatus] = React.useState("")
+    // const [transactionMessage, setTransactionMessage] = React.useState()
     const data = route.params.data;
 
     React.useEffect(()=>{
@@ -31,16 +36,16 @@ const ContactDetails = ({navigation, route}) => {
     const TransactionCard = ({data})=>{
       return(
         <TouchableOpacity>
-          <Card containerStyle={{marginLeft:10, marginRight:10,backgroundColor:"white",padding:5, paddingLeft:12,elevation:5}} wrapperStyle={{width:200}}>
-            <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
-            <View style={{display:"flex",flexDirection:"column"}}>
+          <Card containerStyle={styles.transactionCard} wrapperStyle={{width:300}}>
+            <View style={styles.transactionView}>
+            <View style={styles.transactionView2}>
               {data.role==="Receiver"?
-                <Text style={{color:"green",fontSize:18, paddingBottom:6}}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+                <Text style={{color:"rgb(45, 201, 55)",fontSize:scale(18), paddingBottom:scale(6)}}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
               :          
-                <Text style={{color:"red", fontSize:18, paddingBottom:6}}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+                <Text style={{color:"rgb(204, 50, 50)", fontSize:scale(18), paddingBottom:scale(6)}}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
               }
-              <Text style={{fontSize:14,color:"black", width:295}}>{data.role==="Receiver" ? data.senderDID : data.receiverDID}</Text>
-              <Text style={{fontSize:14, color:"grey"}}>{data.Date}</Text>
+              <Text style={styles.transactionDid}>{data.role==="Receiver" ? data.senderDID : data.receiverDID}</Text>
+              <Text style={styles.date}>{data.Date}</Text>
               </View>
             </View>
           </Card>
@@ -63,8 +68,13 @@ const ContactDetails = ({navigation, route}) => {
         try {
       const response = await fetch('https://webwallet.knuct.com/capi/getTxnByDID',options);
       const responseJson = await response.json();
-      console.log(responseJson.data)
-      setTransactionList(responseJson.data)
+      // console.log(responseJson.data)
+      console.log("TXN DID: ", responseJson.message)
+      console.log("Boolean: ", responseJson.status)
+      // console.log("Sender DID: ", responseJson.data.response.senderDID)
+      setTransactionList(responseJson.data.response)
+      // setTransactionMessage(responseJson.message)
+      setStatus(responseJson.status)
 
         }
         catch(error){
@@ -183,8 +193,9 @@ const ContactDetails = ({navigation, route}) => {
     //     setCopiedText(text)
     // }
     return(
+      <ScrollView>
         <View>
-            <Card>
+            <Card containerStyle={{height:"auto", borderRadius:10}}>
                 <View>
                     <TouchableOpacity onPress={()=>navigation.goBack(null)}>
                         <View style={{flexDirection:'row'}}>
@@ -283,7 +294,7 @@ const ContactDetails = ({navigation, route}) => {
                 <View>
                     <Text style={{fontSize:25,color:"black",textAlign:"center",fontWeight:"bold", letterSpacing:1.5, marginBottom:10}}>{data.nickname}</Text>
                     <Text style={{fontSize:13.5,color:"rgba(0, 0, 0, 0.6)",fontWeight:"400"}}>{data.did}</Text>
-                    <TouchableOpacity onPress={() => copyToClipboard()} style={{marginLeft:320}}>
+                    <TouchableOpacity onPress={() => copyToClipboard()} style={{marginLeft:300}}>
                     <View>
                         <MaterialIcons name="content-copy" color="#1976D2" size={18} style={{bottom:12}}/>
                     </View>
@@ -291,7 +302,7 @@ const ContactDetails = ({navigation, route}) => {
                 </View>
                 
                 <View>
-                <TouchableOpacity onPress={() => navigation.navigate('Transactions')} style={{marginLeft:25, height:50, width:300 ,marginTop:25, borderRadius:10}}>
+                <TouchableOpacity onPress={() => navigation.navigate('Transactions')} style={{marginLeft:25, height:35, width:300 ,marginTop:15, borderRadius:10}}>
                     <View style={{flexDirection:"row"}}>
                     <Text style={{textAlign:"center",fontWeight:'bold',marginLeft:55,marginRight:12,fontFamily:'Roboto',color:'#1976D2', fontSize:17}}>
                     TRANSFER TOKENS
@@ -305,29 +316,50 @@ const ContactDetails = ({navigation, route}) => {
                 </View>
             </Card>
 
-            <Card>
-            {
-        (() => {
-          if(transactionList.tokens!=="") {
-            transactionList.slice(0,3).map((data,id) => (
-            <TransactionCard key={id} data={data} />
+            <Card containerStyle={{ height:"auto", bottom:7, borderRadius:10}}>
+        {
+          // (!transactions)?
+          (status === "true")?
+            transactionList.slice(0,5).map((data) => (
+            <TransactionCard data={data} />
             ))
-            }
-          else { 
+            :
             <View>
-              <Text style={{color:"#00000061"}}>{transactionList.message}</Text>
+              <Text style={{fontSize:20, color:"rgba(0, 0, 0, 0.38)", textAlign:"center", marginTop:10, marginBottom:10, fontWeight:"500"}}>No Transactions found</Text>
             </View>
-          }
         }
-          )
-        }
-                {/* <Text style={{fontSize:18, color:"rgba(0, 0, 0, 0.38)", textAlign:"center", fontWeight:"bold"}}>{transactionList.message}</Text> */}
             </Card>
         </View>
+    </ScrollView>
     );
 };
-const styles = StyleSheet.create({
-
+const styles = ScaledSheet.create({
+  transactionCard:{
+    marginLeft:0, 
+    marginRight:0,
+    backgroundColor:"white",
+    padding:5, 
+    paddingLeft:12,
+    elevation:5
+  },
+  transactionView:{
+    flexDirection:'column', 
+    flexWrap:"wrap", 
+    justifyContent:"space-evenly"
+  },
+  transactionView2:{
+    display:"flex",
+    flexDirection:"column"
+  },
+  transactionDid:{
+    fontSize:14,
+    color:"black", 
+    width:295
+  },
+  date:{
+    color:"rgba(0, 0, 0, 0.38)", 
+    fontSize:"14@s"
+  },
   qrcode: {
       margin: 10, 
       backgroundColor: "white", 
@@ -345,5 +377,6 @@ const styles = StyleSheet.create({
       justifyContent:'space-evenly'
     },
 })
+
 
 export default ContactDetails;

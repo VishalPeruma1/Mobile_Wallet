@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import {
   ScrollView,
-  StyleSheet,
   Text, 
   TouchableOpacity,
   View,
+  TextInput,
+  Modal,
   TextInput,
   Modal
 } from 'react-native';
@@ -20,8 +21,8 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 
  const Transactions = ({navigation}) => {
-  const [type,setType] = React.useState("Token");
-  const [opac,setOpac] = React.useState(1);
+    const [type,setType] = React.useState("Token");
+    const [opac,setOpac] = React.useState(1);
     const [Token, onChangeToken] = React.useState("");
     const [RDID, onChangeRDID] = React.useState("");
     const [com, onChangecom] = React.useState("");
@@ -44,6 +45,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
       getNftTxnByCount()
       // getNftTransaction()
       }, [isFocused])
+
     const getTxnByCount = async()=>{
       let options = {
         method:"POST",
@@ -98,7 +100,6 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
         Toast.show(error,Toast.LONG);
       }
     } 
-    
 
     const viewTokens = async()=> {
       try {
@@ -122,22 +123,23 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
 
       return(
         <View>
-        <TouchableOpacity onPress={() => { setTrans(true)
-          }}>
-          <Card containerStyle={{ marginLeft: 10, marginRight: 10, backgroundColor: "white", padding: 5, paddingLeft: 12, elevation: 5 }} wrapperStyle={{ width: 200 }}>
-            <View style={{ flexDirection: 'column', flexWrap: "wrap", justifyContent: "space-evenly" }}>
-              <View style={{ display: "flex", flexDirection: "column" }}>
-                {data.role === "Receiver" ?
-                  <Text style={{ color: "green", fontSize: 18, paddingBottom: 6 }}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
-                  :
-                  <Text style={{ color: "red", fontSize: 18, paddingBottom: 6 }}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>}
-                <Text style={{ fontSize: 14, color: "black", width: 295 }}>{data.role === "Receiver" ? data.senderDID : data.receiverDID}</Text>
-                <Text style={{ fontSize: 14, color: "grey" }}>{data.Date}</Text>
+          <TouchableOpacity onPress={() => { setTrans(true)
+            }}>
+            <Card containerStyle={styles.transactionCard} wrapperStyle={{width:300}}>
+              <View style={styles.transactionView}>
+              <View style={styles.transactionView2}>
+                {data.role==="Receiver"?
+                  <Text style={{color:"rgb(45, 201, 55)",fontSize:scale(18), paddingBottom:scale(6)}}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+                :          
+                  <Text style={{color:"rgb(204, 50, 50)", fontSize:scale(18), paddingBottom:scale(6)}}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
+                }
+                <Text style={styles.transactionDid}>{data.role==="Receiver" ? data.senderDID : data.receiverDID}</Text>
+                <Text style={styles.date}>{data.Date}</Text>
+                </View>
               </View>
-            </View>
-          </Card>
-        </TouchableOpacity>
-        <Modal visible={trans} transparent={true} hasBackdrop={true} onRequestClose={() => {setTrans(false)} }>
+            </Card>
+          </TouchableOpacity>
+          <Modal visible={trans} transparent={true} hasBackdrop={true} onRequestClose={() => {setTrans(false)} }>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',marginRight:20,marginLeft:20}}>
               <View style={styles.qrcode}>
                 <View style={{ flexDirection: 'column' }}>
@@ -156,15 +158,11 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
                   <Text style={{ color: "green", fontSize: 20, paddingTop: 6 }}>{JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
                   :
                   <Text style={{ color: "#CC3232", fontSize: 20, paddingTop: 6 }}> {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>}
-              
                 <View style={{padding:5}}>
-
-                <Text style={{ paddingLeft:6,borderRadius:10,width:data.comment.length*12,backgroundColor:"#00000014",fontSize: 18, color: 'black' }}>{data.comment}</Text>
-              
+                  <Text style={{ paddingLeft:6,borderRadius:10,width:data.comment.length*12,backgroundColor:"#00000014",fontSize: 18, color: 'black' }}>{data.comment}</Text>
                 </View>
                 <Text style={{  marginTop:10,fontSize: 18, color: 'black' }}>Transaction ID:</Text>
                 <Text style={{  fontSize: 15, color: 'black' }}>{data.txn}</Text>
-
                 <TouchableOpacity onPress={() => setQuoroums(true)} style={{marginTop:15}}>
                   <Text style={{color:"#1976D2"}}>
                     VIEW 15 QUORUMS
@@ -191,30 +189,33 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
                </View>
             </View>
           </Modal>
-          </View>
+        </View>
       )
   }
+  
   const NftTransactionCard = ({data})=>{
     const [nft,setNft]=React.useState(false);
     const [quoroums,setQuoroums] = React.useState(false);
     const QList = data.quorumList;
+
     return(
       <View>
-      <TouchableOpacity onPress={() => {setNft(true)}}>
-        <Card containerStyle={{ marginLeft: 10, marginRight: 10, backgroundColor: "white", padding: 5, paddingLeft: 12, elevation: 5 }} wrapperStyle={{ width: 300 }}>
-          <View style={{ flexDirection: 'column', flexWrap: "wrap", justifyContent: "space-evenly" }}>
-            <View style={{ display: "flex", flexDirection: "column" }}>
-              {data.role === "Buyer" ?
-                <Text style={{ color: "rgb(25, 118, 210)", fontWeight: "500", fontSize: 18, paddingBottom: 6 }}>NFT <Text style={{ color: "rgba(0, 0, 0, 0.6)" }}>{data.amount}</Text>  <Text style={{ color: "purple", fontSize: 18, paddingBottom: 6 }}> KNCT <Text style={{ color: "rgb(204, 50, 50)" }}> - {data.amount}</Text></Text></Text>
-                :
-                <Text style={{ color: "rgb(25, 118, 210)", fontWeight: "500", fontSize: 18, paddingBottom: 6 }}>NFT <Text style={{ color: "rgba(0, 0, 0, 0.6)" }}>{data.amount}</Text>  <Text style={{ color: "purple", fontSize: 18, paddingBottom: 6 }}> KNCT <Text style={{ color: "rgb(45, 201, 55)" }}> + {data.amount}</Text></Text></Text>}
-              <Text style={{ color: "black", fontSize: 15, paddingBottom: 6 }}>{data.sellerDID}</Text>
-              <Text style={{ color: "rgba(0, 0, 0, 0.38)", fontSize: 15, paddingBottom: 6 }}>{data.Date}</Text>
+        <TouchableOpacity onPress={() => {setNft(true)}}>
+          <Card containerStyle={styles.transactionCard} wrapperStyle={{width:300}}>
+            <View style={styles.transactionView}>
+            <View style={styles.transactionView2}>
+              {data.role==="Buyer"?
+                  <Text  style={styles.nft}>NFT <Text style={styles.nftAmount}>{data.amount}</Text>  <Text style={styles.knct}> KNCT <Text style={{color:"rgb(204, 50, 50)"}}> - {data.amount}</Text></Text></Text>
+                :          
+                  <Text  style={styles.nft}>NFT <Text style={styles.nftAmount}>{data.amount}</Text>  <Text style={styles.knct}> KNCT <Text style={{color:"rgb(45, 201, 55)"}}> + {data.amount}</Text></Text></Text>
+              }
+              <Text style={styles.nftSellerDID}>{data.sellerDID}</Text>
+              <Text style={styles.date}>{data.Date}</Text>
+              </View>
             </View>
-          </View>
-        </Card>
-      </TouchableOpacity>
-      <Modal visible={nft} transparent={true} onRequestClose={() => { setNft(false) } }>
+          </Card>
+        </TouchableOpacity>
+        <Modal visible={nft} transparent={true} onRequestClose={() => { setNft(false) } }>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',marginRight:20,marginLeft:20}}>
           <View style={styles.quoroumcode}>
           <View style={{ flexDirection: 'column' }}>
@@ -266,23 +267,19 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
           </View>
         </View>
         </Modal>
-        </View>
-
+      </View>
     )
 }
     const chooseImage = () =>{
-
       var options = {
         title:"Choose profile image",
         mediaType:'photo',
         customButtons:[{name:'customOptionKey', title:'Choose file from Gallery'}],storageOptions:{skipBackup:true,path:'images'},
       };
-      launchImageLibrary(options,res =>{
-  
+      launchImageLibrary(options,res =>{  
         console.log("Response = ",res)
         if(res.didCancel)
         {console.log("User Cancelled");}
-  
         else if(res.error){
           console.log("Error: ",res.error);
   
@@ -297,33 +294,33 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
             Toast.show("File size must be less than 1 MB",Toast.LONG)
           }
           else{
-  
             console.log("Success",pro_image.uri);
-  
           }
         }
       })
     }
-    const types = [{displayname:"TOKEN",navName:"Token",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(type==="Token"?"#1976D2":"#808080"), fontSize:25}}/>},
-    {displayname:"NFT",navName:"Nft",icon:<MaterialCommunityIcons name="cube-scan" style={{color:(type==="Nft"?"#1976D2":"#808080"), fontSize:25}}/>}]
 
+    const types = [{displayname:"TOKEN",navName:"Token",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(type==="Token"?"#1976D2":"#808080"), fontSize:scale(22)}}/>},
+    {displayname:"NFT",navName:"Nft",icon:<MaterialCommunityIcons name="cube-scan" style={{color:(type==="Nft"?"#1976D2":"#808080"), fontSize:scale(22)}}/>}]
 
     const TabScreen = ({data})=>{
       return(
-          <TouchableOpacity style={{height:75, alignItems:"center",justifyContent:"center"}} onPress={()=>setType(data.navName)}>
-          <View style={{flexDirection:'row',alignItems:"center", justifyContent:"center"}}>
+          <TouchableOpacity style={styles.tabScreenTouchable} onPress={()=>setType(data.navName)}>
+          <View style={styles.tabView}>
               {data.icon}
-              <Text style={{color:(type===data.navName?"#1976D2":"#808080"), fontSize:20}} >{data.displayname}</Text>
+              <Text style={{color:(type===data.navName?"#1976D2":"#808080"), fontSize:scale(20)}} >{data.displayname}</Text>
           </View>
           </TouchableOpacity>
       )
     }
+
     const token = ()=> {
       return(
         <Card containerStyle={{width:"auto", height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
-        {/* <Text style={{color: '#00000099', fontWeight:'bold', fontSize:14, fontFamily:'Roboto' , marginLeft:5}}>TOKEN</Text> */}
+        {/* <Text style={{color: '#00000099', fontWeight:'bold', fontSize:14, fontFamily:'Roboto' , marginLeft:5}}>TOKEN</Text> */}      
             <View style={{flexDirection:'column'}}>
               <Text style={{color: '#000000DE', fontWeight:'bold', fontSize:20, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}>Transfer Tokens</Text>
+  
               <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}>Send tokens to a receiver</Text>
             </View>
             <View style={{flexDirection:'column'}}>
@@ -371,17 +368,17 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
                 <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#fff', fontSize:15,marginLeft:10, marginTop:12}}>
                   Transfer
                 </Text>
-                </View>
-              </TouchableOpacity>          
+                </View>  
+              </TouchableOpacity>
           </Card>
-        )
+      )
   }
 
   const Nft = ()=>{
     return(
       <Card containerStyle={{width:"auto", height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
       {/* <Text style={{color: '#00000099', fontWeight:'bold', fontSize:14, fontFamily:'Roboto' , marginLeft:5}}>NFT</Text> */}
-              <View style={{flexDirection:'column'}}>
+          <View style={{flexDirection:'column'}}>
             <Text style={{color: '#000000DE', fontWeight:'bold', fontSize:20, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}>Transfer NFT</Text>
             <Text style={{color: '#000000DE', fontSize:12, fontFamily:'Roboto' , marginLeft:5, paddingTop:10}}>Send NFT to a receiver</Text>
           </View>
@@ -424,7 +421,6 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
           <TextInput placeholder='Price' placeholderTextColor="grey" style={styles.textinput} onChangeText={onChangeToken} value={Token} />
           <Text style={{color: '#00000099',fontSize:12, fontFamily:'Roboto' , marginLeft:20, paddingTop:10}}>Average price of the NFT</Text>
           </View>
-
           <View style={{flexDirection:'row',marginTop:10,width:325, marginLeft: 10, marginRight: 25,borderColor: "black",borderRadius: 5,borderWidth: 1,justifyContent: "space-between"}}>
             <TextInput placeholder='Receiver DID' placeholderTextColor="grey"  onChangeText={onChangeRDID} value={RDID}  />
             <TouchableOpacity onPress={()=>setshowQR(true)}>
@@ -433,7 +429,6 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
             </View>
             <Modal visible={showQR} transparent={true} onRequestClose={()=>{setshowQR(false)}}>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-
           <View style={styles.qrcode}>
             <View style={{flexDirection:'row',alignSelf:'baseline'}}>
             <Text style={{fontWeight:'bold', fontSize:20, color:'black'}}>QR reader</Text>          
@@ -445,7 +440,6 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
              Scan QR code with camera   
               </Text>
                 </TouchableOpacity>
-
             <TouchableOpacity onPress={chooseImage} style={{marginTop:10,flexDirection:'row',backgroundColor:'#9c27b0', height:75, width:240, borderRadius:10,alignSelf:'center'}}>
             <MaterialIcons name="qr-code-2" style={{marginTop:6,padding:10,fontSize:40, color:"white"}}/>
               <Text style={{includeFontPadding:true,marginRight:80,textAlignVertical:'center',padding:10,textAlign:'center',fontWeight:'bold',fontFamily:'Roboto',color:'#fff', fontSize:14}}>
@@ -464,18 +458,17 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
             </View>
             <TouchableOpacity style={{marginLeft:25 ,backgroundColor:'#1962D2', height:50, width:300 ,marginTop:25, borderRadius:10}}>
               <View style={{flexDirection:'row'}} >
-              <Ionicons name='send-outline' style={{ color:'#fff', fontSize:14,marginLeft:100, marginTop:18}}/>
+              <Ionicons name='send-outline' style={{ color:'#fff', fontSize:14,marginLeft:100, marginTop:18}}/>              
               <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#fff', fontSize:15,marginLeft:10, marginTop:12}}>
                 Transfer
               </Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity>          
         </Card>
     )
 } 
     return (
         <ScrollView style={styles.content}>
-
           <View style={{width:375,marginLeft:15, borderRadius:10,flexDirection:'row', backgroundColor:'white',paddingTop:5,alignItems:'center',justifyContent:'space-around',}}>
             {types.map((data,id) => (
                 <TabScreen key={id} data={data} />
@@ -488,20 +481,17 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
             {type==="Nft" ? 
                 Nft() : null
             }
-            
-
-      
         <Card containerStyle={{width:scale(330),height:"auto",borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
         <View style={{flexDirection:'row'}}>
           <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Recent Transcations</Text>
           <TouchableOpacity onPress={() => navigation.navigate("Recent Transactions",{"transactionList":transactionList,"transactions":transactions,"transactionCount":transactionCount})}>            
-          <Text style={{fontSize:14,marginLeft:75,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
+            <Text style={{fontSize:14,marginLeft:75,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
           </TouchableOpacity>
         </View>
         {
           (!transactions)?
-            transactionList.slice(0,3).map((data,id) => (
-            <TransactionCard key={id} data={data} />
+            transactionList.slice(0,3).map((data) => (
+            <TransactionCard data={data} />
             ))
             :
             <View>
@@ -509,7 +499,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
             </View>
         }
         </Card>
-          <Card containerStyle={{width:375, height:250, borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
+          <Card containerStyle={{width:scale(330), height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
         <View style={{flexDirection:'row'}}>
           <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Recent NFT Transcations</Text>
           <TouchableOpacity>
@@ -519,8 +509,8 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
         <View style={{flexDirection:"column"}}>
         {
           (Object.values(recentNftTransaction).length >= 1)?
-            recentNftTransaction.slice(0,3).map((data,id) => (
-            <NftTransactionCard  key={id} data={data} />
+            recentNftTransaction.slice(0,3).map((data) => (
+            <NftTransactionCard data={data} />
             ))
             :
             <View/>
@@ -556,7 +546,6 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
               <Text style={{fontSize:20, color:"rgba(0, 0, 0, 0.38)", textAlign:"center"}}>No tokens in this account</Text>
               </View>
           }
-
           {
             tokenCount > 5 ?
             <View>
@@ -567,23 +556,66 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
             :
             <View/>
           }
-          
         </Card>
-        </View>
-            
+        </View> 
             </ScrollView>
-        
     );
  };
  
- const styles = StyleSheet.create({
+ const styles = ScaledSheet.create({
     transactionCard:{
-      marginLeft:10, 
-      marginRight:10,
+      marginLeft:0, 
+      marginRight:0,
       backgroundColor:"white",
       padding:5, 
       paddingLeft:12,
       elevation:5
+    },
+    transactionView:{
+      flexDirection:'column', 
+      flexWrap:"wrap", 
+      justifyContent:"space-evenly"
+    },
+    transactionView2:{
+      display:"flex",
+      flexDirection:"column"
+    },
+    transactionDid:{
+      fontSize:14,
+      color:"black", 
+      width:295
+    },
+    nft:{
+      color:"rgb(25, 118, 210)", 
+      fontWeight:"500",
+      fontSize:18, 
+      paddingBottom:6
+    },
+    nftAmount:{
+      color:"rgba(0, 0, 0, 0.6)"
+    },
+    knct:{
+      color:"rgb(156, 39, 176)", 
+      fontSize:18, 
+      paddingBottom:6
+    },
+    nftSellerDID:{
+      color:"black",
+      fontSize:14
+    },
+    date:{
+      color:"rgba(0, 0, 0, 0.38)", 
+      fontSize:"14@s"
+    },
+    tabScreenTouchable:{
+      height:75, 
+      alignItems:"center",
+      justifyContent:"center"
+    },
+    tabView:{
+      flexDirection:'row',
+      alignItems:"center", 
+      justifyContent:"center"
     },
     sectionContainer: {
       marginTop: 32,
@@ -655,6 +687,12 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
     flexDirection:'column',
     justifyContent:'space-evenly'
   },
+   text: {
+      borderWidth: 1,
+      padding: 25,
+      borderColor: 'black',
+      backgroundColor: 'red'
+   },
   quoroumcode: {
     margin: 7, 
     backgroundColor: "white", 
@@ -675,13 +713,6 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
     flexDirection:'column',
     justifyContent:'space-evenly'
   },
-   text: {
-      borderWidth: 1,
-      padding: 25,
-      borderColor: 'black',
-      backgroundColor: 'red'
-   }
-  ,
     headline: {
       textAlign: 'center', // <-- the magic
       fontWeight: 'bold',
