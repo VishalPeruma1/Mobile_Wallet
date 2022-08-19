@@ -5,8 +5,6 @@ import {
   TouchableOpacity,
   View,
   TextInput,
-  Modal,
-  TextInput,
   Modal
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';

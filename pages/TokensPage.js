@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Card } from "react-native-elements";
 import { Dropdown } from 'react-native-element-dropdown';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 const data = [
