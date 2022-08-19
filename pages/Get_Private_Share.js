@@ -35,7 +35,7 @@ const Get_Private_Share = ({ navigation, route}) => {
           addAndroidDownloads: { 
             title: 'PrivateShare', 
             description: 'Downloaded PrivateShare.png',
-            path: Platform.OS=="ios" ? RNFS.LibraryDirectoryPath+'/PrivateShare.png' : RNFS.DownloadDirectoryPath +'/PrivateShare.png',
+            path: Platform.OS==="ios" ? RNFS.LibraryDirectoryPath+'/PrivateShare.png' : RNFS.DownloadDirectoryPath +'/PrivateShare.png',
             useDownloadManager: true, 
             notification: true,
             mediaScannable:true,
