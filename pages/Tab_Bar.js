@@ -4,11 +4,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Dashboard from './Dashboard.js';
 import Contacts from './Contacts.js';
 import Transactions from './Transactions.js';
-import { View, Text, TouchableOpacity, StyleSheet, PermissionsAndroid,BackHandler, Platform , Alert, ImageBackground} from 'react-native';
+import { View, Text, TouchableOpacity, PermissionsAndroid,BackHandler, Platform , Alert, ImageBackground} from 'react-native';
 import * as ImagePicker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 import { PERMISSIONS } from 'react-native-permissions';
 import Geolocation from '@react-native-community/geolocation'
+import { scale,ScaledSheet } from 'react-native-size-matters';
 
 const TabBar= ({ navigation, route}) => {
 
@@ -27,9 +28,9 @@ const TabBar= ({ navigation, route}) => {
     const [pagename,setPagename] = React.useState("Dashboard")
     const [responseCamera, setResponseCamera] = React.useState(null);
     const pages = [
-        {displayname:"Dashboard",navName:"Dashboard",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(pagename==="Dashboard"?"#1976D2":"#808080"), fontSize:25}}/>},
-        {displayname:"Transaction",navName:"Transactions",icon:<MaterialIcons name="compare-arrows" style={{color:(pagename==="Transactions"?"#1976D2":"#808080"), fontSize:25}}/>},
-        {displayname:"Contacts",navName:"Contacts",icon:<MaterialIcons name="contact-page" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:25}}/>}
+        {displayname:"Dashboard",navName:"Dashboard",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(pagename==="Dashboard"?"#1976D2":"#808080"), fontSize:scale(24)}}/>},
+        {displayname:"Transaction",navName:"Transactions",icon:<MaterialIcons name="compare-arrows" style={{color:(pagename==="Transactions"?"#1976D2":"#808080"), fontSize:scale(24)}}/>},
+        {displayname:"Contacts",navName:"Contacts",icon:<MaterialIcons name="contact-page" style={{color:(pagename==="Contacts"?"#1976D2":"#808080"), fontSize:scale(24)}}/>}
     ]
     React.useEffect(()=>{
       const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
@@ -215,7 +216,7 @@ const TabBar= ({ navigation, route}) => {
             <TouchableOpacity onPress={()=>setPagename(data.navName)}>
             <View style={{alignItems:"center", justifyContent:"center"}}>
                 {data.icon}
-                <Text style={{color:(pagename===data.navName?"#1976D2":"#808080"), fontSize:13}} >{data.displayname}</Text>
+                <Text style={{color:(pagename===data.navName?"#1976D2":"#808080"), fontSize:scale(12)}} >{data.displayname}</Text>
             </View>
             </TouchableOpacity>
         )
@@ -233,7 +234,7 @@ const TabBar= ({ navigation, route}) => {
                 <Contacts navigation={navigation}/> : null
             }
             {pagename==="Camera" ?
-            <ImageBackground source={{uri : imgPath}} style={{width: "100%", height: "100%", flex: 1}}>
+            <ImageBackground source={{uri : "file://"+imgPath}} style={{width: "100%", height: "100%", flex: 1,  }}>
             <View style={styles.detailStyle}>  
               <Text style={styles.boldText}>
                   {locationStatus}
@@ -266,8 +267,8 @@ const TabBar= ({ navigation, route}) => {
             ))}
             <TouchableOpacity onPress={() => getcamerapermission()}>
               <View style={{alignItems:"center", justifyContent:"center"}}>
-                  <MaterialCommunityIcons name="camera" style={{color:"#808080", fontSize:25}}/>
-                  <Text style={{color:"#808080", fontSize:13}} >Camera</Text> 
+                  <MaterialCommunityIcons name="camera" style={{color:"#808080", fontSize:scale(24)}}/>
+                  <Text style={{color:"#808080", fontSize:scale(12)}} >Camera</Text> 
               </View>
             </TouchableOpacity>
           </View>
@@ -276,35 +277,35 @@ const TabBar= ({ navigation, route}) => {
 
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
     tabbarstyle: {
         backgroundColor:'white', 
-        paddingTop:5, 
-        paddingBottom:5, 
+        paddingTop:'5@s', 
+        paddingBottom:'5@s', 
         alignItems:"center", 
         justifyContent:"space-around", 
         flexDirection:"row", 
-        borderRadius:10, 
-        bottom:0,
+        borderRadius:'10@s', 
+        bottom:'0@s',
         position:"absolute",
         width:"100%"
     },
     boldText: {
-      fontSize: 25,
+      fontSize: '22@s',
       color: 'red',
-      marginVertical: 10,
+      marginVertical: '10@s',
     },
     detailStyle: {
       flex: 1, 
-      margin:15, 
+      margin: '15@s', 
       position: "absolute", 
-      bottom: 0, 
-      left: 0, 
+      bottom: '0@s', 
+      left: '0@s', 
     },
     weatherText : {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 16,
+        marginTop: '13@s',
         fontWeight: "900",
         color: 'black',
     }
