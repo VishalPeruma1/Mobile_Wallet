@@ -1,6 +1,4 @@
 import React from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Dashboard from './Dashboard.js';
 import Contacts from './Contacts.js';
 import Transactions from './Transactions.js';
@@ -8,7 +6,9 @@ import { View, Text, TouchableOpacity, PermissionsAndroid,BackHandler, Platform 
 import * as ImagePicker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 import { PERMISSIONS } from 'react-native-permissions';
-import Geolocation from '@react-native-community/geolocation'
+import Geolocation from '@react-native-community/geolocation';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { scale,ScaledSheet } from 'react-native-size-matters';
 
 const TabBar= ({ navigation, route}) => {
@@ -27,6 +27,8 @@ const TabBar= ({ navigation, route}) => {
     const did = route.params.did
     const [pagename,setPagename] = React.useState("Dashboard")
     const [responseCamera, setResponseCamera] = React.useState(null);
+    const [annotation,setAnnotation] = React.useState(false);
+
     const pages = [
         {displayname:"Dashboard",navName:"Dashboard",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(pagename==="Dashboard"?"#1976D2":"#808080"), fontSize:scale(24)}}/>},
         {displayname:"Transaction",navName:"Transactions",icon:<MaterialIcons name="compare-arrows" style={{color:(pagename==="Transactions"?"#1976D2":"#808080"), fontSize:scale(24)}}/>},
@@ -222,19 +224,10 @@ const TabBar= ({ navigation, route}) => {
         )
     }
 
-    return (
-        <View style={{flex:1}}>
-            {pagename==="Dashboard" ? 
-                <Dashboard data={did}/> : null
-            }
-            {pagename==="Transactions" ? 
-                <Transactions navigation={navigation}/> : null
-            }
-            {pagename==="Contacts" ? 
-                <Contacts navigation={navigation}/> : null
-            }
-            {pagename==="Camera" ?
-            <ImageBackground source={{uri : "file://"+imgPath}} style={{width: "100%", height: "100%", flex: 1,  }}>
+    const AnnotationScreen = ()=>{
+      
+      return(
+        <ImageBackground source={{uri : "file://"+imgPath}} style={{width: "100%", height: "100%", flex: 1}}>
             <View style={styles.detailStyle}>  
               <Text style={styles.boldText}>
                   {locationStatus}
@@ -254,12 +247,45 @@ const TabBar= ({ navigation, route}) => {
               <Text style={styles.weatherText}>
                 Temp: {temp}
               </Text>
-              <Text style={[styles.weatherText, {marginBottom:56}]}>
+              <Text style={styles.weatherText}>
                 Humidity: {humidity}
               </Text>
             </View>
+            <View style={styles.annotationBtn}>
+              {annotation?
+                <TouchableOpacity>
+                  <MaterialCommunityIcons name='message-text-outline' style={[styles.annotation,{marginBottom:scale(10)}]}/>
+                </TouchableOpacity>
+              :null
+              }
+              {annotation?
+                <TouchableOpacity>
+                  <MaterialIcons name='keyboard-voice' style={[styles.annotation,{marginBottom:scale(10)}]}/>
+                </TouchableOpacity>
+              :null
+              }
+              <TouchableOpacity onPress={()=>setAnnotation(!annotation)}  >
+                {annotation?<MaterialCommunityIcons name='close' style={[styles.annotation]}/>:
+                <MaterialCommunityIcons name='plus' style={styles.annotation}/>
+                }
+              </TouchableOpacity>
+            </View>
             </ImageBackground> 
-              : null
+      )}
+
+    return (
+        <View style={{flex:1}}>
+            {pagename==="Dashboard" ? 
+                <Dashboard data={did}/> : null
+            }
+            {pagename==="Transactions" ? 
+                <Transactions navigation={navigation}/> : null
+            }
+            {pagename==="Contacts" ? 
+                <Contacts navigation={navigation}/> : null
+            }
+            {pagename==="Camera" ?
+                <AnnotationScreen /> : null
             }
           <View style={styles.tabbarstyle}>
             {pages.map((data,id) => (
@@ -274,7 +300,6 @@ const TabBar= ({ navigation, route}) => {
           </View>
         </View>
       );
-
 }
 
 const styles = ScaledSheet.create({
@@ -293,14 +318,18 @@ const styles = ScaledSheet.create({
     boldText: {
       fontSize: '22@s',
       color: 'red',
-      marginVertical: '10@s',
+      marginVertical: '5@s',
     },
     detailStyle: {
       flex: 1, 
-      margin: '15@s', 
+      marginLeft: '5@s', 
       position: "absolute", 
-      bottom: '0@s', 
+      bottom: '56@s', 
       left: '0@s', 
+      backgroundColor:"white",
+      opacity:0.65,
+      padding:"10@s",
+      borderRadius:"20@s"
     },
     weatherText : {
         justifyContent: 'center',
@@ -308,6 +337,20 @@ const styles = ScaledSheet.create({
         marginTop: '13@s',
         fontWeight: "900",
         color: 'black',
+    },
+    annotationBtn:{
+      bottom:"56@s",
+      right:"10@s", 
+      position:"absolute", 
+    },
+    annotation:{
+      color:"white", 
+      padding:'12@s', 
+      fontSize:'25@s', 
+      backgroundColor:"#1976D2", 
+      borderRadius:'30@s',
+      justifyContent:"center",
+      alignItems:"center", 
     }
 })
 
