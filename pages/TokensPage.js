@@ -5,13 +5,16 @@ import {
   Text, 
   TouchableOpacity,
   View,
-  isFocused
+  isFocused,
+  TextInput
 } from 'react-native';
 import { Card } from "react-native-elements";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Dropdown } from 'react-native-element-dropdown';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import {s, scale,ScaledSheet} from 'react-native-size-matters';
 const data = [
   { label: '5', value: '5' },
   { label: '10', value: '10' },
@@ -19,17 +22,44 @@ const data = [
   { label: 'All', value: 'All' }
 ];
  
-const TokensPage = () => {
-    const [filt,setFilt]=React.useState(false);
-    const [value, setValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
-
+const TokensPage = ({navigation}) => {
+    const [tokenCount,setTokenCount] = useState(0);
     const [tokensList,setTokensList] = React.useState([])
-
+    const [foundtkns,SetFoundtkns]= React.useState([]);
+    const [search, setSearch] = React.useState("");
     React.useEffect(()=> {
         viewTokens()
         // getNftTransaction()
         }, [isFocused])
+
+    const Tokens = ({data})=>{
+      return(
+      <View style={{flexDirection:"row", paddingBottom:5}}>
+        <MaterialCommunityIcons name="cube-outline" color="#1976D2" size={18} style={{paddingRight:5}}/>
+        <Text style={styles.filter_did}>{data}</Text>
+      </View>
+      )
+    }
+    const filterTokens = (key) =>{
+      console.log("Inside Search")
+      const keyword = key;
+      setSearch(keyword)
+
+      if(keyword!=="")
+      {
+        console.log("Inside IF")
+        console.log(keyword)
+        const results = tokensList.filter((t)=> {
+          return t.toLowerCase().startsWith(keyword.toLowerCase());
+          });
+          console.log(results)
+          SetFoundtkns(results)
+      }
+      else{
+        SetFoundtkns(tokensList)
+      }
+
+    }
 
     const viewTokens = async()=> {
         try {
@@ -38,6 +68,7 @@ const TokensPage = () => {
             if(response.status===200){
             console.log("Tokens: "+responseJson.data.response)
             setTokensList(responseJson.data.response)
+            setTokenCount(responseJson.data.count)
             }
         } catch(error){
             Toast.show(error,Toast.LONG);
@@ -45,109 +76,86 @@ const TokensPage = () => {
         }
   return (
     <ScrollView>
-    <View style={{flexDirection: 'row'}}>
-       <Card containerStyle={{width:"auto",borderRadius:10, backgroundColor:"white", borderWidth:0}} >
-       <View style={{flexDirection:'row'}}>
-       
-       <Text style={{fontSize:25,color:"black"}}>Recent Transaction</Text>
-
-       <View style={{paddingBottom:75}}>
-        <Card containerStyle={{width:360, height:"auto", borderRadius:10, backgroundColor:"white", borderColor:"white"}}>
+      <View style={{margin:scale(15)}}>
+        <TouchableOpacity onPress={()=>navigation.goBack(null)}>
           <View style={{flexDirection:'row'}}>
-            <Text style={{fontWeight:'bold',fontFamily:'Roboto',color:'#000000DE', fontSize:20}}>Tokens</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Tokens")}>
-              <Text style={{fontSize:14,marginLeft:200,color:'#1976D2',marginTop:6}}> VIEW ALL</Text>
-            </TouchableOpacity>
-
+          <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:scale(20)}}/>
+          <Text style={styles.back}>BACK</Text>
           </View>
-          <Text style={{marginLeft:10}}>
-            0 total
-          </Text>
-          {
+        </TouchableOpacity>
+      </View>
+    <View>
+       <Card containerStyle={styles.container} >
+       <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+       
+       <Text style={{fontSize:scale(25),color:"black"}}>Tokens</Text>
+       </View>
+
+                
+          {search===""?
+      <Text style={styles.searchText}>{tokenCount} Total</Text>:
+      <Text style={styles.searchText}>{Object.keys(foundtkns).length} token(s) found from {tokenCount} total token(s)</Text>
+    }
+    <View>
+            <TextInput placeholder="Search Tokens.." style={styles.placeholdertext} onChangeText={(search) =>filterTokens(search)}>
+
+            </TextInput>
+          </View>
+          <View>
+          {(() => { 
+
+            if(search!=="")
+            {
+              return foundtkns.map((d,id) => (
+                <Tokens key={id} data={d} />
+                ))
+            }
+            else
+            {
+              return tokensList.map((d,id) => (
+                <Tokens key={id} data={d} />
+                ))
+            }
+
+          })()
             
-              tokensList.map((item,id) => (
-              <View style={{flexDirection:"row", paddingBottom:5}}>
-                <MaterialCommunityIcons name="cube-outline" color="#1976D2" size={18} style={{paddingRight:5}}/>
-                <Text key={id} style={{color:"black", fontSize:15, bottom:4, paddingRight:15}} >{item}</Text>
-              </View>
-              ))
           }
-          
-        </Card>
-        </View>
-
-       {filt ? <TouchableOpacity style={{marginLeft:75,}}>
-       <MaterialIcons name="tune" style={{fontSize:30, color:"black"}}/>
-       </TouchableOpacity> :<TouchableOpacity style={{marginLeft:75,}}>
-       <MaterialIcons name="tune" style={{fontSize:30, color:"grey"}}/>
-       </TouchableOpacity>
-
-        }
-       {/* <TouchableOpacity style={{marginLeft:75,}}>
-       <MaterialIcons name="tune" style={{fontSize:30, color:"grey"}}/>
-       </TouchableOpacity> */}
-
-       
-       
-        </View>
-        <View style={{flexDirection:"row"}}>
-        <Dropdown style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={data}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? '5' : '...'}
-          searchPlaceholder="Search..."
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);}}>
-
-
-       </Dropdown>
-       
-       
-       <TouchableOpacity>
-        <View style={{flexDirection:"row"}}>
-        
-       <MaterialIcons name="horizontal-rule" style={{left:5,padding:10,paddingTop:15,fontSize:30, color:"grey", transform: [{rotate: '90deg'}],position: 'absolute'}}/>
-       <SimpleLineIcons name="arrow-left" style={{left:15,marginTop:6,padding:10,fontSize:20, color:"#A6A6A6"}}/>
-        </View>
-       
-       </TouchableOpacity>
-       <TouchableOpacity>
-       <SimpleLineIcons name="arrow-left" style={{marginTop:6,padding:10,fontSize:20, color:"#A6A6A6"}}/>
-       </TouchableOpacity>
-
-
-
-       <TouchableOpacity>
-       <SimpleLineIcons name="arrow-right" style={{marginTop:6,padding:10,fontSize:20, color:"#A6A6A6"}}/>
-       </TouchableOpacity>
-       
-       <TouchableOpacity>
-        <View style={{flexDirection:"row"}}>
-        <SimpleLineIcons name="arrow-right" style={{marginTop:6,padding:10,fontSize:20, color:"#A6A6A6"}}/>
-       <MaterialIcons name="horizontal-rule" style={{left:5,padding:10,paddingTop:15,fontSize:30, color:"grey", transform: [{rotate: '90deg'}],position: 'absolute'}}/>
-        </View>
-       
-       </TouchableOpacity>
-        </View>
-        
+          </View>        
         </Card>
     </View>
     </ScrollView>
   );
 };
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
+  back:{
+    color: '#1976D2',
+    fontSize:'14@s', 
+    fontFamily:'Roboto'
+  },
+  filter_did:{
+    color:"black", 
+    fontSize:"13@s", 
+    bottom:'4@s', 
+    paddingRight:'15@s'
+
+  },
   container: {
+    height:"auto",
     backgroundColor: 'white',
-    padding: 16,
+    padding: '16@s',
+    borderRadius:'10@s',
+    marginTop:'-10@s',
+    marginBottom:'20@s'
+  },
+  placeholdertext:{
+    color:'black',
+    height:'auto',
+    width:'auto',
+    marginTop: '10@s',
+    padding: '10@s',
+    borderWidth: '1@s',
+    borderRadius: '5@s',
+    marginBottom: '10@s'
   },
   dropdown: {
     height: 50,

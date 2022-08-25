@@ -4,17 +4,19 @@ import {
   StyleSheet,
   Text, 
   TouchableOpacity,
-  View,Modal,Button,
+  View,
   TextInput
 } from 'react-native';
 import { Card } from "react-native-elements";
+import TransactionCard from './components/TransactionCard';
 import { Dropdown } from 'react-native-element-dropdown';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-simple-toast';
+import { useIsFocused } from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {scale,ScaledSheet} from 'react-native-size-matters';
+import {s, scale,ScaledSheet} from 'react-native-size-matters';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const data = [
@@ -36,6 +38,7 @@ const RecentTransactions = ({navigation,route}) => {
     const [value, setValue] = useState(10);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isFocus, setIsFocus] = useState(false);
+    const isFocused = useIsFocused();
     const [txn,setTxn] = React.useState([]);
     const [sdate,setSdate] = useState(dateToSTring(new Date()));
     const [edate,setEdate] = useState(dateToSTring(new Date()));
@@ -45,9 +48,6 @@ const RecentTransactions = ({navigation,route}) => {
     const [first,setFirst] = React.useState(true);
     const [next,setNext] = React.useState(false);
     const [last,setLast] = React.useState(false);
-    // const transactionList = route.params.transactionList;
-    // const transactions = route.params.transactions;
-    // const transactionCount = route.params.transactionCount;
     const [start,setStart] = React.useState(0);
     const [end,setEnd] = React.useState(10);
     const [text_did,setText_did] = useState(null);
@@ -85,7 +85,7 @@ const RecentTransactions = ({navigation,route}) => {
         setNext(end<transactionCount?false:true)
         setLast(end<transactionCount?false:true)
       }
-    })
+    }, [isFocused])
 
     const endDate = async(ed) =>{
       let datetmp = new Date(ed);
@@ -252,86 +252,6 @@ const RecentTransactions = ({navigation,route}) => {
     }
     
 
-  const TransactionCard = ({data})=>{
-    const [trans, setTrans] = React.useState(false);
-      const [quoroums,setQuoroums] = React.useState(false);
-      const QList = data.quorumList;
-    return(
-      <View>
-      <TouchableOpacity onPress={() => { setTrans(true) }}>
-        <Card containerStyle={{marginLeft:10, marginRight:10,backgroundColor:"white",padding:5, paddingLeft:12,elevation:5}} wrapperStyle={{width:200}}>
-          <View style={{flexDirection:'column', flexWrap:"wrap", justifyContent:"space-evenly"}}>
-          <View style={{display:"flex",flexDirection:"column"}}>
-            {data.role==="Receiver"?
-              <Text style={{color:"rgb(45, 201, 55)",fontSize:18, paddingBottom:6}}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
-            :          
-              <Text style={{color:"#cc3232", fontSize:18, paddingBottom:6}}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
-            }
-            <Text style={{fontSize:14,color:"black", width:295}}>{data.role==="Receiver" ? data.senderDID : data.receiverDID}</Text>
-            <Text style={{fontSize:14, color:"grey"}}>{data.Date}</Text>
-            </View>
-          </View>
-        </Card>
-      </TouchableOpacity>
-      <Modal visible={trans} transparent={true} hasBackdrop={true} onRequestClose={() => {setTrans(false)} }>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',marginRight:20,marginLeft:20}}>
-              <View style={styles.qrcode}>
-                <View style={{ flexDirection: 'column' }}>
-                <View style={{ flexDirection: 'row', alignSelf: 'baseline' }}>
-                  <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>Knuct Transaction</Text>
-                <TouchableOpacity style={{paddingLeft:150}} onPress={() => setTrans(false)}>
-                  <Entypo name="cross" style={{color:"black",fontSize:25}}/> 
-                </TouchableOpacity> 
-                </View>
-                <Text style={{ paddingTop:5,fontSize: 14, color: "grey" }}>{data.Date}</Text>
-                </View>
-                <View style={{ padding: 15 }}>
-                {data.role === "Receiver" ? <Text style={{ fontSize: 18, color: "grey" }}>From</Text> : <Text style={{ fontSize: 14, color: "grey" }}>To</Text>}
-                <Text style={{ padding:5,fontSize: 14, color: "black", width: 295 }}>{data.role === "Receiver" ? data.senderDID : data.receiverDID}</Text>
-                {data.role === "Receiver" ?
-                  <Text style={{ color: "green", fontSize: 20, paddingTop: 6 }}>{JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
-                  :
-                  <Text style={{ color: "#CC3232", fontSize: 20, paddingTop: 6 }}> {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>}
-              
-                <View style={{padding:5}}>
-
-                <Text style={{ paddingLeft:6,borderRadius:10,width:data.comment.length*12,backgroundColor:"#00000014",fontSize: 18, color: 'black' }}>{data.comment}</Text>
-              
-                </View>
-                <Text style={{  marginTop:10,fontSize: 18, color: 'black' }}>Transaction ID:</Text>
-                <Text style={{  fontSize: 15, color: 'black' }}>{data.txn}</Text>
-
-                <TouchableOpacity onPress={() => setQuoroums(true)} style={{marginTop:15}}>
-                  <Text style={{color:"#1976D2"}}>
-                    VIEW 15 QUORUMS
-                  </Text>
-                </TouchableOpacity>
-                <Modal visible={quoroums} transparent={true} onRequestClose={() => { setQuoroums(false); } }>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' ,marginRight:20,marginLeft:20,marginTop:80,marginBottom:80}}>
-                  <View style={styles.quoroumcode}>
-                  <ScrollView>
-                      {
-                      QList.map((item,key)=>(
-                        <Text key={key} style={{fontSize:15,padding:2}}>{item} </Text>
-                      ))
-                      }
-                      </ScrollView>
-                       <TouchableOpacity onPress={() => setQuoroums(false)}>
-                  <Text style={{marginTop:10,color:"black",fontSize:18}}>
-                    Cancel</Text> 
-                </TouchableOpacity>
-                  </View>                  
-                </View>
-                </Modal>
-               </View>
-               </View>
-            </View>
-          </Modal>
-        
-      </View>
-    )
-  }
-
   function First(){
     setStart(0)
     setEnd(rowsPerPage)
@@ -377,20 +297,20 @@ const RecentTransactions = ({navigation,route}) => {
       <View style={{margin:scale(15)}}>
         <TouchableOpacity onPress={()=>navigation.goBack(null)}>
           <View style={{flexDirection:'row'}}>
-          <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:20}}/>
+          <Ionicons name='arrow-back-outline' style={{color: '#1976D2',fontSize:scale(20)}}/>
           <Text style={{color: '#1976D2', fontSize:scale(14), fontFamily:'Roboto'}}>BACK</Text>
           </View>
         </TouchableOpacity>
       </View>
-       <Card containerStyle={{borderRadius:scale(10), backgroundColor:"white", marginTop:scale(-10),marginBottom:scale(20)}} >
+       <Card containerStyle={styles.container} >
        <View style={{flexDirection:'row', justifyContent:'space-between'}}>      
        <Text style={{fontSize:scale(20),color:"black"}}>Transaction History</Text>
-       <TouchableOpacity onPress={()=>{setFilt(!filt);close()}} style={{}}>
+       <TouchableOpacity onPress={()=>{setFilt(!filt);close()}}>
        {filt ? 
        
-       <MaterialIcons name="tune" style={{ fontSize: scale(25), color: "black",borderRadius:50,borderColor:"grey",padding:5,backgroundColor:"rgba(0, 0, 0, 0.08)" }} />
+       <MaterialIcons name="tune" style={styles.filterIconSelected} />
       :
-       <MaterialIcons name="tune" style={{fontSize:scale(25), color:"grey",borderRadius:50,borderColor:"white",borderWidth:1,padding:5 }}/>
+       <MaterialIcons name="tune" style={styles.filterIconNotSelected}/>
        
        }
        </TouchableOpacity>
@@ -448,13 +368,13 @@ const RecentTransactions = ({navigation,route}) => {
 
       {
         did ? <View>
-          <Text style={{marginTop:20,fontSize:20, color:"black",fontWeight:"bold"}}>
+          <Text style={styles.text}>
         Filter Transactions by DID
         </Text>
         <Text style={{marginTop:10,fontSize:14, color:"black"}}>
         Retrieves all the transactions made with the specific DID.
         </Text>
-        <TextInput placeholder=" Unique DID" style={{color: "black",height: "auto",width: "auto",marginTop: 10,padding: 10,borderWidth: 1,borderRadius: 5,marginBottom:10}} onChangeText={setText_did} value={text_did}></TextInput>
+        <TextInput placeholder=" Unique DID" style={styles.placeholdertext} onChangeText={setText_did} value={text_did}></TextInput>
         
         <TouchableOpacity onPress={()=>getTxnByDID(text_did)} style={{marginLeft:175,backgroundColor:"#1976D2",borderRadius:5}}>
           <Text style={{fontSize:16,color:"white",fontWeight:"bold",margin:10}}>
@@ -471,14 +391,14 @@ const RecentTransactions = ({navigation,route}) => {
 
       {
         range ? <View>
-        <Text style={{marginTop:20,fontSize:20, color:"black",fontWeight:"bold"}}>
+        <Text style={styles.text}>
       Filter Transactions by Range
       </Text>
       <Text style={{marginTop:10,fontSize:14, color:"black"}}>
       Retrieves all the transactions within a given range.
       </Text>
-      <TextInput onChangeText={setSrange} value={srange} placeholder="Start Range" style={{color: "black",height: "auto",width: "auto",marginTop: 10,padding: 10,borderWidth: 1,borderRadius: 5,marginBottom:10}}></TextInput>
-      <TextInput onChangeText={setErange} value={erange} placeholder="End Range" style={{color: "black",height: "auto",width: "auto",marginTop: 10,padding: 10,borderWidth: 1,borderRadius: 5,marginBottom:10}}></TextInput>
+      <TextInput onChangeText={setSrange} value={srange} placeholder="Start Range" style={styles.placeholdertext}></TextInput>
+      <TextInput onChangeText={setErange} value={erange} placeholder="End Range" style={styles.placeholdertext}></TextInput>
       <TouchableOpacity style={{marginLeft:175,backgroundColor:"#1976D2",borderRadius:5}} onPress={()=>getTxnByCount()}>
         <Text style={{fontSize:16,color:"white",fontWeight:"bold",margin:10}}>
           FILTER TRANSACTIONS
@@ -490,13 +410,13 @@ const RecentTransactions = ({navigation,route}) => {
       }
       {
         comment ? <View>
-        <Text style={{marginTop:20,fontSize:20, color:"black",fontWeight:"bold"}}>
+        <Text style={styles.text}>
       Filter Transactions by Comment
       </Text>
       <Text style={{marginTop:10,fontSize:14, color:"black"}}>
       Retrieves all the transactions with the specified comment.
       </Text>
-      <TextInput onChangeText={setComt} value={comt} placeholder="Comment" style={{color: "black",height: "auto",width: "auto",marginTop: 10,padding: 10,borderWidth: 1,borderRadius: 5,marginBottom:10}}></TextInput>
+      <TextInput onChangeText={setComt} value={comt} placeholder="Comment" style={styles.placeholdertext}></TextInput>
       <TouchableOpacity onPress={()=>{getTxnByComment(comt)}} style={{marginLeft:175,backgroundColor:"#1976D2",borderRadius:5}}>
         <Text style={{fontSize:16,color:"white",fontWeight:"bold",margin:10}}>
           FILTER TRANSACTIONS
@@ -510,13 +430,13 @@ const RecentTransactions = ({navigation,route}) => {
       {
         date ? 
         <View>
-        <Text style={{ marginTop: 20, fontSize: 20, color: "black", fontWeight: "bold" }}>
+        <Text style={styles.text}>
               Filter Transactions by Date
             </Text><Text style={{ marginTop: 10, fontSize: 14, color: "black" }}>
                 Retrieves all the transactions during the specified period.
               </Text>
               <View style={{flexDirection:"row"}}>
-              <Text style={{ color: "black", height: "auto", width: 280, marginTop: 10, padding: 10, borderWidth: 1, borderRadius: 5, marginBottom: 10 }}>{start_date.toString()}</Text>
+              <Text style={styles.date}>{start_date.toString()}</Text>
               {/* <TextInput value={10} editable={false} style={{ color: "black", height: "auto", width: 300, marginTop: 10, padding: 10, borderWidth: 1, borderRadius: 5, marginBottom: 10 }}></TextInput> */}
                 <TouchableOpacity style={{marginLeft:15,marginTop:10,width:"auto",height:"auto"}} onPress={()=>setDatePickerVisibility(true)}>
                 <AntDesign name="calendar" style={{fontSize:25,color:"black",marginTop:10}}/>
@@ -530,7 +450,7 @@ const RecentTransactions = ({navigation,route}) => {
         onCancel={()=>setDatePickerVisibility(false)}
       />
       <View style={{flexDirection:"row"}}>    
-      <Text style={{ color: "black", height: "auto", width: 280, marginTop: 10, padding: 10, borderWidth: 1, borderRadius: 5, marginBottom: 10 }}>{end_date.toString()}</Text> 
+      <Text style={styles.date}>{end_date.toString()}</Text> 
               <TouchableOpacity style={{marginLeft:15,marginTop:10,width:"auto",height:"auto"}} onPress={()=>setDateEnd(true)}>
                 <AntDesign name="calendar" style={{fontSize:25,color:"black",marginTop:10}}/>
                   </TouchableOpacity>
@@ -554,7 +474,7 @@ const RecentTransactions = ({navigation,route}) => {
       
         
           <View>
-            <View style={{flexDirection:"row", justifyContent:'space-between',alignItems:'center',alignContent:'center', marginTop:scale(10)}}>
+            <View style={styles.transistions}>
               <Dropdown style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
@@ -611,8 +531,57 @@ const RecentTransactions = ({navigation,route}) => {
 const styles = ScaledSheet.create({
   container: {
     backgroundColor: 'white',
-    padding: '16@s',
+    borderRadius: '10@s',
+    marginTop:'-10@s',
+    marginBottom:'20@s',
   },
+  text: {
+    marginTop: '10@s',
+    fontSize:'20@s',
+    color:'black',
+    fontWeight:'bold',
+  },
+  transistions:{flexDirection:"row", 
+  justifyContent:'space-between',
+  alignItems:'center',
+  alignContent:'center', 
+  marginTop:'10@s'},
+  date:{
+    color: "black",
+    height: "auto",
+    width: '280@s', 
+    marginTop: '10@s',
+    padding:'10@s',
+    borderWidth: '1@s',
+    borderRadius: '5@s',
+    marginBottom: '5@s', 
+  },
+  placeholdertext:{
+    color:'black',
+    height:'auto',
+    width:'auto',
+    marginTop: '10@s',
+    padding: '10@s',
+    borderWidth: '1@s',
+    borderRadius: '5@s',
+    marginBottom: '10@s'
+  },
+  filterIconSelected:{
+fontSize:'25@s',
+color:'black',
+borderRadius: '50@s',
+borderColor:'grey',
+padding: '5@s',
+backgroundColor:'rgba(0, 0, 0, 0.08)',
+  },
+  filterIconNotSelected:{
+    fontSize:'25@s',
+    color:'grey',
+    borderRadius: '50@s',
+    borderColor:'white',
+    padding: '5@s',
+    borderWidth:'1@s'
+      },
   nextIcon:{
     marginTop:'6@s',
     padding:'10@s',

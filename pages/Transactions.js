@@ -342,7 +342,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
         <Card containerStyle={styles.card}>
         <View style={{flexDirection:'row'}}>
           <Text style={styles.recentTransactionHeading}>Recent NFT Transcations</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate('Recent NFT Transactions')}>
             <Text style={styles.recentNftTransactionView}> VIEW ALL</Text>
           </TouchableOpacity>
           </View>
