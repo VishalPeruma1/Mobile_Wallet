@@ -7,6 +7,7 @@ import {
   TextInput,
   Modal
 } from 'react-native';
+import OwnedNFT from './components/OwnedNFT';
 import TransactionCard from './components/TransactionCard';
 import NftTransactionCard from './components/NftTransactionCard';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -34,13 +35,31 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
     const [transactionMessage, setTransactionMessage] = React.useState("")
     const [tokenCount, setTokenCount] = React.useState()
     const [recentNftTransaction, setRecentNftTransaction] = React.useState([])
+    const [ownedNft, setOwnedNft] = React.useState([]);
+    const [own, setOwn] = React.useState(false);
+    const [ownedNftTokens, setOwnedNftTokens] = React.useState([]);
     const [nftTransactionMessage, setNftTransactionMessage] = React.useState("")
 
     React.useEffect(()=> {
       getTxnByCount()
       viewTokens()
       getNftTxnByCount()
+      getMyAssets()
       }, [isFocused])
+      
+    const getMyAssets = async () => {
+      try{
+        const response = await fetch('https://webwallet.knuct.com/capi/getMyAssets');
+        const responseJson = await response.json();
+        setOwnedNft(responseJson.data.response);
+        setOwn(true);
+        setOwnedNftTokens(responseJson.data.count)
+        console.log(responseJson.data.response[0].description);
+      }
+      catch(error){        
+        Toast.show(error,Toast.LONG);
+      }
+    }
 
     const getTxnByCount = async()=>{
       let options = {
@@ -393,7 +412,29 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
             <View/>
           }
         </Card>
-        </View> 
+        <Card containerStyle={styles.card}>
+        <View style={{flexDirection:'row'}}>
+          <Text style={styles.recentTransactionHeading}>Owned NFTs</Text>
+          <TouchableOpacity onPress={()=>navigation.navigate('Recent NFT Transactions')}>
+            <Text style={styles.OwnedNftView}> VIEW ALL</Text>
+          </TouchableOpacity>
+          </View>
+          <Text style={styles.tokenCount}>
+            {ownedNftTokens} total
+          </Text>
+          {
+          (own)?
+            ownedNft.map((data) => (
+            <OwnedNFT data={data} />
+            ))
+            :
+            <View>
+             <Text style={styles.noTokens}>No tokens in this account</Text>
+             </View>
+        }
+        </Card>
+        
+        </View>
             </ScrollView>
     );
  };
@@ -636,6 +677,12 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
   recentNftTransactionView:{
     fontSize:'13@s',
     marginLeft:'22@s',
+    color:'#1976D2',
+    marginTop:'5@s'
+  },
+  OwnedNftView:{
+    fontSize:'13@s',
+    marginLeft:'125@s',
     color:'#1976D2',
     marginTop:'5@s'
   },
