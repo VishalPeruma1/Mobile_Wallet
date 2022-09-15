@@ -97,9 +97,7 @@ const TokensPage = ({navigation}) => {
       <Text style={styles.searchText}>{Object.keys(foundtkns).length} token(s) found from {tokenCount} total token(s)</Text>
     }
     <View>
-            <TextInput placeholder="Search Tokens.." style={styles.placeholdertext} onChangeText={(search) =>filterTokens(search)}>
-
-            </TextInput>
+            <TextInput placeholder="Search Tokens.." style={styles.placeholdertext} onChangeText={(search) =>filterTokens(search)}></TextInput>
           </View>
           <View>
           {(() => { 
@@ -148,7 +146,7 @@ const styles = ScaledSheet.create({
     marginBottom:'20@s'
   },
   placeholdertext:{
-    color:'black',
+    color:'grey',
     height:'auto',
     width:'auto',
     marginTop: '10@s',
@@ -177,6 +175,9 @@ const styles = ScaledSheet.create({
     zIndex: 999,
     paddingHorizontal: 8,
     fontSize: 14,
+  },
+  searchText:{
+    color:"black"
   },
   placeholderStyle: {
     fontSize: 16,

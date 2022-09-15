@@ -66,11 +66,10 @@ const OwnedNFT = ({data})=>{
                         </TouchableOpacity> 
                         </View>
                         <TouchableOpacity onPress={copyToClipboard}>
-          <View style={styles.buttonView}>
-            <MaterialIcons name="content-copy" style={styles.buttonIcon}/>
-            
-          </View>
-          </TouchableOpacity>
+                            <View style={styles.buttonView}>
+                              <MaterialIcons name="content-copy" style={styles.buttonIcon}/>
+                            </View>
+                            </TouchableOpacity>
                         <Text>
                           {data.description}
                         </Text>
@@ -83,8 +82,7 @@ const OwnedNFT = ({data})=>{
               <Image style={styles.img_style} source={{uri:b64 }}/>
               </View>
             </View>
-        </View>
-        
+        </View>       
         </ScrollView> 
     </Modal>
 </View>

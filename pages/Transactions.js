@@ -415,7 +415,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
         <Card containerStyle={styles.card}>
         <View style={{flexDirection:'row'}}>
           <Text style={styles.recentTransactionHeading}>Owned NFTs</Text>
-          <TouchableOpacity onPress={()=>navigation.navigate('Recent NFT Transactions')}>
+          <TouchableOpacity onPress={()=>navigation.navigate('Nft Page')}>
             <Text style={styles.OwnedNftView}> VIEW ALL</Text>
           </TouchableOpacity>
           </View>
@@ -429,7 +429,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
             ))
             :
             <View>
-             <Text style={styles.noTokens}>No tokens in this account</Text>
+             <Text style={styles.noTokens}>No NFTs in this account</Text>
              </View>
         }
         </Card>
@@ -682,7 +682,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
   },
   OwnedNftView:{
     fontSize:'13@s',
-    marginLeft:'125@s',
+    marginLeft:'135@s',
     color:'#1976D2',
     marginTop:'5@s'
   },

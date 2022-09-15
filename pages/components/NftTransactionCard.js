@@ -6,14 +6,27 @@ import {
   View,
   Modal
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { Card } from "react-native-elements";
 import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const NftTransactionCard = ({data})=>{
     const [nft,setNft]=React.useState(false);
     const [quoroums,setQuoroums] = React.useState(false);
     const QList = data.quorumList;
+    const copyToClipboard = ()=>{
+      if(data.role ==="Receiver")
+      {Clipboard.setString(data.sellerDID)
+        Toast.show("DID Copied to clipboard")}
+        else{
+          Clipboard.setString(data.buyerDID)
+          Toast.show("DID Copied to clipboard")
+        }
+      
+    }
 
     return(
       <View>
@@ -44,9 +57,16 @@ const NftTransactionCard = ({data})=>{
                 </View>
                 <Text style={styles.modalDate}>{data.Date}</Text>
           </View>
-          <View>
+          <View style={{ marginLeft:scale(12),flexDirection: 'column', alignSelf: 'flex-start' }}>
           {data.role === "Buyer" ? <Text style={styles.role}>From</Text> : <Text style={styles.role}>To</Text>}
+          <View style={{flexDirection:"row",alignSelf: 'baseline'}}>
           <Text style={styles.did}>{data.role === "Buyer" ? data.sellerDID : data.buyerDID}</Text>
+          <TouchableOpacity onPress={copyToClipboard}>
+                <View style={styles.buttonView}>
+                  <MaterialIcons name="content-copy" style={styles.buttonIcon}/>
+                </View>
+              </TouchableOpacity>
+          </View>
           <View style={{ display: "flex", flexDirection: "row" }}>
               {data.role === "Buyer" ?
                 <Text style={styles.recentNftText}>NFT <Text style={{ color: "rgba(0, 0, 0, 0.6)" }}>{data.amount}</Text>  <Text style={styles.knct}> KNCT <Text style={{ color: "rgb(204, 50, 50)" }}> - {data.amount}</Text></Text></Text>
@@ -88,6 +108,10 @@ const NftTransactionCard = ({data})=>{
 }
 
 const styles = ScaledSheet.create({
+  buttonIcon:{
+    fontSize:'18@s', 
+    color:"#1976D2"
+  },
     transactionCard:{
       marginLeft:'0@s', 
       marginRight:'0@s',

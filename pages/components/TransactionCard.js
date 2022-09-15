@@ -7,7 +7,10 @@ import {
   Modal
 } from 'react-native';
 import { Card } from "react-native-elements";
+import Toast from 'react-native-simple-toast';
+import Clipboard from '@react-native-clipboard/clipboard';
 import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 
 
@@ -15,6 +18,16 @@ const TransactionCard = ({data})=>{
     const [trans, setTrans] = React.useState(false);
     const [quoroums,setQuoroums] = React.useState(false);
     const QList = data.quorumList;
+    const copyToClipboard = ()=>{
+      if(data.role ==="Receiver")
+      {Clipboard.setString(data.senderDID)
+        Toast.show("DID Copied to clipboard")}
+        else{
+          Clipboard.setString(data.receiverDID)
+          Toast.show("DID Copied to clipboard")
+        }
+      
+    }
 
     return(
       <View>
@@ -46,9 +59,16 @@ const TransactionCard = ({data})=>{
               </View>
               <Text style={styles.modalDate}>{data.Date}</Text>
               </View>
-              <View>
+              <View style={{ marginLeft:scale(12),flexDirection: 'column', alignSelf: 'flex-start' }}>
               {data.role === "Receiver" ? <Text style={styles.role}>From</Text> : <Text style={styles.role}>To</Text>}
+              <View style={{flexDirection:"row",alignSelf: 'baseline'}}>
               <Text style={styles.did}>{data.role === "Receiver" ? data.senderDID : data.receiverDID}</Text>
+              <TouchableOpacity onPress={copyToClipboard}>
+                <View style={styles.buttonView}>
+                  <MaterialIcons name="content-copy" style={styles.buttonIcon}/>
+                </View>
+              </TouchableOpacity>
+              </View>
               {data.role === "Receiver" ?
                 <Text style={[styles.knctText, {color: "rgb(45, 201, 55)"}]}>{JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
                 :
@@ -90,6 +110,10 @@ const TransactionCard = ({data})=>{
 
 
 const styles = ScaledSheet.create({
+  buttonIcon:{
+    fontSize:'18@s', 
+    color:"#1976D2"
+  },
     transactionCard:{
       marginLeft:'0@s', 
       marginRight:'0@s',
