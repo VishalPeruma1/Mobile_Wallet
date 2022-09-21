@@ -16,7 +16,7 @@ import Toast from 'react-native-simple-toast';
 import { useIsFocused } from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {s, scale,ScaledSheet} from 'react-native-size-matters';
+import {scale,ScaledSheet} from 'react-native-size-matters';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const data = [
@@ -73,6 +73,9 @@ const RecentTransactions = ({navigation,route}) => {
       if(end>transactionCount){
         setEnd(transactionCount)
       }
+      else{
+        setEnd(end)
+      }
       if(transactionCount<=rowsPerPage){
         setPrev(true)
         setNext(true)
@@ -99,7 +102,7 @@ const RecentTransactions = ({navigation,route}) => {
       );
       const localTime = new Date(milliseconds);
       setEnd_date(localTime.toLocaleDateString()+" "+localTime.toLocaleTimeString())
-      console.log(dateToSTring(localTime));
+      // console.log(dateToSTring(localTime));
       setEdate(dateToSTring(localTime))
       setDateEnd(false);
     };
@@ -244,7 +247,7 @@ const RecentTransactions = ({navigation,route}) => {
       <View style={{marginBottom:25}}>
       {
         
-         txn.slice(0,txn.count).map((d,id) =>(
+         txn.slice(start,end).map((d,id) =>(
           <TransactionCard key={id} data={d}/>
         )) 
       }
@@ -254,18 +257,23 @@ const RecentTransactions = ({navigation,route}) => {
 
   function First(){
     setStart(0)
-    setEnd(rowsPerPage)
     setFirst(true)
     setPrev(true)
+    if(rowsPerPage<end){
+      setEnd(rowsPerPage)
+    }
   }
 
   function Prev(){
-    setStart(start-rowsPerPage)
-    if(end-rowsPerPage<rowsPerPage){
-      setEnd(rowsPerPage)
-    }
-    else{
-      setEnd(end-rowsPerPage)
+    if(start>0)
+    {
+      setStart(start-rowsPerPage)
+      if(end-rowsPerPage<rowsPerPage){
+        setEnd(rowsPerPage)
+      }
+      else{
+        setEnd(end-rowsPerPage)
+      }
     }
   }
   function close(){
@@ -277,12 +285,19 @@ const RecentTransactions = ({navigation,route}) => {
   }
 
   function Next(){
-    setStart(start+rowsPerPage)
-    setEnd(end+rowsPerPage)
+    if(start<transactionCount && end<transactionCount){
+      setStart(start+rowsPerPage)
+      if(transactionCount>(end+rowsPerPage)){
+        setEnd(end+rowsPerPage)
+      }
+      else{
+        setEnd(transactionCount)
+      }
+    }
   }
 
   function Last(){
-    var x = Math.floor(transactionCount/rowsPerPage)
+    let x = Math.floor(transactionCount/rowsPerPage)
     if(transactionCount%rowsPerPage===0){
       x=x-1
     }
@@ -508,16 +523,16 @@ const RecentTransactions = ({navigation,route}) => {
               </Dropdown> 
               <Text style={{color:"black",fontSize:15}}>{start+1}-{end} of {transactionCount}</Text>
               <View style={{flexDirection:"row"}}>
-                <TouchableOpacity disabled={first} onPress={()=>{First()}}>
+                <TouchableOpacity onPress={()=>{First()}}>
                   <AntDesign name="verticleright" style={[styles.nextIcon,{color:first?"grey":"black"}]}/>
                 </TouchableOpacity>
-                <TouchableOpacity disabled={prev} onPress={()=>{Prev()}}>
+                <TouchableOpacity onPress={()=>{Prev()}}>
                     <AntDesign name="left" style={[styles.nextIcon,{color:prev?"grey":"black"}]}/>
                 </TouchableOpacity>
-                <TouchableOpacity disabled={next} onPress={()=>{Next()}}>
+                <TouchableOpacity onPress={()=>{Next()}}>
                     <AntDesign name="right" style={[styles.nextIcon,{color:next?"grey":"black"}]}/>
                 </TouchableOpacity>
-                <TouchableOpacity disabled={last} onPress={()=>{Last()}}>
+                <TouchableOpacity onPress={()=>{Last()}}>
                       <AntDesign name="verticleleft" style={[styles.nextIcon,{color:last?"grey":"black"}]}/>
                 </TouchableOpacity>
               </View>
