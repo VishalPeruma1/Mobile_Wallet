@@ -2,7 +2,7 @@ import React from 'react';
 import Dashboard from './Dashboard.js';
 import Contacts from './Contacts.js';
 import Transactions from './Transactions.js';
-import { View, Text, TouchableOpacity, PermissionsAndroid,BackHandler, Platform , Alert, ImageBackground} from 'react-native';
+import { View, Text, TouchableOpacity, PermissionsAndroid,BackHandler, Platform , Alert, ImageBackground, Modal, TextInput} from 'react-native';
 import * as ImagePicker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 import { PERMISSIONS } from 'react-native-permissions';
@@ -24,10 +24,16 @@ const TabBar= ({ navigation, route}) => {
     const [temp,setTemp] = React.useState('...');
     //const [phototaken,setphototaken] = React.useState("")(
     const [imgPath,setImgPath] = React.useState("")
+    const [txtPath,setTxtPath] = React.useState("")
+    const [jsonName,setJsonName] = React.useState("")
     const did = route.params.did
     const [pagename,setPagename] = React.useState("Dashboard")
     const [responseCamera, setResponseCamera] = React.useState(null);
     const [annotation,setAnnotation] = React.useState(false);
+    const [showTextAnnotation,setShowTextAnnotation] = React.useState(false);
+    const [showAudioAnnotation,setShowAudioAnnotation] = React.useState(false);
+    const [text, onChangeText] = React.useState("");
+    const [textInputHeight,setTextInputHeight] = React.useState(40)
 
     const pages = [
         {displayname:"Dashboard",navName:"Dashboard",icon:<MaterialCommunityIcons name="view-dashboard-outline" style={{color:(pagename==="Dashboard"?"#1976D2":"#808080"), fontSize:scale(24)}}/>},
@@ -69,6 +75,15 @@ const TabBar= ({ navigation, route}) => {
                 setWindSpeed(responseJson["wind"]["speed"]+" m/s");
                 console.log(responseJson);
                 setPagename("Camera")
+                var op = {
+                  'latitude': JSON.stringify(position.coords.latitude),
+                  'longtitude': JSON.stringify(position.coords.longitude),
+                  'currentDate': new Date().toLocaleString(),
+                  'humidity': responseJson["main"]["humidity"]+"%",
+                  'windSpeed': responseJson["wind"]["speed"]+" m/s",
+                  'temp': responseJson["main"]["temp"] + " celsius" 
+                }
+                saveJsonAnnotation(op)
               })
               .catch(error => {
                 return {"status": "error","response": error};
@@ -112,6 +127,29 @@ const TabBar= ({ navigation, route}) => {
       } else {
         getlocationpermission()
       }
+    }
+
+    const saveTextAnnotation = (inputText) => {
+      console.log(inputText);
+      RNFS.writeFile(txtPath,inputText, 'utf8')
+      .then((success) => {
+        console.log('TEXT FILE WRITTEN!');
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    };
+
+    const saveJsonAnnotation = async(op) => {
+      console.log(op);
+      var path = Platform.OS==="ios" ? RNFS.LibraryDirectoryPath+"/"+jsonName : RNFS.DownloadDirectoryPath +"/"+jsonName
+      RNFS.writeFile(path, JSON.stringify(op), 'utf8')
+      .then((success) => {
+        console.log('JSON FILE WRITTEN!');
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
     }
 
     const getlocationpermission = () => {
@@ -173,6 +211,8 @@ const TabBar= ({ navigation, route}) => {
 
     function OpenCamera () {
       var imgName = "img_"+new Date().getTime().toString()+".jpg"
+      var txtName = "img_"+new Date().getTime().toString()+".txt"
+      setJsonName("img_"+new Date().getTime().toString()+".json")
       let options = {
         storageOptions: {
           skipBackup: true,
@@ -203,6 +243,7 @@ const TabBar= ({ navigation, route}) => {
               .then((success) => {
                 console.log('File moved!');
                 setImgPath(destination)
+                setTxtPath(Platform.OS==="ios" ? RNFS.LibraryDirectoryPath+"/"+txtName : RNFS.DownloadDirectoryPath +"/"+txtName)
                 console.log(destination)
               })
               .catch((err) => {
@@ -253,15 +294,63 @@ const TabBar= ({ navigation, route}) => {
             </View>
             <View style={styles.annotationBtn}>
               {annotation?
-                <TouchableOpacity>
+              <View>
+                <TouchableOpacity onPress={()=>setShowTextAnnotation(true)}>
                   <MaterialCommunityIcons name='message-text-outline' style={[styles.annotation,{marginBottom:scale(10)}]}/>
                 </TouchableOpacity>
+                <Modal visible={showTextAnnotation} transparent={true} onRequestClose={()=>{setShowTextAnnotation(false)}}>
+                  <View style={styles.popUpView}>
+                    <View style={styles.textAnnotation}>
+                    <Text style={styles.popUpHeadingText}>
+                        Enter your text
+                    </Text>
+                    <TextInput multiline={true} style={[styles.textinput,{height:textInputHeight}]} onChangeText={onChangeText} value={text}
+                    onContentSizeChange={(e) => setTextInputHeight(e.nativeEvent.contentSize.height) } />
+                    <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity onPress={()=>setShowTextAnnotation(false)}>
+                      <Text style={styles.cancelBtn}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={
+                    () => {saveTextAnnotation(text)
+                    saveJsonAnnotation()}
+                    }>
+                      <Text style={styles.submitBtn}>Submit</Text>
+                    </TouchableOpacity>
+                    </View>
+                    </View>
+                  </View>
+                </Modal>
+              </View>
               :null
               }
               {annotation?
-                <TouchableOpacity>
+              <View>
+                <TouchableOpacity onPress={()=>setShowAudioAnnotation(true)}>
                   <MaterialIcons name='keyboard-voice' style={[styles.annotation,{marginBottom:scale(10)}]}/>
+                  <Modal visible={showAudioAnnotation} transparent={true} onRequestClose={()=>{setShowAudioAnnotation(false)}}>
+                  <View style={styles.popUpView}>
+                    <View style={styles.textAnnotation}>
+                    <Text style={styles.popUpHeadingText}>
+                        Enter your text
+                    </Text>
+                    <TextInput multiline={true} style={[styles.textinput,{height:textInputHeight}]} onChangeText={onChangeText} value={text}
+                    onContentSizeChange={(e) => setTextInputHeight(e.nativeEvent.contentSize.height) } />
+                    <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity onPress={()=>setShowTextAnnotation(false)}>
+                      <Text style={styles.cancelBtn}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={
+                    () => {saveTextAnnotation(text)
+                    saveJsonAnnotation()}
+                    }>
+                      <Text style={styles.submitBtn}>Submit</Text>
+                    </TouchableOpacity>
+                    </View>
+                    </View>
+                  </View>
+                </Modal>
                 </TouchableOpacity>
+              </View>
               :null
               }
               <TouchableOpacity onPress={()=>setAnnotation(!annotation)}  >
@@ -330,7 +419,54 @@ const styles = ScaledSheet.create({
       opacity:0.65,
       padding:"10@s",
       borderRadius:"20@s"
+  },  
+  textAnnotation: {
+    margin: '10@s', 
+    backgroundColor: "white", 
+    borderRadius: '5@s',
+    paddingTop:'18@s', 
+    paddingLeft: '14@s',
+    paddingRight:'10@s', 
+    paddingBottom:'20@s',
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: '0@s',
+      height: '2@s'
     },
+    shadowOpacity: '0.25@s',
+    shadowRadius: '4@s',
+    elevation: '25@s',
+    flexDirection:'column',
+    justifyContent:'space-evenly',
+    width:'325@s',
+    height:'225@s',
+  },
+  textinput:{
+    color: "black",
+    marginTop: '12@s',
+    marginStart:'12@s',
+    marginEnd:'12@s',
+    padding: '10@s',
+    borderWidth: '1@s', 
+    borderRadius: '5@s',
+    maxHeight:'85@s',
+    width:'275@s'
+  },
+  cancelBtn:{
+    fontSize:'14@s',
+    color:'#9C27B0',
+    fontFamily:'Roboto',
+    marginTop:'20@s',
+    paddingRight:'35@s'
+  },
+  submitBtn:{
+    fontSize:'14@s',
+    color:'#9C27B0',
+    fontFamily:'Roboto',
+    marginTop:'20@s',
+    paddingLeft:'25@s'
+  },
     weatherText : {
         justifyContent: 'center',
         alignItems: 'center',
@@ -351,7 +487,17 @@ const styles = ScaledSheet.create({
       borderRadius:'30@s',
       justifyContent:"center",
       alignItems:"center", 
-    }
+    },
+    popUpView:{
+      flex: 1, 
+      justifyContent: 'center', 
+      alignItems: 'center',
+    },
+    popUpHeadingText:{
+      fontWeight:'bold', 
+      fontSize:'25@s', 
+      color:'black'
+    },
 })
 
 export default TabBar;
