@@ -70,6 +70,9 @@ const RecentNftTransactions = ({navigation}) => {
         if(end>transactionCount){
           setEnd(transactionCount)
         }
+        else{
+          setEnd(end)
+        }
         if(transactionCount<=rowsPerPage){
           setPrev(true)
           setNext(true)
@@ -95,7 +98,7 @@ const RecentNftTransactions = ({navigation}) => {
         );
         const localTime = new Date(milliseconds);
         setEnd_date(localTime.toLocaleDateString()+" "+localTime.toLocaleTimeString())
-        console.log(dateToSTring(localTime));
+        // console.log(dateToSTring(localTime));
         setEdate(dateToSTring(localTime))
         setDateEnd(false);
       };
@@ -238,7 +241,7 @@ const RecentNftTransactions = ({navigation}) => {
         <View style={{marginBottom:25}}>
         {
           
-           txn.slice(0,txn.count).map((d,id) =>(
+           txn.slice(start,end).map((d,id) =>(
             <NftTransactionCard key={id} data={d}/>
           )) 
         }
@@ -246,18 +249,23 @@ const RecentNftTransactions = ({navigation}) => {
       }
       function First(){
         setStart(0)
-        setEnd(rowsPerPage)
         setFirst(true)
         setPrev(true)
+        if(rowsPerPage<end){
+          setEnd(rowsPerPage)
+        }
       }
     
       function Prev(){
-        setStart(start-rowsPerPage)
-        if(end-rowsPerPage<rowsPerPage){
-          setEnd(rowsPerPage)
-        }
-        else{
-          setEnd(end-rowsPerPage)
+        if(start>0)
+        {
+          setStart(start-rowsPerPage)
+          if(end-rowsPerPage<rowsPerPage){
+            setEnd(rowsPerPage)
+          }
+          else{
+            setEnd(end-rowsPerPage)
+          }
         }
       }
       function close(){
@@ -269,8 +277,15 @@ const RecentNftTransactions = ({navigation}) => {
       }
     
       function Next(){
-        setStart(start+rowsPerPage)
-        setEnd(end+rowsPerPage)
+        if(start<transactionCount && end<transactionCount){
+          setStart(start+rowsPerPage)
+          if(transactionCount>(end+rowsPerPage)){
+            setEnd(end+rowsPerPage)
+          }
+          else{
+            setEnd(transactionCount)
+          }
+        }
       }
     
       function Last(){
@@ -499,13 +514,13 @@ const RecentNftTransactions = ({navigation}) => {
                   </Dropdown> 
                   <Text style={{color:"black",fontSize:15}}>{start+1}-{end} of {transactionCount}</Text>
                   <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity disabled={first} onPress={()=>{First()}}>
+                    <TouchableOpacity onPress={()=>{First()}}>
                       <AntDesign name="verticleright" style={[styles.nextIcon,{color:first?"grey":"black"}]}/>
                     </TouchableOpacity>
-                    <TouchableOpacity disabled={prev} onPress={()=>{Prev()}}>
+                    <TouchableOpacity onPress={()=>{Prev()}}>
                         <AntDesign name="left" style={[styles.nextIcon,{color:prev?"grey":"black"}]}/>
                     </TouchableOpacity>
-                    <TouchableOpacity disabled={next} onPress={()=>{Next()}}>
+                    <TouchableOpacity onPress={()=>{Next()}}>
                         <AntDesign name="right" style={[styles.nextIcon,{color:next?"grey":"black"}]}/>
                     </TouchableOpacity>
                     <TouchableOpacity disabled={last} onPress={()=>{Last()}}>

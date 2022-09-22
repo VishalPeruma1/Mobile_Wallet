@@ -1,17 +1,26 @@
-import React from "react";
+import React, {useState} from "react";
 
 import {View,Text,TouchableOpacity,Image,TextInput,StyleSheet,Modal} from 'react-native';
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Card, ListItem } from "react-native-elements";
+import TransactionCard from './components/TransactionCard';
+import { Dropdown } from 'react-native-element-dropdown';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchImageLibrary} from 'react-native-image-picker';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Toast from 'react-native-simple-toast';
 import { useIsFocused } from '@react-navigation/native';
 import { ScrollView } from "react-native";
 import { scale, ScaledSheet } from "react-native-size-matters";
 
+const dropdownValues = [
+  { label: '5', value: '5' },
+  { label: '10', value: '10' },
+  { label: '25', value: '25' },
+  { label: 'All', value: 'All' }
+];
 
 const ContactDetails = ({navigation, route}) => {
 
@@ -19,38 +28,77 @@ const ContactDetails = ({navigation, route}) => {
     // const did = route.params.did;
     // const onlineStatus = route.params.onlineStatus;
     // const dp = route.params.dp;
+    const [filt,setFilt]=React.useState(false);
     const [newDp,setnewDp] = React.useState(false)
+    const [value, setValue] = useState(10);
     const[Img,setImg]=React.useState("");
     const[showImg,setshowImg]=React.useState(false);
     const [transactionList,setTransactionList] = React.useState([]);
+    const [isFocus, setIsFocus] = useState(false);
     const isFocused = useIsFocused();
+    const [prev,setPrev] = React.useState(true);
+    const [first,setFirst] = React.useState(true);
+    const [next,setNext] = React.useState(false);
+    const [last,setLast] = React.useState(false);
+    const [start,setStart] = React.useState(0);
+    const [end,setEnd] = React.useState(10);
+    const [txn,setTxn] = React.useState([]);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [transactionCount, setTransactionCount] = React.useState(10);
     const [transactions, setTransactions] = React.useState(false)
     const [status, setStatus] = React.useState("")
-    // const [transactionMessage, setTransactionMessage] = React.useState()
+    const [transactionMessage, setTransactionMessage] = React.useState()
     const data = route.params.data;
 
     React.useEffect(()=>{
-     getTxnByDID()
-    },[isFocused])
+     getTxnByCount()
+    if(end>transactionCount){
+      setEnd(transactionCount)
+    }
+    else{
+      setEnd(end)
+    }
+    if(transactionCount<=rowsPerPage){
+      setPrev(true)
+      setNext(true)
+      setFirst(true)
+      setLast(true)
+    }
+    else{
+      setPrev(start!==0?false:true)
+      setFirst(start!==0?false:true)
+      setNext(end<transactionCount?false:true)
+      setLast(end<transactionCount?false:true)
+    }
+    })
 
-    const TransactionCard = ({data})=>{
-      return(
-        <TouchableOpacity>
-          <Card containerStyle={styles.transactionCard} wrapperStyle={{width:300}}>
-            <View style={styles.transactionView}>
-            <View style={styles.transactionView2}>
-              {data.role==="Receiver"?
-                <Text style={{color:"rgb(45, 201, 55)",fontSize:scale(18), paddingBottom:scale(6)}}>+ {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
-              :          
-                <Text style={{color:"rgb(204, 50, 50)", fontSize:scale(18), paddingBottom:scale(6)}}>- {JSON.stringify(Object.keys(data.tokens).length)} KNCT</Text>
-              }
-              <Text style={styles.transactionDid}>{data.role==="Receiver" ? data.senderDID : data.receiverDID}</Text>
-              <Text style={styles.date}>{data.Date}</Text>
-              </View>
-            </View>
-          </Card>
-        </TouchableOpacity>
-      )
+
+  const getTxnByCount = async()=>{
+    let options = {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+      },
+      body:JSON.stringify ({
+        txnCount: 10
+      })
+    }
+    try {
+        const response = await fetch('https://webwallet.knuct.com/capi/getTxnByCount',options);
+        const responseJson = await response.json();
+        if(response.status===200 && responseJson) {
+          setTransactionCount(responseJson.data.count)
+          if(responseJson.data.count <= 1 && responseJson.data.response[0].Message){
+            setTransactions(true)
+            setTransactionMessage(responseJson.data.response[0].Message)
+          }
+          else{
+          setTxn(responseJson.data.response)
+        }
+        }
+    } catch(error) {
+      Toast.show(error,Toast.LONG);
+    }
   }
 
     const getTxnByDID = async()=>{
@@ -179,7 +227,7 @@ const ContactDetails = ({navigation, route}) => {
         var s_green =  1.2 * data.did.toString().charAt(20).charCodeAt() 
         var s_blue = data.did.toString().charAt(30).charCodeAt() 
         var s_contactColor = "rgb(" + String(s_red) + "," + String(s_green) + "," + String(s_blue) + ")"
-        console.log("CONTACT COLOR => ",s_contactColor)
+        // console.log("CONTACT COLOR => ",s_contactColor)
         return s_contactColor
       }
   
@@ -192,6 +240,70 @@ const ContactDetails = ({navigation, route}) => {
     //     const text = await Clipboard.getString()
     //     setCopiedText(text)
     // }
+    
+    const display = () =>{
+      return(
+      <View style={{marginBottom:25}}>
+      {
+        
+         txn.slice(start,end).map((d,id) =>(
+          <TransactionCard key={id} data={d}/>
+        )) 
+      }
+    </View>)
+    }
+  function First(){
+    setStart(0)
+    setFirst(true)
+    setPrev(true)
+    if(rowsPerPage<end){
+      setEnd(rowsPerPage)
+    }
+  }
+
+  function Prev(){
+    if(start>0)
+    {
+      setStart(start-rowsPerPage)
+      if(end-rowsPerPage<rowsPerPage){
+        setEnd(rowsPerPage)
+      }
+      else{
+        setEnd(end-rowsPerPage)
+      }
+    }
+  }
+  // function close(){
+
+  //   setDid(false)
+  //   setRange(false)
+  //   setComment(false)
+  //   setDate(false)
+  // }
+
+  function Next(){
+    if(start<transactionCount && end<transactionCount){
+      setStart(start+rowsPerPage)
+      if(transactionCount>(end+rowsPerPage)){
+        setEnd(end+rowsPerPage)
+      }
+      else{
+        setEnd(transactionCount)
+      }
+    }
+  }
+
+  function Last(){
+    let x = Math.floor(transactionCount/rowsPerPage)
+    if(transactionCount%rowsPerPage===0){
+      x=x-1
+    }
+    setStart(x*rowsPerPage)
+    setEnd(transactionCount)
+    setLast(true)
+    setNext(true)
+  }
+
     return(
       <ScrollView>
         <View>
@@ -317,31 +429,74 @@ const ContactDetails = ({navigation, route}) => {
             </Card>
 
             <Card containerStyle={{ height:"auto", bottom:7, borderRadius:10}}>
-        {
-          // (!transactions)?
-          (status === "true")?
-            transactionList.slice(0,5).map((data) => (
-            <TransactionCard data={data} />
-            ))
-            :
-            <View>
-              <Text style={{fontSize:20, color:"rgba(0, 0, 0, 0.38)", textAlign:"center", marginTop:10, marginBottom:10, fontWeight:"500"}}>No Transactions found</Text>
+<View>
+
+<View>{display()}</View>
+
+            <View style={styles.transistions}>
+              <Dropdown 
+                style={[styles.dropdown, isFocus && { borderColor: 'black' }]}
+                placeholderStyle={styles.placeholderStyle}
+                itemTextStyle={{textColor:"black"}}
+                textColor="black"
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                itemContainerStyle={{color:"black"}}
+                iconColor="black"
+                dropdownTextStyles={{color:"black"}}
+                iconStyle={styles.iconStyle}
+                data={dropdownValues}
+                labelField="label"
+                valueField="value"
+                // searchPlaceholder="Search..."
+                placeholder='10'
+                value={value}
+                baseColor="black"
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={item => {
+                  setStart(0)
+                  setValue(item.value);
+                  if(item.value==="All"){
+                    setRowsPerPage(transactionCount)
+                    setEnd(transactionCount)
+                  }
+                  else{
+                    setRowsPerPage(Number(item.value));
+                    if(Number(item.value)>transactionCount){
+                      setEnd(transactionCount)
+                    }
+                    else{
+                      setEnd(Number(item.value));
+                    }
+                  }
+                  setIsFocus(false);}}>
+              </Dropdown> 
+              <Text style={{color:"black",fontSize:15}}>
+                {start+1}-{end} of {transactionCount}
+                </Text>
+              <View style={{flexDirection:"row"}}>
+                <TouchableOpacity onPress={()=>{First()}}>
+                  <AntDesign name="verticleright" style={[styles.nextIcon,{color:first?"grey":"black"}]}/>
+                </TouchableOpacity>
+                <TouchableOpacity  onPress={()=>{Prev()}}>
+                    <AntDesign name="left" style={[styles.nextIcon,{color:prev?"grey":"black"}]}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{Next()}}>
+                    <AntDesign name="right" style={[styles.nextIcon,{color:next?"grey":"black"}]}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{Last()}}>
+                      <AntDesign name="verticleleft" style={[styles.nextIcon,{color:last?"grey":"black"}]}/>
+                </TouchableOpacity>
+              </View>
             </View>
-        }
+          </View>
             </Card>
         </View>
     </ScrollView>
     );
 };
-const styles = ScaledSheet.create({
-  transactionCard:{
-    marginLeft:0, 
-    marginRight:0,
-    backgroundColor:"white",
-    padding:5, 
-    paddingLeft:12,
-    elevation:5
-  },
+const styles = ScaledSheet.create({ 
   transactionView:{
     flexDirection:'column', 
     flexWrap:"wrap", 
@@ -351,31 +506,54 @@ const styles = ScaledSheet.create({
     display:"flex",
     flexDirection:"column"
   },
-  transactionDid:{
-    fontSize:14,
-    color:"black", 
-    width:295
-  },
   date:{
     color:"rgba(0, 0, 0, 0.38)", 
     fontSize:"14@s"
   },
-  qrcode: {
-      margin: 10, 
-      backgroundColor: "white", 
-      borderRadius: 5,  
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 25,
-      flexDirection:'column',
-      justifyContent:'space-evenly'
-    },
+  transistions:{
+    flexDirection:"row", 
+    justifyContent:'space-between',
+    alignItems:'center',
+    alignContent:'center', 
+    marginTop:'10@s'},
+    date:{
+      color: "black",
+      height: "auto",
+      width: '280@s', 
+      marginTop: '10@s',
+      padding:'10@s',
+      borderWidth: '1@s',
+      borderRadius: '5@s',
+      marginBottom: '5@s', 
+  },
+  nextIcon:{
+    marginTop:'6@s',
+    padding:'10@s',
+    fontSize:'20@s', 
+    color:"#A6A6A6"
+  },
+  dropdown: {
+    height: '30@s',
+    width:'65@s',
+    paddingHorizontal: '8@s',
+    color:"black",
+  },
+  placeholderStyle: {
+    fontSize: '16@s',
+    color:"black"
+  },
+  selectedTextStyle: {
+    fontSize: '16@s',
+    color:"black"
+  },
+  iconStyle: {
+    width: '20@s',
+    height: '20@s',
+  },
+  inputSearchStyle: {
+    height: '40@s',
+    fontSize: '16@s',
+  },
 })
 
 

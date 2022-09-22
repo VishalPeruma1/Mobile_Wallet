@@ -18,6 +18,7 @@ import ContactDetails from './pages/ContactDetails';
 import Transactions from './pages/Transactions';
 import RecentTransactions from './pages/RecentTransactions';
 import RecentNftTransactions from './pages/RecentNftTransactions';
+import NftPage from './pages/NftPage';
 import TokensPage from './pages/TokensPage';
 import {scale, ScaledSheet} from 'react-native-size-matters';
 
@@ -133,6 +134,7 @@ const App = () => {
     <Stack.Screen name="Recent Transactions" component={RecentTransactions} />
     <Stack.Screen name="Tokens Page" component={TokensPage}/>
     <Stack.Screen name="Recent NFT Transactions" component={RecentNftTransactions} />
+    <Stack.Screen name="Nft Page" component={NftPage} />
   </Stack.Navigator>
   </NavigationContainer>
     
